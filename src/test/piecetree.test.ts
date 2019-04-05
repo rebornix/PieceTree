@@ -11,5 +11,10 @@ describe('random tests', () => {
         expect(pieceTree.getLineCount()).toEqual(2);
         expect(pieceTree.getLineContent(1)).toEqual('abc');
         expect(pieceTree.getLineContent(2)).toEqual('def');
+
+        pieceTree.insert(1, '+');
+        expect(pieceTree.getLineCount()).toEqual(2);
+        expect(pieceTree.getLineContent(1)).toEqual('a+bc');
+        expect(pieceTree.getLineContent(2)).toEqual('def');
     });
 });
