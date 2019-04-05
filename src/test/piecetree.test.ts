@@ -1,5 +1,4 @@
-import { PieceTreeBase } from '../pieceTreeBase';
-import { PieceTreeTextBufferBuilder, DefaultEndOfLine } from '../pieceTreeBuilder';
+import { PieceTreeTextBufferBuilder, DefaultEndOfLine } from '../index';
 
 describe('random tests', () => {
     it('random insert delete', () => {

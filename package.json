@@ -2,7 +2,8 @@
     "name": "piecetree",
     "version": "1.0.0",
     "description": "Piece Tree",
-    "main": "index.js",
+    "main": "out/index.js",
+    "types": "out/index.d.ts",
     "scripts": {
         "start": "npm run build && npm run watch",
         "build": "tsc",
