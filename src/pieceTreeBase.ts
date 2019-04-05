@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CharCode } from './charCode';
-import { Position } from './position';
-import { Range } from './range';
+import { CharCode } from './common/charCode';
+import { Position } from './common/position';
+import { Range } from './common/range';
 import { NodeColor, SENTINEL, TreeNode, fixInsert, leftest, rbDelete, righttest, updateTreeMetadata } from './rbTreeBase';
 
 export interface ITextSnapshot {
@@ -523,6 +523,9 @@ export class PieceTreeBase {
 		return this._lineCnt;
 	}
 
+	/**
+	 * @param lineNumber 1 based
+	 */
 	public getLineContent(lineNumber: number): string {
 		if (this._lastVisitedLine.lineNumber === lineNumber) {
 			return this._lastVisitedLine.value;
