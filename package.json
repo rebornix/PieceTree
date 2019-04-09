@@ -1,5 +1,5 @@
 {
-    "name": "piecetree",
+    "name": "vscode-piece-tree",
     "version": "1.0.0",
     "description": "Piece Tree",
     "main": "out/index.js",
