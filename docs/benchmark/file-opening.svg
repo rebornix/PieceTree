@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="798" height="284" viewBox="0 0 798 284" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12">
+<rect width="798" height="284" fill="#ffffff" rx="6"/>
+<text x="24" y="28" font-size="17" font-weight="600" fill="#1f2328">File opening</text>
+<text x="24" y="46" font-size="11" fill="#656d76">milliseconds, lower is better; every cell has its own scale</text>
+<text x="708" y="28" fill="#1f2328">piece tree</text>
+<rect x="690" y="17" width="12" height="12" rx="2" fill="#0078d4"/>
+<text x="606" y="28" fill="#1f2328">line array</text>
+<rect x="588" y="17" width="12" height="12" rx="2" fill="#9aa0a6"/>
+<text x="99" y="71" text-anchor="middle" font-weight="600" fill="#1f2328">checker.ts</text>
+<text x="99" y="86" text-anchor="middle" font-size="11" fill="#656d76">1.46 MB · 27k lines</text>
+<text x="249" y="71" text-anchor="middle" font-weight="600" fill="#1f2328">sqlite3.c</text>
+<text x="249" y="86" text-anchor="middle" font-size="11" fill="#656d76">4.31 MB · 128k lines</text>
+<text x="399" y="64" text-anchor="middle" font-weight="600" fill="#1f2328">Russian-English</text>
+<text x="399" y="79" text-anchor="middle" font-weight="600" fill="#1f2328">Bilingual.dic</text>
+<text x="399" y="94" text-anchor="middle" font-size="11" fill="#656d76">14.23 MB · 552k lines</text>
+<text x="549" y="71" text-anchor="middle" font-weight="600" fill="#1f2328">synthetic huge</text>
+<text x="549" y="86" text-anchor="middle" font-size="11" fill="#656d76">54.13 MB · 3.0M lines</text>
+<text x="699" y="71" text-anchor="middle" font-weight="600" fill="#1f2328">checker.ts x 128</text>
+<text x="699" y="86" text-anchor="middle" font-size="11" fill="#656d76">187 MB · 3.4M lines</text>
+<text x="8" y="170" text-anchor="end" font-weight="600" fill="#1f2328"></text>
+<line x1="24" y1="100" x2="774" y2="100" stroke="#d0d7de" stroke-width="1"/>
+<line x1="40" y1="210" x2="158" y2="210" stroke="#8c959f" stroke-width="1"/>
+<rect x="54" y="142.6" width="38" height="67.4" fill="#9aa0a6"/>
+<text x="73" y="137.6" text-anchor="middle" font-size="11" fill="#1f2328">3.14 ms</text>
+<rect x="106" y="132.0" width="38" height="78.0" fill="#0078d4"/>
+<text x="125" y="127.0" text-anchor="middle" font-size="11" fill="#1f2328">3.63 ms</text>
+<text x="99" y="227" text-anchor="middle" font-size="11" fill="#656d76">1.2x slower</text>
+<line x1="190" y1="210" x2="308" y2="210" stroke="#8c959f" stroke-width="1"/>
+<rect x="204" y="144.5" width="38" height="65.5" fill="#9aa0a6"/>
+<text x="223" y="139.5" text-anchor="middle" font-size="11" fill="#1f2328">10.7 ms</text>
+<rect x="256" y="132.0" width="38" height="78.0" fill="#0078d4"/>
+<text x="275" y="127.0" text-anchor="middle" font-size="11" fill="#1f2328">12.7 ms</text>
+<text x="249" y="227" text-anchor="middle" font-size="11" fill="#656d76">1.2x slower</text>
+<line x1="340" y1="210" x2="458" y2="210" stroke="#8c959f" stroke-width="1"/>
+<rect x="354" y="132.0" width="38" height="78.0" fill="#9aa0a6"/>
+<text x="373" y="127.0" text-anchor="middle" font-size="11" fill="#1f2328">69.3 ms</text>
+<rect x="406" y="176.9" width="38" height="33.1" fill="#0078d4"/>
+<text x="425" y="171.9" text-anchor="middle" font-size="11" fill="#1f2328">29.4 ms</text>
+<text x="399" y="227" text-anchor="middle" font-size="11" fill="#656d76">2.4x faster</text>
+<line x1="490" y1="210" x2="608" y2="210" stroke="#8c959f" stroke-width="1"/>
+<rect x="504" y="132.0" width="38" height="78.0" fill="#9aa0a6"/>
+<text x="523" y="127.0" text-anchor="middle" font-size="11" fill="#1f2328">407 ms</text>
+<rect x="556" y="174.0" width="38" height="36.0" fill="#0078d4"/>
+<text x="575" y="169.0" text-anchor="middle" font-size="11" fill="#1f2328">187 ms</text>
+<text x="549" y="227" text-anchor="middle" font-size="11" fill="#656d76">2.2x faster</text>
+<line x1="640" y1="210" x2="758" y2="210" stroke="#8c959f" stroke-width="1"/>
+<rect x="654" y="132.0" width="38" height="78.0" fill="#9aa0a6"/>
+<text x="673" y="127.0" text-anchor="middle" font-size="11" fill="#1f2328">641 ms</text>
+<rect x="706" y="145.7" width="38" height="64.3" fill="#0078d4"/>
+<text x="725" y="140.7" text-anchor="middle" font-size="11" fill="#1f2328">528 ms</text>
+<text x="699" y="227" text-anchor="middle" font-size="11" fill="#656d76">1.2x faster</text>
+<text x="24" y="272" font-size="10" fill="#8c959f">Node v22.14.0, V8 12.4.254.21, Intel(R) Xeon(R) Processor, linux. Median of 3 runs after one warm-up, 2026-09-07.</text>
+</svg>
