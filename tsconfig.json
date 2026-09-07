@@ -1,11 +1,16 @@
 {
+  // Type-checking config for editors and `npm run typecheck`: covers the
+  // library, the tests and the Vitest config. The publishable build uses
+  // tsconfig.build.json instead.
   "compilerOptions": {
-    /* Basic Options */
-    "target": "es2015",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
-    "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
-    "declaration": true,                   /* Generates corresponding '.d.ts' file. */
-    "outDir": "./lib",                        /* Redirect output structure to the directory. */
-    "esModuleInterop": true                   /* Enables emit interoperability between CommonJS and ES Modules via */
+    "target": "es2022",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "noEmit": true
   },
-  "include": ["src"]
+  "include": ["src", "vitest.config.ts"]
 }

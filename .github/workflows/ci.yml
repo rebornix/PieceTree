@@ -19,7 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20.x, 22.x]
+        # Vitest 5 requires Node >= 22.12; 22 is maintenance LTS, 24 is active LTS
+        node-version: [22.x, 24.x]
     steps:
       - uses: actions/checkout@v7
 
@@ -38,7 +39,7 @@ jobs:
         run: npm run typecheck
 
       - name: Test
-        run: npm run test:coverage -- --ci
+        run: npm run test:coverage
 
   # Single, stable status check to mark as "required" in branch protection,
   # so the matrix above can change without having to update repo settings.

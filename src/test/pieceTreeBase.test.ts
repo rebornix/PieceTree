@@ -8,7 +8,7 @@
  *   https://github.com/microsoft/vscode/blob/6b924c51528e663dda5091a1493229a361676aca/src/vs/editor/test/common/model/pieceTreeTextBuffer/pieceTreeTextBuffer.test.ts
  *
  * Differences from upstream:
- * - mocha suite/test -> jest describe/it
+ * - mocha suite/test -> vitest describe/it
  * - createTextBuffer / assertTreeInvariants / getValueInSnapshot live in testUtils.ts so other tests can share them
  * - createTextBuffer() returns the PieceTreeBase directly (this package has no PieceTreeTextBuffer wrapper)
  * - the 'snapshot' suite is rewritten against PieceTreeBase.createSnapshot instead of TextModel.applyEdits
@@ -17,6 +17,7 @@
  */
 
 import assert from 'assert';
+import { describe, it } from 'vitest';
 import { Position } from '../common/position';
 import { Range } from '../common/range';
 import { PieceTreeBase } from '../pieceTreeBase';

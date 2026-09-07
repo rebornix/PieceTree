@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { createTextBuffer } from './testUtils';
 
 function splitLines(text: string): string[] {
