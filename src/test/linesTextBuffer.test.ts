@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { describe, expect, it } from 'vitest';
 import { Position } from '../common/position';
 import { Range } from '../common/range';
 import { LinesTextBuffer, splitLinesKeepingTerminators } from './linesTextBuffer';

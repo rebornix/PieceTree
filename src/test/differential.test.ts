@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { createTree, expectNoDivergence, generateScenario, Mode, runScenario, Scenario } from './differential';
 
 /**
