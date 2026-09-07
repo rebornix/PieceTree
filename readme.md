@@ -49,7 +49,7 @@ npm run bench -- --help             # all options (--iterations, --file, --seed,
 
 ### Results
 
-Measured with `npm run bench -- --corpus --huge --iterations 3` on Node 22.14 (V8 12.4), Linux, Intel Xeon, on the files of the post: `checker.ts` (TypeScript 2.7.1), `sqlite3.c` (emscripten 1.37.36), the Russian-English dictionary, and `checker.ts` repeated 128 times. The post's Chromium heap snapshot is not public, so a synthetic 54 MB / 3M-line document stands in for it. The synthetic small/medium/large documents give the same picture as the real files of the same size. The samples are in [`docs/benchmark/results.json`](docs/benchmark/results.json); the charts plot the medians against the file size, on log-log axes since the numbers span four orders of magnitude between the files.
+Measured with `npm run bench -- --corpus --huge --iterations 3` on Node 22.14 (V8 12.4), Linux, Intel Xeon, on the files of the post: `checker.ts` (TypeScript 2.7.1), `sqlite3.c` (emscripten 1.37.36), the Russian-English dictionary, and `checker.ts` repeated 128 times. The post's Chromium heap snapshot is not public, so a synthetic 54 MB / 3M-line document stands in for it. The synthetic small/medium/large documents give the same picture as the real files of the same size. The samples are in [`docs/benchmark/results.json`](docs/benchmark/results.json); the charts show the medians on linear axes, so the bars of the small files are barely visible next to the 187 MB one: their values are in the labels and in the table at the end.
 
 The conclusions of the post hold on today's V8.
 
