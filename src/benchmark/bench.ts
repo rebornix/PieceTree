@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { Prng } from '../test/prng';
 import { IBenchBuffer, IBufferImplementation, implementations, pieceTreeImplementation } from './adapters';
-import { IBenchReport, chartInput, renderCharts } from './charts';
 import {
 	CORPUS_FILES, IDocument, SYNTHETIC_SPECS, corpusPath, fileDocument, repeatDocument, syntheticDocument
 } from './corpus';
@@ -34,7 +33,6 @@ interface IOptions {
 	edits: number;
 	seed: number;
 	json: string | undefined;
-	charts: string | undefined;
 }
 
 const HELP = `Usage: npm run bench -- [options]
@@ -49,8 +47,6 @@ const HELP = `Usage: npm run bench -- [options]
   --edits <n>         number of edits per editing workload (default: 1000)
   --seed <n>          seed for the generated documents and edits (default: 2018)
   --json <path>       also write all samples and environment info as JSON
-  --charts <dir>      also render the results as SVG bar charts, one per benchmark family
-                      (npm run bench:charts renders them later from the JSON)
   --smoke             shorthand for --sizes tiny --iterations 1 (CI check that the benchmark still runs)
 `;
 
@@ -63,8 +59,7 @@ function parseArgs(argv: string[]): IOptions {
 		iterations: 5,
 		edits: 1000,
 		seed: 2018,
-		json: undefined,
-		charts: undefined
+		json: undefined
 	};
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -83,7 +78,6 @@ function parseArgs(argv: string[]): IOptions {
 			case '--edits': options.edits = parseInt(value(), 10); break;
 			case '--seed': options.seed = parseInt(value(), 10); break;
 			case '--json': options.json = value(); break;
-			case '--charts': options.charts = value(); break;
 			case '--smoke': options.sizes = ['tiny']; options.iterations = 1; break;
 			case '--help': case '-h': process.stdout.write(HELP); process.exit(0);
 			default: throw new Error(`Unknown option ${arg}\n\n${HELP}`);
@@ -417,27 +411,22 @@ function main(): void {
 	const markdown = report(options, documents, runner.results);
 	process.stdout.write('\n' + markdown);
 
-	const json: IBenchReport & { options: IOptions } = {
-		environment: {
-			node: process.version,
-			v8: process.versions.v8,
-			platform: os.platform(),
-			arch: os.arch(),
-			cpu: os.cpus()[0]?.model.trim(),
-			date: new Date().toISOString()
-		},
-		options,
-		documents: documents.map(d => ({ name: d.name, bytes: d.bytes, lines: d.lines })),
-		results: runner.results
-	};
 	if (options.json) {
+		const json = {
+			environment: {
+				node: process.version,
+				v8: process.versions.v8,
+				platform: os.platform(),
+				arch: os.arch(),
+				cpu: os.cpus()[0]?.model.trim(),
+				date: new Date().toISOString()
+			},
+			options,
+			documents: documents.map(d => ({ name: d.name, bytes: d.bytes, lines: d.lines })),
+			results: runner.results
+		};
 		fs.writeFileSync(options.json, JSON.stringify(json, null, 2));
 		process.stderr.write(`wrote ${options.json}\n`);
-	}
-	if (options.charts) {
-		for (const file of renderCharts(chartInput(json), options.charts)) {
-			process.stderr.write(`wrote ${file}\n`);
-		}
 	}
 }
 

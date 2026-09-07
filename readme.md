@@ -43,14 +43,13 @@ npm run bench                       # synthetic documents shaped like the post's
 npm run bench:corpus                # download the post's public files into bench-corpus/
 npm run bench -- --corpus           # ... and run on them
 npm run bench -- --corpus --huge    # add the 3M-line category (several minutes)
-npm run bench -- --json r.json --charts charts/   # also save the samples, and render SVG charts
-npm run bench:charts -- r.json charts/            # re-render the charts of a saved run
+npm run bench -- --json r.json      # also save all samples and environment info
 npm run bench -- --help             # all options (--iterations, --file, --seed, ...)
 ```
 
 ### Results
 
-Measured with `npm run bench -- --corpus --huge --iterations 3` on Node 22.14 (V8 12.4), Linux, Intel Xeon, on the files of the post: `checker.ts` (TypeScript 2.7.1), `sqlite3.c` (emscripten 1.37.36), the Russian-English dictionary, and `checker.ts` repeated 128 times. The post's Chromium heap snapshot is not public, so a synthetic 54 MB / 3M-line document stands in for it. The synthetic small/medium/large documents give the same picture as the real files of the same size. The samples are in [`docs/benchmark/results.json`](docs/benchmark/results.json); the charts show medians, and every cell has its own scale, since the numbers span four orders of magnitude between the files.
+Measured with `npm run bench -- --corpus --huge --iterations 3` on Node 22.14 (V8 12.4), Linux, Intel Xeon, on the files of the post: `checker.ts` (TypeScript 2.7.1), `sqlite3.c` (emscripten 1.37.36), the Russian-English dictionary, and `checker.ts` repeated 128 times. The post's Chromium heap snapshot is not public, so a synthetic 54 MB / 3M-line document stands in for it. The synthetic small/medium/large documents give the same picture as the real files of the same size. The samples are in [`docs/benchmark/results.json`](docs/benchmark/results.json); the charts plot the medians against the file size, on log-log axes since the numbers span four orders of magnitude between the files.
 
 The conclusions of the post hold on today's V8.
 
@@ -68,9 +67,7 @@ The conclusions of the post hold on today's V8.
 
 **Reading**: the piece tree's Achilles heel. After 1000 edits `getLineContent` is 2–5x slower than an array index, but that is 40–55 ns per line when reading the whole file, and ten screenfuls of 100 lines are read in under 0.1 ms.
 
-![Reading all lines](docs/benchmark/reading-all-lines.svg)
-
-![Reading 10 windows of 100 lines](docs/benchmark/reading-windows.svg)
+![Reading after 1000 random edits](docs/benchmark/reading.svg)
 
 **Saving**: the piece tree hands out a few large substrings instead of joining hundreds of thousands of line strings, and is 2–6x faster.
 
@@ -90,5 +87,3 @@ The conclusions of the post hold on today's V8.
 | save (full text) after 1000 random edits | 1.35 ms → **0.628 ms** | 8.08 ms → **3.13 ms** | 25.31 ms → **7.43 ms** | 156.7 ms → **26.00 ms** | 510.6 ms → **88.71 ms** |
 
 </details>
-
-The charts were rendered from the saved run with `npm run bench:charts -- docs/benchmark/results.json --documents "checker.ts,sqlite3.c,Russian-English Bilingual.dic,synthetic huge,checker.ts x 128"`.

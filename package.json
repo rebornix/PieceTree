@@ -13,8 +13,7 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "bench": "node --expose-gc --import tsx src/benchmark/bench.ts",
-		"bench:corpus": "node --import tsx src/benchmark/fetchCorpus.ts",
-		"bench:charts": "node --import tsx src/benchmark/renderCharts.ts"
+        "bench:corpus": "node --import tsx src/benchmark/fetchCorpus.ts"
     },
     "repository": {
         "type": "git",
