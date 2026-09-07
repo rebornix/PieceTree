@@ -5,8 +5,11 @@
 The underling text buffer used in VS Code/Monaco. For detailed architecture behind it, please read [Text Buffer Reimplementation](https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation).
 
 ```
-npm install vscode-piece-tree
+npm install github:rebornix/PieceTree
 ```
+
+The library is compiled from source when it is installed (a `prepare` script runs `tsc`), so the install needs no global tools and always matches the commit it was installed from. Add `#<commit>` to the URL to pin a specific revision.
+
 ## API
 
 ```typescript
