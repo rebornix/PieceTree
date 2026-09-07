@@ -4,7 +4,11 @@
     "description": "Piece Tree",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "files": [
+        "lib"
+    ],
     "scripts": {
+        "prepare": "npm run build",
         "start": "npm run build && npm run watch",
         "build": "tsc -p tsconfig.build.json",
         "watch": "tsc -p tsconfig.build.json -w",
