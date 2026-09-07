@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { PieceTreeTextBufferBuilder, DefaultEndOfLine } from '../index';
 
 function createPieceTree(chunks: string[]) {
