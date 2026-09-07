@@ -7,7 +7,7 @@ export default defineConfig({
 			provider: 'v8',
 			// report on the whole library, not only on files the tests happen to load
 			include: ['src/**/*.ts'],
-			exclude: ['src/test/**'],
+			exclude: ['src/test/**', 'src/benchmark/**'],
 			reporter: ['text', 'lcov'],
 		},
 	},

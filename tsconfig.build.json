@@ -1,6 +1,6 @@
 {
   // Build config for the published library (lib/): CommonJS + declarations,
-  // tests excluded.
+  // tests and benchmarks excluded.
   "compilerOptions": {
     "target": "es2015",
     "module": "commonjs",
@@ -9,5 +9,5 @@
     "esModuleInterop": true
   },
   "include": ["src"],
-  "exclude": ["src/test"]
+  "exclude": ["src/test", "src/benchmark"]
 }

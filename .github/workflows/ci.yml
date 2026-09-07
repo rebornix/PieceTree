@@ -41,6 +41,11 @@ jobs:
       - name: Test
         run: npm run test:coverage
 
+      # Not a performance gate (CI runners are too noisy for that); this only
+      # makes sure the benchmark still runs and both buffers still agree.
+      - name: Benchmark smoke run
+        run: npm run bench -- --smoke
+
   # Single, stable status check to mark as "required" in branch protection,
   # so the matrix above can change without having to update repo settings.
   ci-passed:

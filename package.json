@@ -11,7 +11,9 @@
         "typecheck": "tsc -p tsconfig.json --noEmit",
         "test": "vitest run",
         "test:watch": "vitest",
-        "test:coverage": "vitest run --coverage"
+        "test:coverage": "vitest run --coverage",
+        "bench": "node --expose-gc --import tsx src/benchmark/bench.ts",
+        "bench:corpus": "node --import tsx src/benchmark/fetchCorpus.ts"
     },
     "repository": {
         "type": "git",
@@ -26,6 +28,7 @@
     "devDependencies": {
         "@types/node": "^22.10.0",
         "@vitest/coverage-v8": "^5.0.0",
+        "tsx": "^4.23.13",
         "typescript": "^5.7.2",
         "vitest": "^5.0.0"
     }
