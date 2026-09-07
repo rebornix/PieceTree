@@ -41,7 +41,8 @@ const HELP = `Usage: npm run bench -- [options]
                       (default: small,medium,large)
   --corpus            also run the blog post's real files from bench-corpus/ (npm run bench:corpus downloads them)
   --file <path>       also run an arbitrary file (repeatable)
-  --huge              add the 54 MB synthetic document and, with --corpus, "checker.ts x 128" (needs a few GB of heap)
+  --huge              add the 54 MB synthetic document (unless --sizes none) and, with --corpus, "checker.ts x 128";
+                      takes several minutes
   --iterations <n>    timed repetitions per benchmark, the median is reported (default: 5)
   --edits <n>         number of edits per editing workload (default: 1000)
   --seed <n>          seed for the generated documents and edits (default: 2018)
