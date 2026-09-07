@@ -9,8 +9,8 @@ function createPieceTree(chunks: string[]) {
     return builder.finish(true).create(DefaultEndOfLine.LF);
 }
 
-describe('random tests', () => {
-    it('random insert delete', () => {
+describe('readme example', () => {
+    it('builds from chunks and inserts', () => {
         let pieceTreeTextBufferBuilder = new PieceTreeTextBufferBuilder();
         pieceTreeTextBufferBuilder.acceptChunk('abc\n');
         pieceTreeTextBufferBuilder.acceptChunk('def');
