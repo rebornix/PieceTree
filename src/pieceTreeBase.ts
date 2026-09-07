@@ -385,6 +385,7 @@ export class PieceTreeBase {
 			let endPosition = other.nodeAt(offset + len);
 			let val = other.getValueInRange2(startPosition, endPosition);
 
+			offset += len;
 			return str === val;
 		});
 
