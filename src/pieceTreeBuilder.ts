@@ -124,13 +124,18 @@ export class PieceTreeTextBufferBuilder {
     }
 
     private _acceptChunk1(chunk: string, allowEmptyStrings: boolean): void {
-        if (!allowEmptyStrings && chunk.length === 0) {
+        if (!allowEmptyStrings && chunk.length === 0 && !this._hasPreviousChar) {
             // Nothing to do
             return;
         }
 
         if (this._hasPreviousChar) {
+            // The held-back \r / high surrogate is consumed here. Clearing the
+            // flag matters when the chunk is empty (a chunk that consisted only
+            // of a held-back char, or _finish on such a document): otherwise
+            // the char would be dropped or emitted twice.
             this._acceptChunk2(String.fromCharCode(this._previousChar) + chunk);
+            this._hasPreviousChar = false;
         } else {
             this._acceptChunk2(chunk);
         }
