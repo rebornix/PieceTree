@@ -50,10 +50,12 @@ export interface Node<T extends IMeasured> {
  * It is frozen: nothing ever writes to it.
  */
 export const EMPTY: Node<never> = (() => {
-	const empty: any = { color: Color.Black, value: null, size: 0, lf: 0 };
+	type Mutable<T> = { -readonly [K in keyof T]: T[K] };
+	// built in two steps because left and right point at the node itself
+	const empty: Mutable<Node<never>> = { color: Color.Black, left: null as never, right: null as never, value: null as never, size: 0, lf: 0 };
 	empty.left = empty;
 	empty.right = empty;
-	return Object.freeze(empty) as Node<never>;
+	return Object.freeze(empty);
 })();
 
 /** The single place where a node is built, hence the single place where the metadata is computed. */
