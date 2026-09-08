@@ -36,7 +36,8 @@ export class LineStarts {
 }
 
 export function createLineStartsFast(str: string, readonly: boolean = true): Uint32Array | Uint16Array | number[] {
-	let r: number[] = [0], rLength = 1;
+	const r: number[] = [0];
+	let rLength = 1;
 
 	for (let i = 0, len = str.length; i < len; i++) {
 		const chr = str.charCodeAt(i);
@@ -1521,12 +1522,10 @@ export class PieceTreeBase {
 			return '';
 		}
 		const buffer = this._buffers[node.piece.bufferIndex];
-		let currentContent;
 		const piece = node.piece;
 		const startOffset = this.offsetInBuffer(piece.bufferIndex, piece.start);
 		const endOffset = this.offsetInBuffer(piece.bufferIndex, piece.end);
-		currentContent = buffer.buffer.substring(startOffset, endOffset);
-		return currentContent;
+		return buffer.buffer.substring(startOffset, endOffset);
 	}
 
 	getPieceContent(piece: Piece) {
