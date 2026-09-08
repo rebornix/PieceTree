@@ -26,7 +26,7 @@ import { IEdit, generateRandomEdits, generateSequentialInserts, generateWindowSt
  *
  *   6. undo: taking back those edits one by one, as versions where the buffer
  *      keeps them and as inverse edits (VS Code's undo stack) where it does not
- *   7. memory after those edits with the undo history alive
+ *   7. memory after those edits, without and with the undo history alive
  *
  * Usage: npm run bench -- [options]     (see --help)
  */
@@ -151,6 +151,7 @@ const BENCHMARKS = {
 	readWindows: (kind: string) => `Reading: 10 windows of 100 lines after ${kind}`,
 	save: (kind: string) => `Saving: full text after ${kind}`,
 	undo: (kind: string) => `Undo: ${kind}, one by one`,
+	memoryAfterEdits: (kind: string) => `Memory after ${kind}`,
 	memoryWithHistory: (kind: string) => `Memory after ${kind} with undo history`
 };
 
@@ -158,14 +159,26 @@ function progress(message: string): void {
 	process.stderr.write(`  ${message}\n`);
 }
 
+/** The same "use the string" trick as the original benchmark, folded into a checksum. */
+function addLine(checksum: number, str: string): number {
+	return (checksum + str.length * 31 + (str.length > 0 ? str.charCodeAt(0) : 0)) | 0;
+}
+
 function readLines(buffer: IBenchBuffer, from: number, to: number): number {
-	// the same "use the string" trick as the original benchmark, folded into a checksum
 	let checksum = 0;
 	for (let lineNumber = from; lineNumber <= to; lineNumber++) {
-		const str = buffer.getLineContent(lineNumber);
-		checksum = (checksum + str.length * 31 + (str.length > 0 ? str.charCodeAt(0) : 0)) | 0;
+		checksum = addLine(checksum, buffer.getLineContent(lineNumber));
 	}
 	return checksum;
+}
+
+/** What readLines over the whole buffer returns for a document made of these lines. */
+function checksumOfLines(lines: string[]): number {
+	let checksum = 0;
+	for (const line of lines) {
+		checksum = addLine(checksum, line);
+	}
+	return (lines.length * 31 + checksum) | 0;
 }
 
 function applyEdits(buffer: IBenchBuffer, edits: IEdit[]): number {
@@ -184,18 +197,18 @@ function applyEdits(buffer: IBenchBuffer, edits: IEdit[]): number {
  * versions, the inverse edit (the range the inserted text occupies, and the
  * text it replaced) where it does not.
  */
-type UndoRecord = { snapshot: unknown } | { range: IEditRange; text: string };
+type UndoRecord = { version: unknown } | { range: IEditRange; text: string };
 
 const EOL_REGEX = /\r\n|\r|\n/;
 
 /** Applies the edits, keeping what undoing each of them needs. */
 function applyEditsRecording(buffer: IBenchBuffer, edits: IEdit[]): UndoRecord[] {
 	const records: UndoRecord[] = [];
-	const versions = typeof buffer.snapshot === 'function' && typeof buffer.restore === 'function';
+	const versions = typeof buffer.captureVersion === 'function' && typeof buffer.restoreVersion === 'function';
 	const eol = buffer.getEOL();
 	for (let i = 0; i < edits.length; i++) {
 		if (versions) {
-			records.push({ snapshot: buffer.snapshot!() });
+			records.push({ version: buffer.captureVersion!() });
 			buffer.applyEdit(edits[i].range, edits[i].text);
 			continue;
 		}
@@ -211,25 +224,29 @@ function applyEditsRecording(buffer: IBenchBuffer, edits: IEdit[]): UndoRecord[]
 	return records;
 }
 
-/** Takes the edits back in reverse order; returns a checksum of the restored document. */
+/** Takes the edits back in reverse order. */
 function undoAll(buffer: IBenchBuffer, records: UndoRecord[]): number {
 	for (let i = records.length - 1; i >= 0; i--) {
 		const record = records[i];
-		if ('snapshot' in record) {
-			buffer.restore!(record.snapshot);
+		if ('version' in record) {
+			buffer.restoreVersion!(record.version);
 		} else {
 			buffer.applyEdit(record.range, record.text);
 		}
 	}
-	return (buffer.getLineCount() * 31 + readLines(buffer, 1, Math.min(buffer.getLineCount(), 50))) | 0;
+	return records.length;
 }
 
 interface ITimedBenchmark {
 	name: string;
 	/** Unmeasured preparation of a freshly built buffer. */
 	prepare?: (buffer: IBenchBuffer) => void;
-	/** The measured part; returns a checksum. */
+	/** The measured part; returns a checksum of what it read (the implementations must agree on it). */
 	run: (buffer: IBenchBuffer) => number;
+	/** Unmeasured check of the resulting document; its checksum is added to `run`'s. */
+	verify?: (buffer: IBenchBuffer) => number;
+	/** What the checksum must be, when it is known independently of the implementations. */
+	expected?: number;
 }
 
 class Runner {
@@ -336,30 +353,40 @@ class Runner {
 				}
 			});
 
-			// 6. undo, one edit at a time: versions where the buffer has them, inverse edits otherwise
+			// 6. undo, one edit at a time: versions where the buffer has them, inverse edits otherwise.
+			// The undo itself is what is timed; that the whole document is back to the original is
+			// checked afterwards, against the original.
 			const undoRecords = new WeakMap<IBenchBuffer, UndoRecord[]>();
 			this.runTimed(document, chunks, {
 				name: BENCHMARKS.undo(kind),
 				prepare: buffer => { undoRecords.set(buffer, applyEditsRecording(buffer, edits)); },
-				run: buffer => undoAll(buffer, undoRecords.get(buffer)!)
+				run: buffer => undoAll(buffer, undoRecords.get(buffer)!),
+				verify: buffer => (buffer.getLineCount() * 31 + readLines(buffer, 1, buffer.getLineCount())) | 0,
+				expected: (edits.length + checksumOfLines(lines)) | 0
 			});
 
-			// 7. memory after the edits, with everything an undo of each of them needs kept alive
+			// 7. memory after the edits, without and with everything an undo of each of them needs
 			if (canMeasureMemory()) {
-				for (const implementation of implementations) {
-					let lineCount = 0;
-					const bytes = measureRetainedHeap(() => {
-						const buffer = implementation.build(document.load());
-						const records = applyEditsRecording(buffer, edits);
-						lineCount = buffer.getLineCount();
-						return { buffer, records };
-					});
-					this.record(document, BENCHMARKS.memoryWithHistory(kind), implementation, [bytes], lineCount);
-				}
-				this.checkAgreement(document, BENCHMARKS.memoryWithHistory(kind));
-				progress(BENCHMARKS.memoryWithHistory(kind));
+				this.measureMemory(document, BENCHMARKS.memoryAfterEdits(kind), buffer => { applyEdits(buffer, edits); return buffer; });
+				this.measureMemory(document, BENCHMARKS.memoryWithHistory(kind), buffer => ({ buffer, records: applyEditsRecording(buffer, edits) }));
 			}
 		}
+	}
+
+	/** Retained heap of what `prepare` returns for a freshly built buffer, per implementation. */
+	private measureMemory(document: IDocument, benchmark: string, prepare: (buffer: IBenchBuffer) => object): void {
+		for (const implementation of implementations) {
+			let lineCount = 0;
+			const bytes = measureRetainedHeap(() => {
+				const buffer = implementation.build(document.load());
+				const retained = prepare(buffer);
+				lineCount = buffer.getLineCount();
+				return retained;
+			});
+			this.record(document, benchmark, implementation, [bytes], lineCount);
+		}
+		this.checkAgreement(document, benchmark);
+		progress(benchmark);
 	}
 
 	private runTimed(document: IDocument, chunks: string[], benchmark: ITimedBenchmark, timeBuild: boolean = false): void {
@@ -387,6 +414,12 @@ class Runner {
 					ms = timeMs(() => {
 						checksum = benchmark.run(buffer);
 					});
+				}
+				if (benchmark.verify !== undefined) {
+					checksum = (checksum + benchmark.verify(buffer)) | 0;
+				}
+				if (benchmark.expected !== undefined && checksum !== benchmark.expected) {
+					throw new Error(`${implementation.name} got "${benchmark.name}" wrong for ${document.name}: checksum ${checksum}, expected ${benchmark.expected}`);
 				}
 				if (iteration >= 0) {
 					samples.get(implementation)!.push(ms);

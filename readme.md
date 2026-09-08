@@ -39,18 +39,18 @@ const tree = pieceTreeFactory.createPersistent(DefaultEndOfLine.LF);
 const before = tree.getVersion();       // O(1)
 tree.insert(1, '+');
 tree.getLineContent(1);                 // 'a+bc'
-tree.setVersion(before);                // O(1)
+tree.restoreVersion(before);            // O(1)
 tree.getLineContent(1);                 // 'abc'
 
-const history = new PieceTreeHistory(tree, 1000); // keeps at most 1000 undo points
-history.snapshot();                     // an undo point, before a change or a group of changes
+const history = new PieceTreeHistory(tree, 1000); // keeps at most 1000 undo stops
+history.pushUndoStop();                 // before a change or a group of changes
 tree.insert(0, '> ');
 tree.delete(5, 1);
-history.undo();                         // back to the snapshot, in O(1)
-history.redo();
+history.undo();                         // back to the undo stop, in O(1)
+history.redo();                         // an edit after an undo discards the redo stack, as in an editor
 ```
 
-Versions keep the pieces they were taken with alive, which is O(log n) tree nodes per edit; the text buffers are shared by all versions (the change buffer only ever grows). The idea and the design follow [fredbuf](https://github.com/cdacamar/fredbuf), described in [Text Editor Data Structures](https://cdacamar.github.io/data%20structures/algorithms/benchmarking/text%20editors/c++/editor-data-structures/).
+Versions keep the tree nodes they were taken with alive, which is O(log n) nodes per edit; the text buffers are shared by all versions (the change buffer only ever grows). The idea and the design follow [fredbuf](https://github.com/cdacamar/fredbuf), described in [Text Editor Data Structures](https://cdacamar.github.io/data%20structures/algorithms/benchmarking/text%20editors/c++/editor-data-structures/).
 
 ## Benchmarks
 
@@ -64,8 +64,8 @@ Versions keep the pieces they were taken with alive, which is O(log n) tree node
 
 and, since the persistent piece tree runs alongside as a third implementation, two workloads for what its versions buy:
 
-6. undo: taking those 1000 edits back one by one, as inverse edits for the line array and the piece tree (how VS Code's undo stack works) and as versions for the persistent tree
-7. memory after those edits with the undo history alive
+6. undo: taking those 1000 edits back one by one, as inverse edits for the line array and the piece tree (how VS Code's undo stack works) and as versions for the persistent tree; only the undo is timed, and the harness then checks the whole document against the original
+7. memory after those edits, without and with the undo history alive
 
 The baseline ([`src/benchmark/lineArrayBuffer.ts`](src/benchmark/lineArrayBuffer.ts)) is a compact port of VS Code 1.21's `LinesTextBuffer`: an array of line strings plus lazily recomputed prefix sums of the line lengths for offset/position conversion. Both buffers are driven the way `TextModel.applyEdits` drove them (line/column range in; offset, length and replaced text out), and the harness checks that all implementations agree on every result (including the document an undo restores), so it also acts as a differential test. Edits are generated from a seed and identical for all buffers.
 
@@ -121,15 +121,17 @@ The conclusions of the post hold on today's V8.
 
 #### Persistent piece tree
 
-Measured with `npm run bench -- --corpus --iterations 5` (same machine, samples in [`docs/benchmark/results-persistent.json`](docs/benchmark/results-persistent.json)). On the workloads above the persistent tree costs what path copying and a tree without parent pointers cost: the same as the piece tree, or slightly faster, for memory after load, file opening, sequential inserts and saving; 1.1–1.5x slower for random edits and 1.1–1.3x slower for reading lines. Undo is where the versions pay off: returning to a version is a pointer swap, whichever edit is undone and whatever the size of the document.
+Measured with `npm run bench -- --corpus --iterations 5` (same machine, samples in [`docs/benchmark/results-persistent.json`](docs/benchmark/results-persistent.json)). On the workloads above the persistent tree costs what path copying and a tree without parent pointers cost: within run-to-run noise of the piece tree for memory after load, file opening, sequential inserts and saving (one cell aside: saving `sqlite3.c` after random edits, where the piece tree measured 3 ms in the run above and 12 ms in this one, with the persistent tree at 3 ms in both); 1.0–1.3x slower for 1000 random edits (2.9–3.8 ms against 2.4–3.5 ms) and 1.1x slower for reading lines. Undo is where the versions pay off: returning to a version is a pointer swap, whichever edit is undone and whatever the size of the document. (The two other buffers undo by applying the inverse edit, which also yields what a content-change event needs; the persistent tree's number does not include computing that.)
 
 ![Undo](docs/benchmark/undo.svg)
 
 | line array → piece tree → persistent piece tree | checker.ts<br>1.46 MB, 27k lines | sqlite3.c<br>4.31 MB, 128k lines | Russian-English dictionary<br>14.2 MB, 552k lines |
 |---|---|---|---|
-| undo 1000 random edits, one by one | 7.69 ms → 2.90 ms → **0.020 ms** | 36.6 ms → 4.24 ms → **0.030 ms** | 156 ms → 2.93 ms → **0.035 ms** |
-| undo 1000 sequential inserts, one by one | 7.40 ms → 1.56 ms → **0.026 ms** | 35.7 ms → 1.56 ms → **0.032 ms** | 230 ms → 1.93 ms → **0.039 ms** |
-| memory after 1000 random edits, undo history kept | 2.61 MB → **1.58 MB** → 2.37 MB | 9.23 MB → **4.61 MB** → 5.27 MB | 40.7 MB → **18.8 MB** → 19.5 MB |
-| memory after 1000 sequential inserts, undo history kept | 2.52 MB → **1.47 MB** → 1.94 MB | 9.17 MB → **4.37 MB** → 5.03 MB | 40.6 MB → **18.6 MB** → 19.3 MB |
+| undo 1000 random edits, one by one | 8.09 ms → 3.49 ms → **0.015 ms** | 36.0 ms → 3.62 ms → **0.014 ms** | 156 ms → 3.40 ms → **0.016 ms** |
+| undo 1000 sequential inserts, one by one | 7.25 ms → 1.31 ms → **0.016 ms** | 34.6 ms → 1.59 ms → **0.010 ms** | 249 ms → 1.87 ms → **0.022 ms** |
+| memory after 1000 random edits | 2.50 MB → **1.47 MB** → 1.58 MB | 9.14 MB → **4.47 MB** → 4.59 MB | 40.6 MB → **18.7 MB** → 18.7 MB |
+| memory after 1000 random edits, undo history kept | 2.62 MB → **1.86 MB** → 2.46 MB | 9.27 MB → **4.77 MB** → 5.36 MB | 40.7 MB → **19.0 MB** → 19.6 MB |
+| memory after 1000 sequential inserts | 2.42 MB → **1.38 MB** → 1.40 MB | 9.08 MB → **4.32 MB** → 4.34 MB | 40.5 MB → **18.5 MB** → 18.5 MB |
+| memory after 1000 sequential inserts, undo history kept | 2.57 MB → **1.58 MB** → 2.00 MB | 9.22 MB → **4.55 MB** → 5.07 MB | 40.6 MB → **18.7 MB** → 19.3 MB |
 
-The price of keeping 1000 versions is the nodes those 1000 edits allocated: 0.5–0.8 MB here whatever the size of the document, since an edit copies the path from the root to the edited piece, a dozen or so nodes and pieces. The inverse edits the other two buffers keep are smaller, a few numbers and the replaced text per edit.
+Keeping 1000 versions costs 0.6–0.9 MB whatever the size of the document (the difference between the rows with and without history): an edit copies the path from the root to the edited piece, a dozen or so nodes and pieces. The inverse edits the other two buffers keep for the same undo, a range and the replaced text each, cost 0.2–0.4 MB.

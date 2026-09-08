@@ -5,7 +5,7 @@
     "platform": "linux",
     "arch": "x64",
     "cpu": "Intel(R) Xeon(R) Processor",
-    "date": "2026-09-08T04:50:02.718Z"
+    "date": "2026-09-08T06:32:28.670Z"
   },
   "options": {
     "sizes": [
@@ -19,7 +19,7 @@
     "iterations": 5,
     "edits": 1000,
     "seed": 2018,
-    "json": "/tmp/bench-persistent.json"
+    "json": "/tmp/bench-persistent2.json"
   },
   "documents": [
     {
@@ -89,13 +89,13 @@
       "benchmark": "File opening",
       "implementation": "line array",
       "samples": [
-        3.161847,
-        3.160654,
-        3.196373,
-        3.271782,
-        3.105609
+        3.06781,
+        3.053426,
+        3.022883,
+        2.950357,
+        3.045686
       ],
-      "median": 3.161847,
+      "median": 3.045686,
       "checksum": 26000
     },
     {
@@ -103,13 +103,13 @@
       "benchmark": "File opening",
       "implementation": "piece tree",
       "samples": [
-        3.716615,
-        3.750234,
-        3.829341,
-        3.759726,
-        3.773554
+        3.406827,
+        3.400143,
+        3.363713,
+        3.338995,
+        3.359877
       ],
-      "median": 3.759726,
+      "median": 3.363713,
       "checksum": 26000
     },
     {
@@ -117,13 +117,13 @@
       "benchmark": "File opening",
       "implementation": "persistent piece tree",
       "samples": [
-        3.845142,
-        3.576404,
-        3.736623,
-        3.608014,
-        4.817596
+        3.321158,
+        3.314415,
+        3.234514,
+        3.272825,
+        4.073136
       ],
-      "median": 3.736623,
+      "median": 3.314415,
       "checksum": 26000
     },
     {
@@ -131,13 +131,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "line array",
       "samples": [
-        8.344057,
-        8.314278,
-        7.528748,
-        7.532569,
-        7.454711
+        8.285523,
+        8.220137,
+        7.545563,
+        7.334814,
+        7.442594
       ],
-      "median": 7.532569,
+      "median": 7.545563,
       "checksum": 757429557
     },
     {
@@ -145,13 +145,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        6.1943,
-        3.601935,
-        7.676184,
-        2.978707,
-        3.104327
+        7.021745,
+        3.53114,
+        7.185836,
+        2.918571,
+        3.023288
       ],
-      "median": 3.601935,
+      "median": 3.53114,
       "checksum": 757429557
     },
     {
@@ -159,13 +159,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        4.393316,
-        3.915796,
-        4.476384,
-        3.834071,
-        3.20608
+        4.214524,
+        3.802424,
+        3.991775,
+        3.636831,
+        3.001397
       ],
-      "median": 3.915796,
+      "median": 3.802424,
       "checksum": 757429557
     },
     {
@@ -173,13 +173,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        1.417283,
-        0.229711,
-        0.23621,
-        0.227339,
-        0.223688
+        0.697022,
+        0.211534,
+        0.226928,
+        0.215391,
+        0.217454
       ],
-      "median": 0.229711,
+      "median": 0.217454,
       "checksum": 47128194
     },
     {
@@ -187,13 +187,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        7.471361,
-        3.56581,
-        3.476381,
-        3.410138,
-        3.434521
+        7.265186,
+        3.504632,
+        3.399859,
+        3.404371,
+        3.42559
       ],
-      "median": 3.476381,
+      "median": 3.42559,
       "checksum": 47128194
     },
     {
@@ -201,13 +201,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        5.010642,
-        4.075452,
-        4.005312,
-        3.955275,
-        4.076038
+        3.741743,
+        3.558409,
+        3.627805,
+        3.541235,
+        4.328079
       ],
-      "median": 4.075452,
+      "median": 3.627805,
       "checksum": 47128194
     },
     {
@@ -215,13 +215,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        0.018066,
-        0.013367,
-        0.013094,
-        0.012459,
-        0.013134
+        0.017573,
+        0.013422,
+        0.012627,
+        0.014033,
+        0.012881
       ],
-      "median": 0.013134,
+      "median": 0.013422,
       "checksum": 1809060
     },
     {
@@ -229,13 +229,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        0.145484,
-        0.144145,
-        0.140881,
-        0.143766,
-        0.140987
+        0.145292,
+        0.145717,
+        0.144268,
+        0.144089,
+        0.143911
       ],
-      "median": 0.143766,
+      "median": 0.144268,
       "checksum": 1809060
     },
     {
@@ -243,13 +243,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        0.172664,
-        0.167767,
-        0.178528,
-        0.165701,
-        0.175868
+        0.155063,
+        0.152924,
+        0.150959,
+        0.16226,
+        0.160448
       ],
-      "median": 0.172664,
+      "median": 0.155063,
       "checksum": 1809060
     },
     {
@@ -257,13 +257,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        1.336522,
-        1.48401,
-        1.343429,
-        1.297984,
-        1.322908
+        1.303285,
+        1.177819,
+        1.167665,
+        1.131145,
+        1.100642
       ],
-      "median": 1.336522,
+      "median": 1.167665,
       "checksum": 47086352
     },
     {
@@ -271,13 +271,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        1.353713,
-        0.802755,
-        0.748052,
-        0.732856,
-        0.697282
+        1.18902,
+        0.673721,
+        0.689903,
+        0.59645,
+        0.58464
       ],
-      "median": 0.748052,
+      "median": 0.673721,
       "checksum": 47086352
     },
     {
@@ -285,13 +285,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        0.87449,
-        0.858892,
-        0.858087,
-        0.790463,
-        0.67258
+        0.655145,
+        0.66885,
+        0.665407,
+        0.538259,
+        0.549197
       ],
-      "median": 0.858087,
+      "median": 0.655145,
       "checksum": 47086352
     },
     {
@@ -299,51 +299,81 @@
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "line array",
       "samples": [
-        7.628254,
-        7.568459,
-        7.617536,
-        7.63026,
-        7.569512
+        7.730791,
+        7.624073,
+        7.675769,
+        7.657971,
+        7.756108
       ],
-      "median": 7.617536,
-      "checksum": 912941
+      "median": 7.675769,
+      "checksum": 48245885
     },
     {
       "document": "synthetic small",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "piece tree",
       "samples": [
-        5.290516,
-        5.551546,
-        4.878483,
-        4.830425,
-        3.245848
+        3.41118,
+        4.502445,
+        4.204354,
+        3.019238,
+        2.915357
       ],
-      "median": 4.878483,
-      "checksum": 912941
+      "median": 3.41118,
+      "checksum": 48245885
     },
     {
       "document": "synthetic small",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.171047,
-        0.041705,
-        0.038207,
-        0.036088,
-        0.031729
+        0.01466,
+        0.015259,
+        0.014869,
+        0.014101,
+        0.012832
       ],
-      "median": 0.038207,
-      "checksum": 912941
+      "median": 0.01466,
+      "checksum": 48245885
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        2627488
+      ],
+      "median": 2627488,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        1649056
+      ],
+      "median": 1649056,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1762536
+      ],
+      "median": 1762536,
+      "checksum": 26000
     },
     {
       "document": "synthetic small",
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "line array",
       "samples": [
-        2760064
+        2771336
       ],
-      "median": 2760064,
+      "median": 2771336,
       "checksum": 26000
     },
     {
@@ -351,9 +381,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "piece tree",
       "samples": [
-        1781648
+        1944824
       ],
-      "median": 1781648,
+      "median": 1944824,
       "checksum": 26000
     },
     {
@@ -361,9 +391,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        2552448
+        2583816
       ],
-      "median": 2552448,
+      "median": 2583816,
       "checksum": 26000
     },
     {
@@ -371,13 +401,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        9.186499,
-        8.437648,
-        8.482794,
-        8.451567,
-        8.516674
+        8.640143,
+        8.401445,
+        8.511158,
+        8.85309,
+        9.169484
       ],
-      "median": 8.482794,
+      "median": 8.640143,
       "checksum": 1529858576
     },
     {
@@ -385,13 +415,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        1.683688,
-        1.511754,
-        0.995152,
-        1.001802,
-        0.99172
+        1.678385,
+        1.24352,
+        0.843416,
+        0.855051,
+        0.855422
       ],
-      "median": 1.001802,
+      "median": 0.855422,
       "checksum": 1529858576
     },
     {
@@ -399,13 +429,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        1.466439,
-        1.582607,
-        1.036641,
-        1.033946,
-        1.028986
+        1.552738,
+        1.154452,
+        0.828336,
+        0.769148,
+        0.797186
       ],
-      "median": 1.036641,
+      "median": 0.828336,
       "checksum": 1529858576
     },
     {
@@ -413,13 +443,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        1.399212,
-        0.187294,
-        0.20249,
-        0.185035,
-        0.180042
+        0.648671,
+        0.186341,
+        0.177389,
+        0.198635,
+        0.185896
       ],
-      "median": 0.187294,
+      "median": 0.186341,
       "checksum": 47491075
     },
     {
@@ -427,13 +457,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        3.073592,
-        3.059178,
-        2.975858,
-        2.996054,
-        3.019435
+        3.038354,
+        3.081585,
+        2.989705,
+        2.99324,
+        3.020797
       ],
-      "median": 3.019435,
+      "median": 3.020797,
       "checksum": 47491075
     },
     {
@@ -441,13 +471,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        3.233133,
-        3.272299,
-        3.32827,
-        3.135187,
-        3.210639
+        3.140019,
+        3.103616,
+        3.014492,
+        3.048891,
+        3.087549
       ],
-      "median": 3.233133,
+      "median": 3.087549,
       "checksum": 47491075
     },
     {
@@ -455,13 +485,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        0.018259,
-        0.01703,
-        0.018431,
-        0.019177,
-        0.019416
+        0.01798,
+        0.016922,
+        0.017397,
+        0.018316,
+        0.018763
       ],
-      "median": 0.018431,
+      "median": 0.01798,
       "checksum": 1879102
     },
     {
@@ -469,13 +499,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        0.152633,
-        0.151897,
-        0.151255,
-        0.155759,
-        0.156681
+        0.152198,
+        0.150433,
+        0.151989,
+        0.147727,
+        0.152571
       ],
-      "median": 0.152633,
+      "median": 0.151989,
       "checksum": 1879102
     },
     {
@@ -483,13 +513,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.168877,
-        0.172297,
-        0.1705,
-        0.173511,
-        0.168819
+        0.172852,
+        0.162384,
+        0.158606,
+        0.162582,
+        0.162194
       ],
-      "median": 0.1705,
+      "median": 0.162384,
       "checksum": 1879102
     },
     {
@@ -497,13 +527,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        1.287442,
-        1.311777,
-        1.211715,
-        1.155968,
-        1.162233
+        1.299882,
+        1.181362,
+        1.125567,
+        1.081956,
+        1.141478
       ],
-      "median": 1.211715,
+      "median": 1.141478,
       "checksum": 47439498
     },
     {
@@ -511,13 +541,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        0.690643,
-        0.670093,
-        0.648238,
-        0.581541,
-        0.54001
+        0.642623,
+        0.513242,
+        0.496927,
+        0.494578,
+        0.575013
       ],
-      "median": 0.648238,
+      "median": 0.513242,
       "checksum": 47439498
     },
     {
@@ -525,13 +555,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.711393,
-        0.661259,
-        0.62649,
-        0.595282,
-        0.665079
+        0.732655,
+        0.622537,
+        0.552708,
+        0.684774,
+        0.503968
       ],
-      "median": 0.661259,
+      "median": 0.622537,
       "checksum": 47439498
     },
     {
@@ -539,51 +569,81 @@
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "line array",
       "samples": [
-        15.181716,
-        10.717955,
-        6.923277,
-        6.817074,
-        6.80671
+        14.141996,
+        7.105823,
+        6.931305,
+        7.013864,
+        8.811003
       ],
-      "median": 6.923277,
-      "checksum": 912941
+      "median": 7.105823,
+      "checksum": 48245885
     },
     {
       "document": "synthetic small",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "piece tree",
       "samples": [
-        1.945054,
-        1.385692,
-        1.408773,
-        1.476052,
-        1.357396
+        1.892223,
+        1.238215,
+        1.240293,
+        1.297152,
+        1.234303
       ],
-      "median": 1.408773,
-      "checksum": 912941
+      "median": 1.240293,
+      "checksum": 48245885
     },
     {
       "document": "synthetic small",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.178516,
-        0.043892,
-        0.047018,
-        0.02944,
-        0.02836
+        0.127616,
+        0.016456,
+        0.01659,
+        0.012435,
+        0.014597
       ],
-      "median": 0.043892,
-      "checksum": 912941
+      "median": 0.016456,
+      "checksum": 48245885
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        2538848
+      ],
+      "median": 2538848,
+      "checksum": 26478
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1472960
+      ],
+      "median": 1472960,
+      "checksum": 26478
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1501000
+      ],
+      "median": 1501000,
+      "checksum": 26478
     },
     {
       "document": "synthetic small",
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "line array",
       "samples": [
-        2637784
+        2706744
       ],
-      "median": 2637784,
+      "median": 2706744,
       "checksum": 26478
     },
     {
@@ -591,9 +651,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "piece tree",
       "samples": [
-        1557048
+        1662672
       ],
-      "median": 1557048,
+      "median": 1662672,
       "checksum": 26478
     },
     {
@@ -601,9 +661,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        2078888
+        2112072
       ],
-      "median": 2078888,
+      "median": 2112072,
       "checksum": 26478
     },
     {
@@ -611,9 +671,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "line array",
       "samples": [
-        9758888
+        9737640
       ],
-      "median": 9758888,
+      "median": 9737640,
       "checksum": 128000
     },
     {
@@ -621,9 +681,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "piece tree",
       "samples": [
-        4578872
+        4577264
       ],
-      "median": 4578872,
+      "median": 4577264,
       "checksum": 128000
     },
     {
@@ -631,9 +691,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "persistent piece tree",
       "samples": [
-        4584592
+        4584208
       ],
-      "median": 4584592,
+      "median": 4584208,
       "checksum": 128000
     },
     {
@@ -641,13 +701,13 @@
       "benchmark": "File opening",
       "implementation": "line array",
       "samples": [
-        11.644799,
-        11.401676,
-        10.785316,
-        10.537607,
-        11.859004
+        10.914727,
+        10.667817,
+        9.799721,
+        10.159448,
+        10.996129
       ],
-      "median": 11.401676,
+      "median": 10.667817,
       "checksum": 128000
     },
     {
@@ -655,13 +715,13 @@
       "benchmark": "File opening",
       "implementation": "piece tree",
       "samples": [
-        12.070266,
-        11.9629,
-        12.562583,
-        10.432491,
-        10.543311
+        12.091121,
+        11.831467,
+        12.994485,
+        10.354762,
+        10.202988
       ],
-      "median": 11.9629,
+      "median": 11.831467,
       "checksum": 128000
     },
     {
@@ -669,13 +729,13 @@
       "benchmark": "File opening",
       "implementation": "persistent piece tree",
       "samples": [
-        11.777472,
-        11.775311,
-        11.401005,
-        10.619474,
-        10.554231
+        11.829458,
+        12.224325,
+        12.376054,
+        10.230682,
+        10.131969
       ],
-      "median": 11.401005,
+      "median": 11.829458,
       "checksum": 128000
     },
     {
@@ -683,13 +743,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "line array",
       "samples": [
-        36.993063,
-        36.798363,
-        36.830826,
-        36.673567,
-        36.883528
+        37.060364,
+        36.876621,
+        36.851979,
+        36.503723,
+        36.762428
       ],
-      "median": 36.830826,
+      "median": 36.851979,
       "checksum": -2027329382
     },
     {
@@ -697,13 +757,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        3.882881,
-        2.873558,
-        2.569051,
-        2.618533,
-        2.579399
+        3.32124,
+        2.48723,
+        2.503861,
+        2.470751,
+        2.489531
       ],
-      "median": 2.618533,
+      "median": 2.489531,
       "checksum": -2027329382
     },
     {
@@ -711,13 +771,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        3.673363,
-        2.85724,
-        3.958428,
-        3.885103,
-        3.942837
+        3.191272,
+        2.607523,
+        3.69653,
+        3.209732,
+        3.279653
       ],
-      "median": 3.885103,
+      "median": 3.209732,
       "checksum": -2027329382
     },
     {
@@ -725,13 +785,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        2.800993,
-        0.873239,
-        0.886888,
-        0.830354,
-        0.839103
+        2.235864,
+        0.833455,
+        0.835682,
+        0.820076,
+        0.837178
       ],
-      "median": 0.873239,
+      "median": 0.835682,
       "checksum": 141255486
     },
     {
@@ -739,13 +799,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        14.971682,
-        14.906674,
-        14.769472,
-        14.917969,
-        14.805438
+        14.690166,
+        14.498246,
+        15.678784,
+        14.596513,
+        15.381302
       ],
-      "median": 14.906674,
+      "median": 14.690166,
       "checksum": 141255486
     },
     {
@@ -753,13 +813,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        17.356276,
-        17.108309,
-        16.790493,
-        17.176605,
-        17.013413
+        16.402525,
+        15.918556,
+        16.072401,
+        16.214358,
+        16.377559
       ],
-      "median": 17.108309,
+      "median": 16.214358,
       "checksum": 141255486
     },
     {
@@ -767,13 +827,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        0.015495,
-        0.014405,
-        0.014472,
-        0.015642,
-        0.016841
+        0.014666,
+        0.014967,
+        0.013265,
+        0.01398,
+        0.014118
       ],
-      "median": 0.015495,
+      "median": 0.014118,
       "checksum": 1128112
     },
     {
@@ -781,13 +841,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        0.130653,
-        0.134084,
-        0.132058,
-        0.132697,
-        0.131246
+        0.126547,
+        0.12795,
+        0.128999,
+        0.127319,
+        0.128722
       ],
-      "median": 0.132058,
+      "median": 0.12795,
       "checksum": 1128112
     },
     {
@@ -795,13 +855,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        0.153759,
-        0.156153,
-        0.155798,
-        0.161549,
-        0.203481
+        0.138083,
+        0.140543,
+        0.137114,
+        0.136263,
+        0.13577
       ],
-      "median": 0.156153,
+      "median": 0.137114,
       "checksum": 1128112
     },
     {
@@ -809,13 +869,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        16.231631,
-        5.552569,
-        16.437456,
-        5.458855,
-        16.603225
+        17.952918,
+        17.012976,
+        4.795861,
+        14.72949,
+        4.70992
       ],
-      "median": 16.231631,
+      "median": 14.72949,
       "checksum": 141017892
     },
     {
@@ -823,13 +883,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        1.749325,
-        1.802559,
-        1.698363,
-        1.911133,
-        1.724438
+        1.462511,
+        1.507444,
+        1.530658,
+        1.414635,
+        1.768302
       ],
-      "median": 1.749325,
+      "median": 1.507444,
       "checksum": 141017892
     },
     {
@@ -837,13 +897,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        1.980781,
-        3.28925,
-        1.983061,
-        3.371884,
-        1.764093
+        1.610616,
+        1.483362,
+        2.949224,
+        1.35631,
+        3.131655
       ],
-      "median": 1.983061,
+      "median": 1.610616,
       "checksum": 141017892
     },
     {
@@ -851,51 +911,81 @@
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "line array",
       "samples": [
-        37.711805,
-        37.783562,
-        37.739907,
-        37.373599,
-        43.544761
+        36.336756,
+        35.941769,
+        36.12442,
+        36.427896,
+        36.672675
       ],
-      "median": 37.739907,
-      "checksum": 4023819
+      "median": 36.336756,
+      "checksum": 145358392
     },
     {
       "document": "synthetic medium",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "piece tree",
       "samples": [
-        6.188709,
-        3.353989,
-        3.125273,
-        4.933714,
-        2.98583
+        3.239283,
+        2.900056,
+        2.865854,
+        2.681945,
+        2.648874
       ],
-      "median": 3.353989,
-      "checksum": 4023819
+      "median": 2.865854,
+      "checksum": 145358392
     },
     {
       "document": "synthetic medium",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.217134,
-        0.025572,
-        0.046829,
-        0.044248,
-        0.041346
+        0.039596,
+        0.013475,
+        0.01444,
+        0.012506,
+        0.017445
       ],
-      "median": 0.044248,
-      "checksum": 4023819
+      "median": 0.01444,
+      "checksum": 145358392
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        9801472
+      ],
+      "median": 9801472,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        4635976
+      ],
+      "median": 4635976,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4761312
+      ],
+      "median": 4761312,
+      "checksum": 128000
     },
     {
       "document": "synthetic medium",
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "line array",
       "samples": [
-        9898968
+        9900416
       ],
-      "median": 9898968,
+      "median": 9900416,
       "checksum": 128000
     },
     {
@@ -903,9 +993,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "piece tree",
       "samples": [
-        4723424
+        4947344
       ],
-      "median": 4723424,
+      "median": 4947344,
       "checksum": 128000
     },
     {
@@ -913,9 +1003,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        5529640
+        5646240
       ],
-      "median": 5529640,
+      "median": 5646240,
       "checksum": 128000
     },
     {
@@ -923,13 +1013,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        46.064854,
-        41.937841,
-        43.046677,
-        41.14518,
-        38.698787
+        37.842784,
+        40.18883,
+        40.661351,
+        40.719408,
+        38.027942
       ],
-      "median": 41.937841,
+      "median": 40.18883,
       "checksum": 259995280
     },
     {
@@ -937,13 +1027,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        1.435644,
-        1.11432,
-        1.16143,
-        1.080023,
-        1.097283
+        1.50235,
+        0.946503,
+        1.01821,
+        0.951919,
+        0.996369
       ],
-      "median": 1.11432,
+      "median": 0.996369,
       "checksum": 259995280
     },
     {
@@ -951,13 +1041,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        1.185326,
-        1.17473,
-        1.167342,
-        1.149163,
-        1.148595
+        1.079275,
+        0.909977,
+        1.008778,
+        0.885786,
+        0.97658
       ],
-      "median": 1.167342,
+      "median": 0.97658,
       "checksum": 259995280
     },
     {
@@ -965,13 +1055,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        3.077418,
-        0.839055,
-        0.870651,
-        0.855738,
-        0.968705
+        2.336218,
+        0.816335,
+        0.795989,
+        0.813338,
+        0.927964
       ],
-      "median": 0.870651,
+      "median": 0.816335,
       "checksum": 141441582
     },
     {
@@ -979,13 +1069,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        14.414574,
-        14.193056,
-        14.33072,
-        14.38911,
-        14.613447
+        14.124973,
+        14.192182,
+        14.101565,
+        14.244839,
+        14.145071
       ],
-      "median": 14.38911,
+      "median": 14.145071,
       "checksum": 141441582
     },
     {
@@ -993,13 +1083,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        16.843656,
-        16.748482,
-        15.622617,
-        16.295997,
-        16.475002
+        14.78199,
+        14.90928,
+        14.828573,
+        14.882764,
+        14.915147
       ],
-      "median": 16.475002,
+      "median": 14.882764,
       "checksum": 141441582
     },
     {
@@ -1007,13 +1097,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        0.035168,
-        0.031658,
-        0.025307,
-        0.025582,
-        0.02579
+        0.023631,
+        0.023819,
+        0.027339,
+        0.024069,
+        0.0229
       ],
-      "median": 0.02579,
+      "median": 0.023819,
       "checksum": 1100064
     },
     {
@@ -1021,13 +1111,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        0.144134,
-        0.137373,
-        0.133866,
-        0.136311,
-        0.13584
+        0.129583,
+        0.128202,
+        0.131177,
+        0.129287,
+        0.129104
       ],
-      "median": 0.136311,
+      "median": 0.129287,
       "checksum": 1100064
     },
     {
@@ -1035,13 +1125,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.164197,
-        0.149421,
-        0.149878,
-        0.147246,
-        0.158261
+        0.131513,
+        0.130548,
+        0.133369,
+        0.131628,
+        0.131316
       ],
-      "median": 0.149878,
+      "median": 0.131513,
       "checksum": 1100064
     },
     {
@@ -1049,13 +1139,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        5.861031,
-        5.767866,
-        5.254972,
-        5.416821,
-        5.167652
+        5.457075,
+        6.159955,
+        4.885321,
+        5.372304,
+        5.187135
       ],
-      "median": 5.416821,
+      "median": 5.372304,
       "checksum": 141195515
     },
     {
@@ -1063,13 +1153,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        1.945073,
-        1.61458,
-        1.546,
-        1.552416,
-        1.511472
+        1.636213,
+        1.468035,
+        1.404096,
+        1.679273,
+        2.274438
       ],
-      "median": 1.552416,
+      "median": 1.636213,
       "checksum": 141195515
     },
     {
@@ -1077,13 +1167,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        2.609282,
-        1.646602,
-        1.628822,
-        1.576253,
-        1.484793
+        1.500621,
+        1.682124,
+        1.471604,
+        1.461205,
+        2.71385
       ],
-      "median": 1.628822,
+      "median": 1.500621,
       "checksum": 141195515
     },
     {
@@ -1091,51 +1181,81 @@
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "line array",
       "samples": [
-        33.603586,
-        34.963149,
-        38.24075,
-        37.590768,
-        40.510226
+        33.71258,
+        33.559636,
+        34.454262,
+        35.217836,
+        36.47612
       ],
-      "median": 37.590768,
-      "checksum": 4023819
+      "median": 34.454262,
+      "checksum": 145358392
     },
     {
       "document": "synthetic medium",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "piece tree",
       "samples": [
-        1.837991,
-        1.535365,
-        1.633384,
-        1.530343,
-        1.661539
+        2.027585,
+        1.529113,
+        1.555201,
+        1.558734,
+        1.534319
       ],
-      "median": 1.633384,
-      "checksum": 4023819
+      "median": 1.555201,
+      "checksum": 145358392
     },
     {
       "document": "synthetic medium",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.088832,
-        0.042698,
-        0.037805,
-        0.036487,
-        0.040387
+        0.0371,
+        0.015812,
+        0.012253,
+        0.012152,
+        0.012987
       ],
-      "median": 0.040387,
-      "checksum": 4023819
+      "median": 0.012987,
+      "checksum": 145358392
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        9720032
+      ],
+      "median": 9720032,
+      "checksum": 128478
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        4497672
+      ],
+      "median": 4497672,
+      "checksum": 128478
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4518272
+      ],
+      "median": 4518272,
+      "checksum": 128478
     },
     {
       "document": "synthetic medium",
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "line array",
       "samples": [
-        9817192
+        9864616
       ],
-      "median": 9817192,
+      "median": 9864616,
       "checksum": 128478
     },
     {
@@ -1143,9 +1263,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "piece tree",
       "samples": [
-        4532560
+        4707568
       ],
-      "median": 4532560,
+      "median": 4707568,
       "checksum": 128478
     },
     {
@@ -1153,9 +1273,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        5234616
+        5287648
       ],
-      "median": 5234616,
+      "median": 5287648,
       "checksum": 128478
     },
     {
@@ -1163,9 +1283,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "line array",
       "samples": [
-        35719264
+        35712376
       ],
-      "median": 35719264,
+      "median": 35712376,
       "checksum": 552000
     },
     {
@@ -1173,9 +1293,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "piece tree",
       "samples": [
-        14712184
+        14715136
       ],
-      "median": 14712184,
+      "median": 14715136,
       "checksum": 552000
     },
     {
@@ -1183,9 +1303,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "persistent piece tree",
       "samples": [
-        14728368
+        14731616
       ],
-      "median": 14728368,
+      "median": 14731616,
       "checksum": 552000
     },
     {
@@ -1193,13 +1313,13 @@
       "benchmark": "File opening",
       "implementation": "line array",
       "samples": [
-        59.613217,
-        66.368405,
-        59.102444,
-        59.135318,
-        66.016118
+        57.512913,
+        61.417321,
+        58.489897,
+        54.343057,
+        65.353246
       ],
-      "median": 59.613217,
+      "median": 58.489897,
       "checksum": 552000
     },
     {
@@ -1207,13 +1327,13 @@
       "benchmark": "File opening",
       "implementation": "piece tree",
       "samples": [
-        41.519294,
-        39.462354,
-        47.999223,
-        47.19545,
-        48.601663
+        40.289949,
+        38.870305,
+        49.659209,
+        48.814962,
+        46.67319
       ],
-      "median": 47.19545,
+      "median": 46.67319,
       "checksum": 552000
     },
     {
@@ -1221,13 +1341,13 @@
       "benchmark": "File opening",
       "implementation": "persistent piece tree",
       "samples": [
-        36.893854,
-        36.734135,
-        36.597361,
-        37.405629,
-        36.926404
+        36.563405,
+        35.864566,
+        36.066535,
+        36.083915,
+        35.935467
       ],
-      "median": 36.893854,
+      "median": 36.066535,
       "checksum": 552000
     },
     {
@@ -1235,13 +1355,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "line array",
       "samples": [
-        157.819135,
-        158.397252,
-        178.96646,
-        160.642191,
-        158.626372
+        160.932202,
+        159.903698,
+        184.813663,
+        158.801184,
+        158.773619
       ],
-      "median": 158.626372,
+      "median": 159.903698,
       "checksum": -1310687052
     },
     {
@@ -1249,13 +1369,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        4.060745,
-        2.893024,
-        2.864334,
-        2.765516,
-        2.734288
+        3.721806,
+        2.814217,
+        2.65543,
+        2.775061,
+        2.627458
       ],
-      "median": 2.864334,
+      "median": 2.775061,
       "checksum": -1310687052
     },
     {
@@ -1263,13 +1383,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        4.201548,
-        3.695234,
-        3.95549,
-        2.900203,
-        3.03101
+        3.581463,
+        4.222437,
+        3.747545,
+        2.787831,
+        2.784402
       ],
-      "median": 3.695234,
+      "median": 3.581463,
       "checksum": -1310687052
     },
     {
@@ -1277,13 +1397,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        6.739411,
-        4.157858,
-        4.061059,
-        4.351222,
-        4.302906
+        5.056917,
+        3.321921,
+        3.335924,
+        3.302236,
+        3.318982
       ],
-      "median": 4.302906,
+      "median": 3.321921,
       "checksum": 454031221
     },
     {
@@ -1291,13 +1411,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        64.228751,
-        62.653935,
-        62.722673,
-        63.595397,
-        63.41176
+        62.319968,
+        62.408274,
+        62.623394,
+        61.976578,
+        61.775135
       ],
-      "median": 63.41176,
+      "median": 62.319968,
       "checksum": 454031221
     },
     {
@@ -1305,13 +1425,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        71.683375,
-        70.110483,
-        75.591018,
-        71.120228,
-        70.845577
+        66.547927,
+        66.490263,
+        66.506802,
+        67.23528,
+        66.388122
       ],
-      "median": 71.120228,
+      "median": 66.506802,
       "checksum": 454031221
     },
     {
@@ -1319,13 +1439,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        0.048317,
-        0.057896,
-        0.051275,
-        0.047467,
-        0.053701
+        0.02573,
+        0.025844,
+        0.026234,
+        0.022018,
+        0.027651
       ],
-      "median": 0.051275,
+      "median": 0.025844,
       "checksum": 824388
     },
     {
@@ -1333,13 +1453,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        0.156566,
-        0.161157,
-        0.159334,
-        0.168933,
-        0.168333
+        0.152141,
+        0.137288,
+        0.138979,
+        0.150666,
+        0.139508
       ],
-      "median": 0.161157,
+      "median": 0.139508,
       "checksum": 824388
     },
     {
@@ -1347,13 +1467,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        0.206941,
-        0.209094,
-        0.222128,
-        0.204607,
-        0.209709
+        0.163549,
+        0.159409,
+        0.158733,
+        0.147687,
+        0.158393
       ],
-      "median": 0.209094,
+      "median": 0.158733,
       "checksum": 824388
     },
     {
@@ -1361,13 +1481,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        52.452933,
-        55.387483,
-        56.281442,
-        37.282641,
-        52.681148
+        51.364247,
+        51.662227,
+        57.565116,
+        20.17137,
+        50.591536
       ],
-      "median": 52.681148,
+      "median": 51.364247,
       "checksum": 453008504
     },
     {
@@ -1375,13 +1495,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        7.894815,
-        7.656643,
-        6.150204,
-        6.554607,
-        6.860375
+        6.751181,
+        6.018774,
+        4.953015,
+        5.341692,
+        4.916278
       ],
-      "median": 6.860375,
+      "median": 5.341692,
       "checksum": 453008504
     },
     {
@@ -1389,13 +1509,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        4.921013,
-        5.752246,
-        5.600673,
-        4.993283,
-        5.21394
+        4.459821,
+        4.529692,
+        4.416087,
+        4.263534,
+        4.322124
       ],
-      "median": 5.21394,
+      "median": 4.416087,
       "checksum": 453008504
     },
     {
@@ -1403,51 +1523,81 @@
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "line array",
       "samples": [
-        159.286137,
-        159.775332,
-        159.730478,
-        163.414612,
-        158.193504
+        158.561054,
+        159.29892,
+        158.846674,
+        160.225118,
+        159.208211
       ],
-      "median": 159.730478,
-      "checksum": 17153165
+      "median": 159.208211,
+      "checksum": 471203772
     },
     {
       "document": "synthetic large",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "piece tree",
       "samples": [
-        3.782631,
-        3.446555,
-        5.035848,
-        3.074054,
-        2.955448
+        3.35187,
+        3.164481,
+        2.724295,
+        2.850466,
+        2.766819
       ],
-      "median": 3.446555,
-      "checksum": 17153165
+      "median": 2.850466,
+      "checksum": 471203772
     },
     {
       "document": "synthetic large",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.074065,
-        0.029852,
-        0.03125,
-        0.039531,
-        0.03233
+        0.043703,
+        0.016654,
+        0.01604,
+        0.017606,
+        0.025399
       ],
-      "median": 0.03233,
-      "checksum": 17153165
+      "median": 0.017606,
+      "checksum": 471203772
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        35736888
+      ],
+      "median": 35736888,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        14819704
+      ],
+      "median": 14819704,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        14889064
+      ],
+      "median": 14889064,
+      "checksum": 552000
     },
     {
       "document": "synthetic large",
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "line array",
       "samples": [
-        35838056
+        35855160
       ],
-      "median": 35838056,
+      "median": 35855160,
       "checksum": 552000
     },
     {
@@ -1455,9 +1605,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "piece tree",
       "samples": [
-        14926464
+        15131200
       ],
-      "median": 14926464,
+      "median": 15131200,
       "checksum": 552000
     },
     {
@@ -1465,9 +1615,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        15691896
+        15795376
       ],
-      "median": 15691896,
+      "median": 15795376,
       "checksum": 552000
     },
     {
@@ -1475,13 +1625,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        202.523717,
-        203.984856,
-        236.147722,
-        262.706066,
-        271.842749
+        280.447358,
+        285.564465,
+        277.520855,
+        292.760152,
+        246.500168
       ],
-      "median": 236.147722,
+      "median": 280.447358,
       "checksum": 1734897688
     },
     {
@@ -1489,13 +1639,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        2.248782,
-        1.952027,
-        1.696185,
-        1.952263,
-        1.717925
+        2.183202,
+        1.618845,
+        1.606606,
+        1.788052,
+        1.496567
       ],
-      "median": 1.952027,
+      "median": 1.618845,
       "checksum": 1734897688
     },
     {
@@ -1503,13 +1653,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        1.509557,
-        1.255895,
-        1.246956,
-        1.132356,
-        1.143907
+        1.292374,
+        1.007348,
+        0.977801,
+        1.057643,
+        0.942335
       ],
-      "median": 1.246956,
+      "median": 1.007348,
       "checksum": 1734897688
     },
     {
@@ -1517,13 +1667,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        6.458805,
-        3.935445,
-        4.516566,
-        5.480794,
-        4.263499
+        5.57575,
+        3.892211,
+        3.509141,
+        5.008317,
+        3.869518
       ],
-      "median": 4.516566,
+      "median": 3.892211,
       "checksum": 454142962
     },
     {
@@ -1531,13 +1681,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        61.876716,
-        61.818083,
-        61.772093,
-        62.514346,
-        61.680621
+        61.302333,
+        62.384268,
+        64.915061,
+        61.970053,
+        62.055703
       ],
-      "median": 61.818083,
+      "median": 62.055703,
       "checksum": 454142962
     },
     {
@@ -1545,13 +1695,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        66.32775,
-        66.383834,
-        66.124446,
-        66.955643,
-        67.077472
+        64.509435,
+        65.599721,
+        65.037961,
+        65.618904,
+        65.389582
       ],
-      "median": 66.383834,
+      "median": 65.389582,
       "checksum": 454142962
     },
     {
@@ -1559,13 +1709,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        0.032624,
-        0.030842,
-        0.037993,
-        0.040595,
-        0.028011
+        0.02398,
+        0.02348,
+        0.025162,
+        0.022058,
+        0.025573
       ],
-      "median": 0.032624,
+      "median": 0.02398,
       "checksum": 829103
     },
     {
@@ -1573,13 +1723,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        0.139342,
-        0.138695,
-        0.131022,
-        0.134465,
-        0.135249
+        0.132984,
+        0.131527,
+        0.128705,
+        0.128379,
+        0.130134
       ],
-      "median": 0.135249,
+      "median": 0.130134,
       "checksum": 829103
     },
     {
@@ -1587,13 +1737,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.144198,
-        0.145165,
-        0.144127,
-        0.143554,
-        0.142698
+        0.137151,
+        0.133754,
+        0.156237,
+        0.13243,
+        0.13416
       ],
-      "median": 0.144127,
+      "median": 0.13416,
       "checksum": 829103
     },
     {
@@ -1601,13 +1751,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        23.587183,
-        21.757371,
-        21.127342,
-        19.754005,
-        19.990633
+        22.475349,
+        19.776277,
+        19.824507,
+        21.343458,
+        21.189127
       ],
-      "median": 21.127342,
+      "median": 21.189127,
       "checksum": 453113542
     },
     {
@@ -1615,13 +1765,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        4.900303,
-        4.866908,
-        4.397041,
-        4.074609,
-        4.114285
+        4.845325,
+        4.272831,
+        4.265151,
+        4.609548,
+        4.480287
       ],
-      "median": 4.397041,
+      "median": 4.480287,
       "checksum": 453113542
     },
     {
@@ -1629,13 +1779,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        5.24757,
-        4.587467,
-        4.296484,
-        4.126061,
-        4.26515
+        4.378159,
+        4.334641,
+        4.297793,
+        4.368367,
+        4.410951
       ],
-      "median": 4.296484,
+      "median": 4.368367,
       "checksum": 453113542
     },
     {
@@ -1643,51 +1793,81 @@
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "line array",
       "samples": [
-        267.733723,
-        206.851368,
-        211.38098,
-        211.533359,
-        212.552905
+        269.308276,
+        395.882574,
+        369.6868,
+        388.819453,
+        476.42444
       ],
-      "median": 211.533359,
-      "checksum": 17153165
+      "median": 388.819453,
+      "checksum": 471203772
     },
     {
       "document": "synthetic large",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "piece tree",
       "samples": [
-        2.201137,
-        2.044556,
-        1.913445,
-        2.005288,
-        1.793362
+        2.372635,
+        1.787768,
+        1.848344,
+        1.945905,
+        1.795971
       ],
-      "median": 2.005288,
-      "checksum": 17153165
+      "median": 1.848344,
+      "checksum": 471203772
     },
     {
       "document": "synthetic large",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.096468,
-        0.033327,
-        0.031196,
-        0.036269,
-        0.035219
+        0.041034,
+        0.024372,
+        0.017769,
+        0.018206,
+        0.020561
       ],
-      "median": 0.035219,
-      "checksum": 17153165
+      "median": 0.020561,
+      "checksum": 471203772
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        35667992
+      ],
+      "median": 35667992,
+      "checksum": 552478
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        14610664
+      ],
+      "median": 14610664,
+      "checksum": 552478
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        14682984
+      ],
+      "median": 14682984,
+      "checksum": 552478
     },
     {
       "document": "synthetic large",
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "line array",
       "samples": [
-        35767280
+        35805248
       ],
-      "median": 35767280,
+      "median": 35805248,
       "checksum": 552478
     },
     {
@@ -1695,9 +1875,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "piece tree",
       "samples": [
-        14710248
+        14873552
       ],
-      "median": 14710248,
+      "median": 14873552,
       "checksum": 552478
     },
     {
@@ -1705,9 +1885,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        15486632
+        15521776
       ],
-      "median": 15486632,
+      "median": 15521776,
       "checksum": 552478
     },
     {
@@ -1715,9 +1895,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "line array",
       "samples": [
-        2597152
+        2582952
       ],
-      "median": 2597152,
+      "median": 2582952,
       "checksum": 26617
     },
     {
@@ -1725,9 +1905,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "piece tree",
       "samples": [
-        1525192
+        1525784
       ],
-      "median": 1525192,
+      "median": 1525784,
       "checksum": 26617
     },
     {
@@ -1745,13 +1925,13 @@
       "benchmark": "File opening",
       "implementation": "line array",
       "samples": [
-        2.959623,
-        2.896603,
-        2.808158,
-        2.916579,
-        2.813465
+        2.87439,
+        3.606656,
+        3.058017,
+        3.050727,
+        2.948505
       ],
-      "median": 2.896603,
+      "median": 3.050727,
       "checksum": 26617
     },
     {
@@ -1759,13 +1939,13 @@
       "benchmark": "File opening",
       "implementation": "piece tree",
       "samples": [
-        3.453579,
-        3.411125,
-        3.373735,
-        3.28392,
-        3.38419
+        3.379816,
+        3.3926,
+        3.317734,
+        3.355213,
+        3.388878
       ],
-      "median": 3.38419,
+      "median": 3.379816,
       "checksum": 26617
     },
     {
@@ -1773,13 +1953,13 @@
       "benchmark": "File opening",
       "implementation": "persistent piece tree",
       "samples": [
-        3.321145,
-        3.402422,
-        3.492811,
-        3.284147,
-        4.079493
+        3.328398,
+        3.291011,
+        3.358897,
+        3.268253,
+        4.54609
       ],
-      "median": 3.402422,
+      "median": 3.328398,
       "checksum": 26617
     },
     {
@@ -1787,13 +1967,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "line array",
       "samples": [
-        7.981245,
-        7.736667,
-        7.83211,
-        7.580321,
-        7.86715
+        8.116433,
+        8.130462,
+        7.956874,
+        8.032937,
+        8.006248
       ],
-      "median": 7.83211,
+      "median": 8.032937,
       "checksum": 765848423
     },
     {
@@ -1801,13 +1981,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        6.773984,
-        3.936457,
-        2.881132,
-        2.524853,
-        2.556937
+        6.964062,
+        3.906785,
+        2.753617,
+        2.51805,
+        2.549247
       ],
-      "median": 2.881132,
+      "median": 2.753617,
       "checksum": 765848423
     },
     {
@@ -1815,13 +1995,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        4.248012,
-        3.22309,
-        3.29548,
-        3.108078,
-        3.022809
+        4.235087,
+        3.338962,
+        3.440017,
+        3.140147,
+        3.018149
       ],
-      "median": 3.22309,
+      "median": 3.338962,
       "checksum": 765848423
     },
     {
@@ -1829,13 +2009,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        1.433047,
-        0.206386,
-        0.208107,
-        0.210108,
-        0.209312
+        0.660391,
+        0.206439,
+        0.210278,
+        0.206498,
+        0.207154
       ],
-      "median": 0.209312,
+      "median": 0.207154,
       "checksum": 46284080
     },
     {
@@ -1843,13 +2023,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        3.532888,
-        3.517691,
-        3.49039,
-        3.48146,
-        3.537015
+        3.580007,
+        3.502822,
+        3.484353,
+        3.478218,
+        3.533504
       ],
-      "median": 3.517691,
+      "median": 3.502822,
       "checksum": 46284080
     },
     {
@@ -1857,13 +2037,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        5.000759,
-        4.595779,
-        4.420535,
-        4.457089,
-        4.277166
+        4.672599,
+        4.781561,
+        3.662494,
+        3.745522,
+        3.682246
       ],
-      "median": 4.457089,
+      "median": 3.745522,
       "checksum": 46284080
     },
     {
@@ -1871,13 +2051,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        0.011682,
-        0.012401,
-        0.011487,
-        0.012349,
-        0.011063
+        0.01283,
+        0.011994,
+        0.012183,
+        0.012049,
+        0.012399
       ],
-      "median": 0.011682,
+      "median": 0.012183,
       "checksum": 1628814
     },
     {
@@ -1885,13 +2065,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        0.145521,
-        0.142278,
-        0.145235,
-        0.139661,
-        0.151637
+        0.141555,
+        0.145477,
+        0.144183,
+        0.139098,
+        0.144231
       ],
-      "median": 0.145235,
+      "median": 0.144183,
       "checksum": 1628814
     },
     {
@@ -1899,13 +2079,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        0.160926,
-        0.156029,
-        0.163463,
-        0.158965,
-        0.162043
+        0.176172,
+        0.151467,
+        0.154475,
+        0.151026,
+        0.153595
       ],
-      "median": 0.160926,
+      "median": 0.153595,
       "checksum": 1628814
     },
     {
@@ -1913,13 +2093,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        1.340445,
-        1.275565,
-        1.257397,
-        1.211506,
-        1.193361
+        1.280401,
+        1.364423,
+        1.302258,
+        1.213113,
+        1.210526
       ],
-      "median": 1.257397,
+      "median": 1.280401,
       "checksum": 47153388
     },
     {
@@ -1927,13 +2107,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        0.743726,
-        0.715036,
-        0.750881,
-        0.606544,
-        0.670499
+        0.681616,
+        0.781261,
+        0.723646,
+        0.589015,
+        0.64299
       ],
-      "median": 0.715036,
+      "median": 0.681616,
       "checksum": 47153388
     },
     {
@@ -1941,13 +2121,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        0.783884,
-        0.723823,
-        0.699279,
-        0.55364,
-        0.571693
+        0.764516,
+        0.679022,
+        0.641154,
+        0.557672,
+        0.622841
       ],
-      "median": 0.699279,
+      "median": 0.641154,
       "checksum": 47153388
     },
     {
@@ -1955,51 +2135,81 @@
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "line array",
       "samples": [
-        7.780132,
-        7.664629,
-        7.729237,
-        7.67164,
-        7.692948
+        8.1325,
+        8.287655,
+        8.048839,
+        8.086683,
+        8.042972
       ],
-      "median": 7.692948,
-      "checksum": 887338
+      "median": 8.086683,
+      "checksum": 47400203
     },
     {
       "document": "checker.ts",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "piece tree",
       "samples": [
-        3.547413,
-        3.075122,
-        2.84998,
-        2.898931,
-        2.760695
+        3.487456,
+        3.006072,
+        4.579101,
+        4.407952,
+        2.874557
       ],
-      "median": 2.898931,
-      "checksum": 887338
+      "median": 3.487456,
+      "checksum": 47400203
     },
     {
       "document": "checker.ts",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.075947,
-        0.021185,
-        0.019565,
-        0.018617,
-        0.019619
+        0.034654,
+        0.016896,
+        0.014571,
+        0.014744,
+        0.01243
       ],
-      "median": 0.019619,
-      "checksum": 887338
+      "median": 0.014744,
+      "checksum": 47400203
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        2624128
+      ],
+      "median": 2624128,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        1545656
+      ],
+      "median": 1545656,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1652624
+      ],
+      "median": 1652624,
+      "checksum": 26617
     },
     {
       "document": "checker.ts",
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "line array",
       "samples": [
-        2741064
+        2745240
       ],
-      "median": 2741064,
+      "median": 2745240,
       "checksum": 26617
     },
     {
@@ -2007,9 +2217,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "piece tree",
       "samples": [
-        1653040
+        1948664
       ],
-      "median": 1653040,
+      "median": 1948664,
       "checksum": 26617
     },
     {
@@ -2017,9 +2227,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        2484936
+        2582416
       ],
-      "median": 2484936,
+      "median": 2582416,
       "checksum": 26617
     },
     {
@@ -2027,13 +2237,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        10.136405,
-        8.976159,
-        8.958325,
-        8.468675,
-        8.969999
+        8.943793,
+        8.804972,
+        8.561075,
+        8.335574,
+        8.772699
       ],
-      "median": 8.969999,
+      "median": 8.772699,
       "checksum": 1531639811
     },
     {
@@ -2041,13 +2251,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        1.18141,
-        0.951263,
-        0.885087,
-        0.936512,
-        0.886248
+        1.451104,
+        0.943393,
+        0.888876,
+        0.941868,
+        0.871194
       ],
-      "median": 0.936512,
+      "median": 0.941868,
       "checksum": 1531639811
     },
     {
@@ -2055,13 +2265,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.946466,
-        1.074123,
-        0.914024,
-        0.848412,
-        0.939087
+        1.334096,
+        0.932002,
+        0.95647,
+        0.855726,
+        0.900022
       ],
-      "median": 0.939087,
+      "median": 0.932002,
       "checksum": 1531639811
     },
     {
@@ -2069,13 +2279,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        1.39079,
-        0.170553,
-        0.177915,
-        0.165018,
-        0.184639
+        0.615538,
+        0.178157,
+        0.169471,
+        0.1636,
+        0.178152
       ],
-      "median": 0.177915,
+      "median": 0.178152,
       "checksum": 46626266
     },
     {
@@ -2083,13 +2293,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        3.091862,
-        3.051111,
-        3.058939,
-        3.019633,
-        3.014552
+        3.093302,
+        2.980455,
+        3.075495,
+        3.055149,
+        3.091924
       ],
-      "median": 3.051111,
+      "median": 3.075495,
       "checksum": 46626266
     },
     {
@@ -2097,13 +2307,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        3.256188,
-        3.256594,
-        3.244269,
-        3.168169,
-        3.17144
+        3.215556,
+        3.215337,
+        3.218067,
+        3.057786,
+        3.150117
       ],
-      "median": 3.244269,
+      "median": 3.215337,
       "checksum": 46626266
     },
     {
@@ -2111,13 +2321,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        0.016899,
-        0.01894,
-        0.021227,
-        0.020588,
-        0.020093
+        0.017763,
+        0.01631,
+        0.01795,
+        0.016014,
+        0.016386
       ],
-      "median": 0.020093,
+      "median": 0.016386,
       "checksum": 1655147
     },
     {
@@ -2125,13 +2335,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        0.12676,
-        0.121043,
-        0.125424,
-        0.125706,
-        0.123666
+        0.125822,
+        0.123728,
+        0.123841,
+        0.125331,
+        0.123849
       ],
-      "median": 0.125424,
+      "median": 0.123849,
       "checksum": 1655147
     },
     {
@@ -2139,13 +2349,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.159747,
-        0.145582,
-        0.128019,
-        0.127414,
-        0.128568
+        0.125754,
+        0.127248,
+        0.12708,
+        0.138682,
+        0.136255
       ],
-      "median": 0.128568,
+      "median": 0.127248,
       "checksum": 1655147
     },
     {
@@ -2153,13 +2363,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        1.360725,
-        1.177766,
-        1.150869,
-        1.077302,
-        2.229686
+        1.30328,
+        1.146756,
+        1.104038,
+        1.087424,
+        1.145559
       ],
-      "median": 1.177766,
+      "median": 1.145559,
       "checksum": 47502014
     },
     {
@@ -2167,13 +2377,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        0.677647,
-        0.560919,
-        0.496804,
-        0.492624,
-        0.495981
+        0.617897,
+        0.568737,
+        0.517176,
+        0.487989,
+        0.557743
       ],
-      "median": 0.496804,
+      "median": 0.557743,
       "checksum": 47502014
     },
     {
@@ -2181,13 +2391,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.638151,
-        0.529839,
-        0.511004,
-        0.494653,
-        0.59412
+        0.591772,
+        0.519759,
+        0.485276,
+        0.493106,
+        0.543151
       ],
-      "median": 0.529839,
+      "median": 0.519759,
       "checksum": 47502014
     },
     {
@@ -2195,51 +2405,81 @@
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "line array",
       "samples": [
-        7.40426,
-        7.117014,
-        7.497763,
-        7.378264,
-        7.458598
+        7.361639,
+        7.250786,
+        7.114505,
+        6.810559,
+        7.48994
       ],
-      "median": 7.40426,
-      "checksum": 887338
+      "median": 7.250786,
+      "checksum": 47400203
     },
     {
       "document": "checker.ts",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "piece tree",
       "samples": [
-        2.221102,
-        1.561366,
-        1.569421,
-        1.560328,
-        1.424606
+        2.097198,
+        1.287054,
+        1.314177,
+        1.303444,
+        1.330285
       ],
-      "median": 1.561366,
-      "checksum": 887338
+      "median": 1.314177,
+      "checksum": 47400203
     },
     {
       "document": "checker.ts",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.050621,
-        0.022959,
-        0.02365,
-        0.026265,
-        0.034347
+        0.038272,
+        0.014348,
+        0.01606,
+        0.014224,
+        0.018078
       ],
-      "median": 0.026265,
-      "checksum": 887338
+      "median": 0.01606,
+      "checksum": 47400203
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        2537656
+      ],
+      "median": 2537656,
+      "checksum": 27095
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1451072
+      ],
+      "median": 1451072,
+      "checksum": 27095
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1468152
+      ],
+      "median": 1468152,
+      "checksum": 27095
     },
     {
       "document": "checker.ts",
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "line array",
       "samples": [
-        2637648
+        2695824
       ],
-      "median": 2637648,
+      "median": 2695824,
       "checksum": 27095
     },
     {
@@ -2247,9 +2487,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "piece tree",
       "samples": [
-        1545032
+        1660136
       ],
-      "median": 1545032,
+      "median": 1660136,
       "checksum": 27095
     },
     {
@@ -2257,9 +2497,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        2034904
+        2099264
       ],
-      "median": 2034904,
+      "median": 2099264,
       "checksum": 27095
     },
     {
@@ -2267,9 +2507,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "line array",
       "samples": [
-        9564672
+        9554384
       ],
-      "median": 9564672,
+      "median": 9554384,
       "checksum": 128417
     },
     {
@@ -2277,9 +2517,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "piece tree",
       "samples": [
-        4614184
+        4614040
       ],
-      "median": 4614184,
+      "median": 4614040,
       "checksum": 128417
     },
     {
@@ -2287,9 +2527,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "persistent piece tree",
       "samples": [
-        4620800
+        4623856
       ],
-      "median": 4620800,
+      "median": 4623856,
       "checksum": 128417
     },
     {
@@ -2297,13 +2537,13 @@
       "benchmark": "File opening",
       "implementation": "line array",
       "samples": [
-        11.667998,
-        9.617409,
-        10.326504,
-        10.244251,
-        9.810159
+        11.158036,
+        9.79662,
+        10.362338,
+        10.553055,
+        9.848122
       ],
-      "median": 10.244251,
+      "median": 10.362338,
       "checksum": 128417
     },
     {
@@ -2311,13 +2551,13 @@
       "benchmark": "File opening",
       "implementation": "piece tree",
       "samples": [
-        10.713575,
-        10.583697,
-        11.224134,
-        12.434458,
-        11.366376
+        9.97688,
+        9.920134,
+        10.514231,
+        11.89898,
+        11.7952
       ],
-      "median": 11.224134,
+      "median": 10.514231,
       "checksum": 128417
     },
     {
@@ -2325,13 +2565,13 @@
       "benchmark": "File opening",
       "implementation": "persistent piece tree",
       "samples": [
-        11.383305,
-        10.342108,
-        12.515233,
-        12.280648,
-        11.463657
+        10.627802,
+        9.766428,
+        10.068608,
+        12.67211,
+        11.495935
       ],
-      "median": 11.463657,
+      "median": 10.627802,
       "checksum": 128417
     },
     {
@@ -2339,13 +2579,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "line array",
       "samples": [
-        36.360428,
-        36.320989,
-        36.360527,
-        36.589532,
-        36.538857
+        36.854505,
+        36.831102,
+        36.663019,
+        36.903432,
+        36.576188
       ],
-      "median": 36.360527,
+      "median": 36.831102,
       "checksum": -1985811721
     },
     {
@@ -2353,13 +2593,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        3.633004,
-        2.418606,
-        2.559611,
-        2.351049,
-        2.398917
+        3.251857,
+        2.388481,
+        2.350825,
+        2.251795,
+        2.37015
       ],
-      "median": 2.418606,
+      "median": 2.37015,
       "checksum": -1985811721
     },
     {
@@ -2367,13 +2607,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        4.061657,
-        2.799393,
-        2.581592,
-        2.833052,
-        3.27049
+        3.407109,
+        2.501985,
+        2.503385,
+        3.02297,
+        3.308383
       ],
-      "median": 2.833052,
+      "median": 3.02297,
       "checksum": -1985811721
     },
     {
@@ -2381,13 +2621,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        2.823496,
-        1.332153,
-        1.014433,
-        1.023091,
-        4.797066
+        2.388274,
+        1.047018,
+        1.011001,
+        1.009637,
+        1.043607
       ],
-      "median": 1.332153,
+      "median": 1.043607,
       "checksum": 140882005
     },
     {
@@ -2395,13 +2635,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        15.233022,
-        15.167622,
-        15.219009,
-        15.303978,
-        15.202473
+        15.656699,
+        15.223424,
+        15.024957,
+        15.193848,
+        15.181686
       ],
-      "median": 15.219009,
+      "median": 15.193848,
       "checksum": 140882005
     },
     {
@@ -2409,13 +2649,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        17.058662,
-        16.91303,
-        16.650323,
-        16.84154,
-        16.895302
+        17.013297,
+        16.222537,
+        16.62374,
+        16.295383,
+        16.321551
       ],
-      "median": 16.895302,
+      "median": 16.321551,
       "checksum": 140882005
     },
     {
@@ -2423,13 +2663,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        0.01688,
-        0.014946,
-        0.014927,
-        0.019689,
-        0.014941
+        0.015975,
+        0.016988,
+        0.016458,
+        0.015514,
+        0.015956
       ],
-      "median": 0.014946,
+      "median": 0.015975,
       "checksum": 1095553
     },
     {
@@ -2437,13 +2677,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        0.138836,
-        0.141964,
-        0.143707,
-        0.144465,
-        0.14142
+        0.139663,
+        0.142438,
+        0.138878,
+        0.146242,
+        0.140969
       ],
-      "median": 0.141964,
+      "median": 0.140969,
       "checksum": 1095553
     },
     {
@@ -2451,13 +2691,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        0.166393,
-        0.163002,
-        0.164852,
-        0.234709,
-        0.173911
+        0.163508,
+        0.162816,
+        0.159319,
+        0.164403,
+        0.160201
       ],
-      "median": 0.166393,
+      "median": 0.162816,
       "checksum": 1095553
     },
     {
@@ -2465,13 +2705,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        19.58298,
-        17.481947,
-        17.529657,
-        16.938371,
-        19.15935
+        19.689486,
+        18.160037,
+        15.353982,
+        17.410758,
+        18.282163
       ],
-      "median": 17.529657,
+      "median": 18.160037,
       "checksum": 140117962
     },
     {
@@ -2479,13 +2719,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        12.004218,
-        11.164516,
-        11.023619,
-        10.892305,
-        2.329829
+        12.772738,
+        12.28284,
+        12.133909,
+        13.830195,
+        11.585822
       ],
-      "median": 11.023619,
+      "median": 12.28284,
       "checksum": 140117962
     },
     {
@@ -2493,13 +2733,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        3.194876,
-        3.181972,
-        3.205297,
-        2.925377,
-        3.471183
+        3.218016,
+        3.122952,
+        3.108844,
+        2.84377,
+        2.967879
       ],
-      "median": 3.194876,
+      "median": 3.108844,
       "checksum": 140117962
     },
     {
@@ -2507,51 +2747,81 @@
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "line array",
       "samples": [
-        36.348787,
-        36.647738,
-        36.514483,
-        36.82652,
-        36.700342
+        36.0192,
+        35.883974,
+        36.268323,
+        36.112152,
+        35.740983
       ],
-      "median": 36.647738,
-      "checksum": 4048345
+      "median": 36.0192,
+      "checksum": 144995687
     },
     {
       "document": "sqlite3.c",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "piece tree",
       "samples": [
-        4.079056,
-        5.261773,
-        6.581458,
-        2.736535,
-        4.240374
+        6.405765,
+        6.429905,
+        2.760203,
+        2.972906,
+        3.622334
       ],
-      "median": 4.240374,
-      "checksum": 4048345
+      "median": 3.622334,
+      "checksum": 144995687
     },
     {
       "document": "sqlite3.c",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.111088,
-        0.039079,
-        0.029883,
-        0.022747,
-        0.02429
+        0.042105,
+        0.014364,
+        0.01416,
+        0.018082,
+        0.012069
       ],
-      "median": 0.029883,
-      "checksum": 4048345
+      "median": 0.014364,
+      "checksum": 144995687
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        9581480
+      ],
+      "median": 9581480,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        4684384
+      ],
+      "median": 4684384,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4811752
+      ],
+      "median": 4811752,
+      "checksum": 128417
     },
     {
       "document": "sqlite3.c",
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "line array",
       "samples": [
-        9677536
+        9716544
       ],
-      "median": 9677536,
+      "median": 9716544,
       "checksum": 128417
     },
     {
@@ -2559,9 +2829,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "piece tree",
       "samples": [
-        4832384
+        5004312
       ],
-      "median": 4832384,
+      "median": 5004312,
       "checksum": 128417
     },
     {
@@ -2569,9 +2839,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        5526200
+        5616136
       ],
-      "median": 5526200,
+      "median": 5616136,
       "checksum": 128417
     },
     {
@@ -2579,13 +2849,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        44.005692,
-        42.594011,
-        42.319043,
-        42.48144,
-        43.685246
+        42.876463,
+        43.560084,
+        42.628895,
+        43.950523,
+        43.64701
       ],
-      "median": 42.594011,
+      "median": 43.560084,
       "checksum": 230909199
     },
     {
@@ -2593,13 +2863,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        1.362618,
-        1.010869,
-        1.119005,
-        1.004151,
-        1.053719
+        1.50742,
+        0.973695,
+        0.971186,
+        0.953686,
+        0.955154
       ],
-      "median": 1.053719,
+      "median": 0.971186,
       "checksum": 230909199
     },
     {
@@ -2607,13 +2877,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        1.101442,
-        1.018002,
-        0.926999,
-        0.960611,
-        0.995482
+        1.026182,
+        0.946162,
+        0.914256,
+        0.895734,
+        0.907752
       ],
-      "median": 0.995482,
+      "median": 0.914256,
       "checksum": 230909199
     },
     {
@@ -2621,13 +2891,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        2.795435,
-        1.019126,
-        1.024422,
-        1.011402,
-        1.027274
+        2.381415,
+        1.041847,
+        1.018849,
+        1.000693,
+        1.029977
       ],
-      "median": 1.024422,
+      "median": 1.029977,
       "checksum": 141065950
     },
     {
@@ -2635,13 +2905,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        14.935143,
-        14.760924,
-        14.813505,
-        15.457156,
-        14.753133
+        14.787635,
+        14.743577,
+        14.701408,
+        14.600389,
+        14.635919
       ],
-      "median": 14.813505,
+      "median": 14.701408,
       "checksum": 141065950
     },
     {
@@ -2649,13 +2919,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        15.522105,
-        15.528905,
-        15.519649,
-        15.451773,
-        15.611279
+        15.38297,
+        15.156398,
+        15.072818,
+        15.212244,
+        15.005766
       ],
-      "median": 15.522105,
+      "median": 15.156398,
       "checksum": 141065950
     },
     {
@@ -2663,13 +2933,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        0.020787,
-        0.022738,
-        0.021235,
-        0.021466,
-        0.021656
+        0.02159,
+        0.033291,
+        0.020405,
+        0.02195,
+        0.021115
       ],
-      "median": 0.021466,
+      "median": 0.02159,
       "checksum": 1025696
     },
     {
@@ -2677,13 +2947,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        0.132504,
-        0.131629,
-        0.130088,
-        0.1313,
-        0.13229
+        0.134023,
+        0.130969,
+        0.141857,
+        0.130318,
+        0.130669
       ],
-      "median": 0.131629,
+      "median": 0.130969,
       "checksum": 1025696
     },
     {
@@ -2691,13 +2961,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.134748,
-        0.132406,
-        0.137504,
-        0.134368,
-        0.136509
+        0.144868,
+        0.132779,
+        0.131645,
+        0.136913,
+        0.132562
       ],
-      "median": 0.134748,
+      "median": 0.132779,
       "checksum": 1025696
     },
     {
@@ -2705,13 +2975,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        11.805757,
-        14.845529,
-        13.449411,
-        12.552292,
-        8.043111
+        7.224109,
+        8.16029,
+        7.568437,
+        7.133688,
+        6.951512
       ],
-      "median": 12.552292,
+      "median": 7.224109,
       "checksum": 140293825
     },
     {
@@ -2719,13 +2989,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        3.620197,
-        3.726923,
-        3.779103,
-        3.487089,
-        3.529398
+        3.441388,
+        3.632736,
+        3.271513,
+        3.026014,
+        3.12226
       ],
-      "median": 3.620197,
+      "median": 3.271513,
       "checksum": 140293825
     },
     {
@@ -2733,13 +3003,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        2.578448,
-        2.631155,
-        2.776195,
-        2.930644,
-        2.879373
+        2.871323,
+        2.669161,
+        2.582187,
+        2.679454,
+        2.563732
       ],
-      "median": 2.776195,
+      "median": 2.669161,
       "checksum": 140293825
     },
     {
@@ -2747,51 +3017,81 @@
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "line array",
       "samples": [
-        40.481503,
-        37.404093,
-        35.728498,
-        35.673295,
-        35.184421
+        37.306278,
+        42.24078,
+        34.412214,
+        34.582119,
+        34.53398
       ],
-      "median": 35.728498,
-      "checksum": 4048345
+      "median": 34.582119,
+      "checksum": 144995687
     },
     {
       "document": "sqlite3.c",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "piece tree",
       "samples": [
-        1.879577,
-        1.753292,
-        1.506309,
-        1.49879,
-        1.555114
+        1.956009,
+        1.49897,
+        1.468058,
+        1.592892,
+        1.596053
       ],
-      "median": 1.555114,
-      "checksum": 4048345
+      "median": 1.592892,
+      "checksum": 144995687
     },
     {
       "document": "sqlite3.c",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.062242,
-        0.032482,
-        0.03205,
-        0.026503,
-        0.0251
+        0.03458,
+        0.010823,
+        0.010261,
+        0.009438,
+        0.0094
       ],
-      "median": 0.03205,
-      "checksum": 4048345
+      "median": 0.010261,
+      "checksum": 144995687
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        9517744
+      ],
+      "median": 9517744,
+      "checksum": 128895
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        4525896
+      ],
+      "median": 4525896,
+      "checksum": 128895
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4548064
+      ],
+      "median": 4548064,
+      "checksum": 128895
     },
     {
       "document": "sqlite3.c",
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "line array",
       "samples": [
-        9617008
+        9663136
       ],
-      "median": 9617008,
+      "median": 9663136,
       "checksum": 128895
     },
     {
@@ -2799,9 +3099,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "piece tree",
       "samples": [
-        4580952
+        4768832
       ],
-      "median": 4580952,
+      "median": 4768832,
       "checksum": 128895
     },
     {
@@ -2809,9 +3109,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        5278944
+        5316720
       ],
-      "median": 5278944,
+      "median": 5316720,
       "checksum": 128895
     },
     {
@@ -2819,9 +3119,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "line array",
       "samples": [
-        42531968
+        42525904
       ],
-      "median": 42531968,
+      "median": 42525904,
       "checksum": 552283
     },
     {
@@ -2829,9 +3129,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "piece tree",
       "samples": [
-        19462640
+        19465760
       ],
-      "median": 19462640,
+      "median": 19465760,
       "checksum": 552283
     },
     {
@@ -2839,9 +3139,9 @@
       "benchmark": "Memory usage after load",
       "implementation": "persistent piece tree",
       "samples": [
-        19468240
+        19478528
       ],
-      "median": 19468240,
+      "median": 19478528,
       "checksum": 552283
     },
     {
@@ -2849,13 +3149,13 @@
       "benchmark": "File opening",
       "implementation": "line array",
       "samples": [
-        64.03536,
-        77.52117,
-        62.645275,
-        60.21275,
-        73.184809
+        64.798195,
+        77.848097,
+        63.002884,
+        59.760568,
+        68.837979
       ],
-      "median": 64.03536,
+      "median": 64.798195,
       "checksum": 552283
     },
     {
@@ -2863,13 +3163,13 @@
       "benchmark": "File opening",
       "implementation": "piece tree",
       "samples": [
-        29.11055,
-        43.950885,
-        28.485376,
-        34.136999,
-        38.597922
+        29.403268,
+        41.283242,
+        28.021263,
+        33.549205,
+        37.064099
       ],
-      "median": 34.136999,
+      "median": 33.549205,
       "checksum": 552283
     },
     {
@@ -2877,13 +3177,13 @@
       "benchmark": "File opening",
       "implementation": "persistent piece tree",
       "samples": [
-        28.581012,
-        28.049391,
-        28.009925,
-        27.984141,
-        28.862754
+        28.52852,
+        27.543353,
+        28.690927,
+        28.415719,
+        28.108985
       ],
-      "median": 28.049391,
+      "median": 28.415719,
       "checksum": 552283
     },
     {
@@ -2891,13 +3191,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "line array",
       "samples": [
-        156.004007,
-        158.375178,
-        156.939592,
-        160.106799,
-        160.240115
+        159.902824,
+        160.431679,
+        156.579544,
+        155.598613,
+        157.602223
       ],
-      "median": 158.375178,
+      "median": 157.602223,
       "checksum": 701697998
     },
     {
@@ -2905,13 +3205,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        3.755046,
-        2.707313,
-        2.841268,
-        2.721194,
-        2.671731
+        4.086566,
+        2.900612,
+        2.71866,
+        2.793714,
+        2.660195
       ],
-      "median": 2.721194,
+      "median": 2.793714,
       "checksum": 701697998
     },
     {
@@ -2919,13 +3219,13 @@
       "benchmark": "Editing: 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        3.903319,
-        2.790824,
-        3.585301,
-        2.87363,
-        2.80156
+        3.418733,
+        2.847742,
+        3.370192,
+        2.768134,
+        2.725464
       ],
-      "median": 2.87363,
+      "median": 2.847742,
       "checksum": 701697998
     },
     {
@@ -2933,13 +3233,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        10.890214,
-        8.453717,
-        8.476364,
-        8.532814,
-        8.968993
+        5.433248,
+        3.596138,
+        3.656797,
+        3.98674,
+        3.686156
       ],
-      "median": 8.532814,
+      "median": 3.686156,
       "checksum": 809145559
     },
     {
@@ -2947,13 +3247,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        71.981994,
-        73.377564,
-        72.201781,
-        73.976641,
-        73.046704
+        69.870763,
+        69.110968,
+        66.626653,
+        67.669081,
+        66.155539
       ],
-      "median": 73.046704,
+      "median": 67.669081,
       "checksum": 809145559
     },
     {
@@ -2961,13 +3261,13 @@
       "benchmark": "Reading: all lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        82.583219,
-        82.770256,
-        80.720384,
-        80.940749,
-        80.506581
+        71.531556,
+        71.212878,
+        71.875575,
+        71.4759,
+        71.239164
       ],
-      "median": 80.940749,
+      "median": 71.4759,
       "checksum": 809145559
     },
     {
@@ -2975,13 +3275,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        0.037432,
-        0.038625,
-        0.035166,
-        0.04044,
-        0.035887
+        0.021856,
+        0.02338,
+        0.022918,
+        0.022787,
+        0.024289
       ],
-      "median": 0.037432,
+      "median": 0.022918,
       "checksum": 1513971
     },
     {
@@ -2989,13 +3289,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        0.170346,
-        0.169157,
-        0.163878,
-        0.172194,
-        0.161683
+        0.153681,
+        0.151398,
+        0.148734,
+        0.147115,
+        0.148761
       ],
-      "median": 0.169157,
+      "median": 0.148761,
       "checksum": 1513971
     },
     {
@@ -3003,13 +3303,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        0.197417,
-        0.201615,
-        0.192416,
-        0.178659,
-        0.197469
+        0.166398,
+        0.167679,
+        0.168602,
+        0.151432,
+        0.16617
       ],
-      "median": 0.197417,
+      "median": 0.166398,
       "checksum": 1513971
     },
     {
@@ -3017,13 +3317,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "line array",
       "samples": [
-        23.584854,
-        27.449256,
-        27.503505,
-        26.154011,
-        28.146727
+        24.090569,
+        25.32329,
+        24.37256,
+        24.49287,
+        25.336469
       ],
-      "median": 27.449256,
+      "median": 24.49287,
       "checksum": 321408738
     },
     {
@@ -3031,13 +3331,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "piece tree",
       "samples": [
-        6.900217,
-        7.117304,
-        6.92621,
-        6.787635,
-        6.816413
+        6.820106,
+        6.965029,
+        6.895006,
+        6.860771,
+        6.867362
       ],
-      "median": 6.900217,
+      "median": 6.867362,
       "checksum": 321408738
     },
     {
@@ -3045,13 +3345,13 @@
       "benchmark": "Saving: full text after 1000 random edits",
       "implementation": "persistent piece tree",
       "samples": [
-        6.494563,
-        7.23155,
-        5.974743,
-        5.751807,
-        5.636268
+        6.139962,
+        6.068379,
+        6.071321,
+        5.946805,
+        5.90067
       ],
-      "median": 5.974743,
+      "median": 6.068379,
       "checksum": 321408738
     },
     {
@@ -3059,51 +3359,81 @@
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "line array",
       "samples": [
-        156.047217,
-        156.36581,
-        156.120796,
-        168.655844,
-        160.59213
+        156.759513,
+        157.458934,
+        156.166193,
+        156.19939,
+        156.444614
       ],
-      "median": 156.36581,
-      "checksum": 17131597
+      "median": 156.444614,
+      "checksum": 826318574
     },
     {
       "document": "Russian-English Bilingual.dic",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "piece tree",
       "samples": [
-        3.808727,
-        3.820431,
-        2.872893,
-        2.800871,
-        2.931629
+        3.400693,
+        3.361804,
+        5.779446,
+        2.8508,
+        4.992335
       ],
-      "median": 2.931629,
-      "checksum": 17131597
+      "median": 3.400693,
+      "checksum": 826318574
     },
     {
       "document": "Russian-English Bilingual.dic",
       "benchmark": "Undo: 1000 random edits, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.079096,
-        0.034661,
-        0.029739,
-        0.030665,
-        0.039187
+        0.035079,
+        0.01581,
+        0.016186,
+        0.016447,
+        0.016138
       ],
-      "median": 0.034661,
-      "checksum": 17131597
+      "median": 0.016186,
+      "checksum": 826318574
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        42544592
+      ],
+      "median": 42544592,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        19566152
+      ],
+      "median": 19566152,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        19630744
+      ],
+      "median": 19630744,
+      "checksum": 552283
     },
     {
       "document": "Russian-English Bilingual.dic",
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "line array",
       "samples": [
-        42643736
+        42660488
       ],
-      "median": 42643736,
+      "median": 42660488,
       "checksum": 552283
     },
     {
@@ -3111,9 +3441,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "piece tree",
       "samples": [
-        19691216
+        19885672
       ],
-      "median": 19691216,
+      "median": 19885672,
       "checksum": 552283
     },
     {
@@ -3121,9 +3451,9 @@
       "benchmark": "Memory after 1000 random edits with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        20447128
+        20558312
       ],
-      "median": 20447128,
+      "median": 20558312,
       "checksum": 552283
     },
     {
@@ -3131,13 +3461,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        209.58894,
-        215.377686,
-        211.476183,
-        213.96342,
-        262.531574
+        217.722633,
+        287.703856,
+        287.365582,
+        334.591178,
+        292.630221
       ],
-      "median": 213.96342,
+      "median": 287.703856,
       "checksum": 1783190965
     },
     {
@@ -3145,13 +3475,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        1.879239,
-        1.616962,
-        1.588146,
-        1.4377,
-        1.817392
+        1.832494,
+        1.567012,
+        1.761912,
+        1.50658,
+        1.755535
       ],
-      "median": 1.616962,
+      "median": 1.755535,
       "checksum": 1783190965
     },
     {
@@ -3159,13 +3489,13 @@
       "benchmark": "Editing: 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        1.183878,
-        1.004658,
-        1.117552,
-        1.029668,
-        1.094037
+        1.190592,
+        1.140036,
+        0.950453,
+        0.962899,
+        0.956132
       ],
-      "median": 1.094037,
+      "median": 0.962899,
       "checksum": 1783190965
     },
     {
@@ -3173,13 +3503,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        11.184893,
-        8.938521,
-        8.684487,
-        9.381567,
-        9.12616
+        6.180233,
+        4.559816,
+        4.422633,
+        4.773303,
+        4.725726
       ],
-      "median": 9.12616,
+      "median": 4.725726,
       "checksum": 809248991
     },
     {
@@ -3187,13 +3517,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        71.654519,
-        70.979324,
-        71.037465,
-        71.133523,
-        71.539824
+        66.654077,
+        66.353566,
+        66.186258,
+        66.517926,
+        65.907527
       ],
-      "median": 71.133523,
+      "median": 66.353566,
       "checksum": 809248991
     },
     {
@@ -3201,13 +3531,13 @@
       "benchmark": "Reading: all lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        77.733803,
-        77.698243,
-        76.80656,
-        77.296843,
-        77.540093
+        69.736991,
+        69.12124,
+        68.910172,
+        69.23604,
+        69.34509
       ],
-      "median": 77.540093,
+      "median": 69.23604,
       "checksum": 809248991
     },
     {
@@ -3215,13 +3545,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        0.045629,
-        0.047701,
-        0.053894,
-        0.042148,
-        0.031355
+        0.026928,
+        0.026225,
+        0.025504,
+        0.02474,
+        0.025625
       ],
-      "median": 0.045629,
+      "median": 0.025625,
       "checksum": 1371711
     },
     {
@@ -3229,13 +3559,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        0.161754,
-        0.163991,
-        0.168386,
-        0.148701,
-        0.152263
+        0.147795,
+        0.145215,
+        0.146494,
+        0.143601,
+        0.14427
       ],
-      "median": 0.161754,
+      "median": 0.145215,
       "checksum": 1371711
     },
     {
@@ -3243,13 +3573,13 @@
       "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        0.172656,
-        0.173977,
-        0.216167,
-        0.157791,
-        0.158934
+        0.149788,
+        0.14315,
+        0.144715,
+        0.147673,
+        0.148994
       ],
-      "median": 0.172656,
+      "median": 0.147673,
       "checksum": 1371711
     },
     {
@@ -3257,13 +3587,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "line array",
       "samples": [
-        26.387992,
-        24.831226,
-        22.876287,
-        21.981272,
-        25.554556
+        23.712017,
+        22.950065,
+        25.283822,
+        24.88104,
+        23.669773
       ],
-      "median": 24.831226,
+      "median": 23.712017,
       "checksum": 321467566
     },
     {
@@ -3271,13 +3601,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "piece tree",
       "samples": [
-        7.29109,
-        6.621894,
-        5.854483,
-        5.639151,
-        7.246252
+        7.014879,
+        6.674394,
+        6.816777,
+        6.606245,
+        6.357565
       ],
-      "median": 6.621894,
+      "median": 6.674394,
       "checksum": 321467566
     },
     {
@@ -3285,13 +3615,13 @@
       "benchmark": "Saving: full text after 1000 sequential inserts",
       "implementation": "persistent piece tree",
       "samples": [
-        6.179834,
-        5.770683,
-        5.660941,
-        5.711205,
-        6.058899
+        5.825108,
+        5.893003,
+        5.820381,
+        6.009837,
+        5.843009
       ],
-      "median": 5.770683,
+      "median": 5.843009,
       "checksum": 321467566
     },
     {
@@ -3299,51 +3629,81 @@
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "line array",
       "samples": [
-        230.522184,
-        216.549002,
-        208.578857,
-        229.729487,
-        257.852841
+        205.965551,
+        205.371332,
+        248.599404,
+        256.401235,
+        260.361957
       ],
-      "median": 229.729487,
-      "checksum": 17131597
+      "median": 248.599404,
+      "checksum": 826318574
     },
     {
       "document": "Russian-English Bilingual.dic",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "piece tree",
       "samples": [
-        2.351279,
-        2.054007,
-        1.929032,
-        1.900818,
-        1.83143
+        2.237371,
+        1.874895,
+        1.838407,
+        1.830483,
+        1.899234
       ],
-      "median": 1.929032,
-      "checksum": 17131597
+      "median": 1.874895,
+      "checksum": 826318574
     },
     {
       "document": "Russian-English Bilingual.dic",
       "benchmark": "Undo: 1000 sequential inserts, one by one",
       "implementation": "persistent piece tree",
       "samples": [
-        0.065479,
-        0.038514,
-        0.039398,
-        0.084689,
-        0.034248
+        0.0455,
+        0.014382,
+        0.018837,
+        0.021905,
+        0.021501
       ],
-      "median": 0.039398,
-      "checksum": 17131597
+      "median": 0.021501,
+      "checksum": 826318574
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        42482104
+      ],
+      "median": 42482104,
+      "checksum": 552761
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        19378696
+      ],
+      "median": 19378696,
+      "checksum": 552761
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        19424384
+      ],
+      "median": 19424384,
+      "checksum": 552761
     },
     {
       "document": "Russian-English Bilingual.dic",
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "line array",
       "samples": [
-        42585320
+        42621536
       ],
-      "median": 42585320,
+      "median": 42621536,
       "checksum": 552761
     },
     {
@@ -3351,9 +3711,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "piece tree",
       "samples": [
-        19463928
+        19628408
       ],
-      "median": 19463928,
+      "median": 19628408,
       "checksum": 552761
     },
     {
@@ -3361,9 +3721,9 @@
       "benchmark": "Memory after 1000 sequential inserts with undo history",
       "implementation": "persistent piece tree",
       "samples": [
-        20218760
+        20281440
       ],
-      "median": 20218760,
+      "median": 20281440,
       "checksum": 552761
     }
   ]
