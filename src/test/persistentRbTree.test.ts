@@ -238,6 +238,16 @@ describe('persistent red-black tree', () => {
 			assertMatchesModel(root, toArray(root));
 		});
 
+		it('rejects zero-length values, which could be inserted but never addressed again', () => {
+			const root = fromValues([item(3), item(3)]);
+			expect(() => insertAt(root, 3, item(0))).toThrow(/positive length/);
+			expect(() => insertAt(root, 6, item(0))).toThrow(/positive length/);
+			expect(() => insertAt(EMPTY, 0, item(0))).toThrow(/positive length/);
+			expect(() => replaceAt(root, 0, item(0))).toThrow(/positive length/);
+			expect(() => fromValues([item(1), item(0)])).toThrow(/positive length/);
+			assertMatchesModel(root, toArray(root));
+		});
+
 		it('keeps the depth logarithmic under sequential and random insertion', () => {
 			let root: Node<Item> = EMPTY;
 			for (let i = 0; i < 5000; i++) {

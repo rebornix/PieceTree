@@ -104,7 +104,7 @@ export function assertPersistentTreeInvariants<T extends IMeasured>(root: Node<T
 		if (node.color === Color.Red) {
 			assert(node.left.color === Color.Black && node.right.color === Color.Black, 'a red node has black children');
 		}
-		assert(node.value.length >= 0 && node.value.lineFeedCnt >= 0);
+		assert(node.value.length > 0 && node.value.lineFeedCnt >= 0, 'values have a positive length');
 		assert(node.size === node.left.size + node.value.length + node.right.size, 'size is the subtree total');
 		assert(node.lf === node.left.lf + node.value.lineFeedCnt + node.right.lf, 'lf is the subtree total');
 		const leftHeight = check(node.left, depth + 1);

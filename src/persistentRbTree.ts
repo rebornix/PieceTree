@@ -23,9 +23,20 @@
  * tree, and tested on its own against an array model.
  */
 
+/**
+ * What the tree stores. `length` must be positive: values are addressed by
+ * the offset at which they start, and an empty value would share its offset
+ * with its neighbour, so it could be inserted but never found or removed.
+ */
 export interface IMeasured {
 	readonly length: number;
 	readonly lineFeedCnt: number;
+}
+
+function checkValue(value: IMeasured): void {
+	if (!(value.length > 0)) {
+		throw new RangeError(`values must have a positive length, got ${value.length}`);
+	}
 }
 
 export const enum Color {
@@ -142,6 +153,7 @@ function ins<T extends IMeasured>(node: Node<T>, offset: number, value: T): Node
  * value that currently starts there.
  */
 export function insertAt<T extends IMeasured>(root: Node<T>, offset: number, value: T): Node<T> {
+	checkValue(value);
 	if (offset < 0 || offset > root.size) {
 		throw new RangeError(`offset ${offset} is out of range [0, ${root.size}]`);
 	}
@@ -264,6 +276,7 @@ function rep<T extends IMeasured>(node: Node<T>, offset: number, value: T): Node
  * differently. The shape of the tree does not change, only the path is rebuilt.
  */
 export function replaceAt<T extends IMeasured>(root: Node<T>, offset: number, value: T): Node<T> {
+	checkValue(value);
 	if (offset < 0 || offset >= root.size) {
 		throw new RangeError(`offset ${offset} is out of range [0, ${root.size})`);
 	}
@@ -283,6 +296,7 @@ export function fromValues<T extends IMeasured>(values: readonly T[]): Node<T> {
 	if (values.length === 0) {
 		return EMPTY;
 	}
+	values.forEach(checkValue);
 	const deepest = Math.floor(Math.log2(values.length));
 	const build = (lo: number, hi: number, depth: number): Node<T> => {
 		if (lo >= hi) {
