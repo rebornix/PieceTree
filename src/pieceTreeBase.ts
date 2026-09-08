@@ -6,20 +6,17 @@
 import { CharCode } from './common/charCode';
 import { Position } from './common/position';
 import { Range } from './common/range';
+import { ITextSnapshot } from './common/model';
 import * as buffers from './pieceBuffers';
-import { BufferCursor, Piece, StringBuffer, createLineStartsFast } from './pieceBuffers';
+import { AverageBufferSize, BufferCursor, Piece, StringBuffer, createLineStartsFast } from './pieceBuffers';
 import { NodeColor, SENTINEL, TreeNode, fixInsert, leftest, rbDelete, righttest, updateTreeMetadata } from './rbTreeBase';
 
-// The buffer and piece definitions live in pieceBuffers.ts (shared with the
-// persistent tree) and stay exported from here for compatibility.
-export { LineStarts, Piece, StringBuffer, createLineStarts, createLineStartsFast, createUintArray } from './pieceBuffers';
+// The buffer and piece definitions live in pieceBuffers.ts and ITextSnapshot in
+// common/model.ts (shared with the persistent tree); they stay exported from
+// here for compatibility.
+export { AverageBufferSize, LineStarts, Piece, StringBuffer, createLineStarts, createLineStartsFast, createUintArray } from './pieceBuffers';
 export type { BufferCursor } from './pieceBuffers';
-
-export interface ITextSnapshot {
-	read(): string | null;
-}
-// const lfRegex = new RegExp(/\r\n|\r|\n/g);
-export const AverageBufferSize = 65535;
+export type { ITextSnapshot } from './common/model';
 
 export interface NodePosition {
 	/**

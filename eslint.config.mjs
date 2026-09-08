@@ -10,6 +10,19 @@ import { builtinModules } from 'node:module';
 
 const nodeBuiltins = [...builtinModules, ...builtinModules.map(name => `node:${name}`)];
 
+// Options of `no-restricted-imports` do not merge between config objects:
+// every layer below repeats the library-wide restrictions and adds its own.
+const libraryImports = (...patterns) => ['error', {
+	paths: nodeBuiltins.map(name => ({ name, message: 'The library must stay platform-neutral: no Node.js modules in src/*.ts or src/common/.' })),
+	patterns: [
+		{
+			group: ['./test/*', '../test/*', './benchmark/*', '../benchmark/*', 'vitest', 'vitest/*'],
+			message: 'The library must not depend on its tests or benchmarks.'
+		},
+		...patterns
+	]
+}];
+
 // Options of `no-restricted-syntax` do not merge between config objects, so the
 // selectors that apply to every file live here and are spread into each override.
 const noUnsafeCasts = [
@@ -74,17 +87,12 @@ export default defineConfig(
 	// Platform-neutral and self-contained: no Node.js modules, no tests, no benchmarks.
 	{
 		files: ['src/*.ts', 'src/common/**/*.ts'],
-		rules: {
-			'no-restricted-imports': ['error', {
-				paths: nodeBuiltins.map(name => ({ name, message: 'The library must stay platform-neutral: no Node.js modules in src/*.ts or src/common/.' })),
-				patterns: [{
-					group: ['./test/*', '../test/*', './benchmark/*', '../benchmark/*', 'vitest', 'vitest/*'],
-					message: 'The library must not depend on its tests or benchmarks.'
-				}]
-			}]
-		}
+		rules: { 'no-restricted-imports': libraryImports() }
 	},
-	// src/common/ is the leaf layer (VS Code's vs/base and editor/common/core): it must not import the tree.
+	// Layering inside the library, bottom up. src/common/ (VS Code's vs/base and
+	// editor/common/core) knows nothing about the tree; pieceBuffers.ts and
+	// persistentRbTree.ts are leaves the two trees are built on; each tree is
+	// unaware of the other; the builder is the only module that knows both.
 	{
 		files: ['src/common/**/*.ts'],
 		rules: {
@@ -92,6 +100,33 @@ export default defineConfig(
 				paths: nodeBuiltins.map(name => ({ name, message: 'src/common/ must stay platform-neutral.' })),
 				patterns: [{ group: ['../*'], message: 'src/common/ must not import the piece tree; only other src/common/ modules.' }]
 			}]
+		}
+	},
+	{
+		files: ['src/pieceBuffers.ts', 'src/persistentRbTree.ts'],
+		rules: {
+			'no-restricted-imports': libraryImports({
+				group: ['./pieceBuffers', './pieceTree*', './rbTreeBase', './persistent*', './index'],
+				message: 'pieceBuffers.ts and persistentRbTree.ts are leaf modules: they only import from src/common/.'
+			})
+		}
+	},
+	{
+		files: ['src/persistentPieceTree.ts'],
+		rules: {
+			'no-restricted-imports': libraryImports({
+				group: ['./pieceTreeBase', './rbTreeBase', './pieceTreeBuilder', './index'],
+				message: 'The persistent tree must not depend on the mutable one; shared code goes to pieceBuffers.ts or src/common/.'
+			})
+		}
+	},
+	{
+		files: ['src/pieceTreeBase.ts', 'src/rbTreeBase.ts'],
+		rules: {
+			'no-restricted-imports': libraryImports({
+				group: ['./persistent*', './pieceTreeBuilder', './index'],
+				message: 'The mutable tree must not depend on the persistent one or on the builder.'
+			})
 		}
 	},
 

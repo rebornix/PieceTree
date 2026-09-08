@@ -1,10 +1,10 @@
 import { CharCode } from './common/charCode';
+import { ITextSnapshot } from './common/model';
 import { Position } from './common/position';
 import { Range } from './common/range';
 import * as rb from './persistentRbTree';
 import * as buffers from './pieceBuffers';
-import { BufferCursor, Piece, StringBuffer, createLineStartsFast } from './pieceBuffers';
-import { AverageBufferSize, ITextSnapshot } from './pieceTreeBase';
+import { AverageBufferSize, BufferCursor, Piece, StringBuffer, createLineStartsFast } from './pieceBuffers';
 
 /*
  * The piece tree on the persistent red-black tree: the same text buffer as

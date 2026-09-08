@@ -12,6 +12,13 @@ import { CharCode } from './common/charCode';
  * tree nodes, so both the mutable piece tree and the persistent one use it.
  */
 
+/**
+ * Text below this size goes into the change buffer; larger inserts get
+ * buffers of their own, and a document is re-chunked into buffers of about
+ * this size when its line endings are normalized.
+ */
+export const AverageBufferSize = 65535;
+
 export function createUintArray(arr: number[]): Uint32Array | Uint16Array {
 	let r;
 	if (arr[arr.length - 1] < 65536) {
