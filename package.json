@@ -13,6 +13,8 @@
         "build": "tsc -p tsconfig.build.json",
         "watch": "tsc -p tsconfig.build.json -w",
         "typecheck": "tsc -p tsconfig.json --noEmit",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "test": "vitest run",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
@@ -30,10 +32,13 @@
     },
     "homepage": "https://github.com/rebornix/PieceTree#readme",
     "devDependencies": {
+        "@stylistic/eslint-plugin": "^5.10.0",
         "@types/node": "^22.10.0",
         "@vitest/coverage-v8": "^5.0.0",
+        "eslint": "^10.10.0",
         "tsx": "^4.23.13",
         "typescript": "^5.7.2",
+        "typescript-eslint": "^8.70.0",
         "vitest": "^5.0.0"
     }
 }
