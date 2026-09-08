@@ -5,6 +5,7 @@
 
 import { CharCode } from './common/charCode';
 import { StringBuffer, createLineStarts, createLineStartsFast } from './pieceBuffers';
+import { PersistentPieceTree } from './persistentPieceTree';
 import { PieceTreeBase } from './pieceTreeBase';
 
 export const UTF8_BOM_CHARACTER = String.fromCharCode(CharCode.UTF8_BOM);
@@ -59,21 +60,27 @@ export class PieceTreeTextBufferFactory {
 
 	public create(defaultEOL: DefaultEndOfLine): PieceTreeBase {
 		const eol = this._getEOL(defaultEOL);
-		const chunks = this._chunks;
+		return new PieceTreeBase(this._chunksFor(eol), eol, this._normalizeEOL);
+	}
 
+	/** The same document as `create`, on the persistent piece tree. */
+	public createPersistent(defaultEOL: DefaultEndOfLine): PersistentPieceTree {
+		const eol = this._getEOL(defaultEOL);
+		return new PersistentPieceTree(this._chunksFor(eol), eol, this._normalizeEOL);
+	}
+
+	/** The chunks with their line breaks normalized to `eol`, when normalization was asked for and is needed. */
+	private _chunksFor(eol: '\r\n' | '\n'): StringBuffer[] {
 		if (this._normalizeEOL &&
-            ((eol === '\r\n' && (this._cr > 0 || this._lf > 0))
-                || (eol === '\n' && (this._cr > 0 || this._crlf > 0)))
+			((eol === '\r\n' && (this._cr > 0 || this._lf > 0))
+				|| (eol === '\n' && (this._cr > 0 || this._crlf > 0)))
 		) {
-			// Normalize pieces
-			for (let i = 0, len = chunks.length; i < len; i++) {
-				const str = chunks[i].buffer.replace(/\r\n|\r|\n/g, eol);
-				const newLineStart = createLineStartsFast(str);
-				chunks[i] = new StringBuffer(str, newLineStart);
-			}
+			return this._chunks.map(chunk => {
+				const str = chunk.buffer.replace(/\r\n|\r|\n/g, eol);
+				return new StringBuffer(str, createLineStartsFast(str));
+			});
 		}
-
-		return new PieceTreeBase(chunks, eol, this._normalizeEOL);
+		return this._chunks;
 	}
 
 	public getFirstLineText(lengthLimit: number): string {

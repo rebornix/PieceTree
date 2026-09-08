@@ -1,16 +1,69 @@
 import assert from 'assert';
+import { Position } from '../common/position';
+import { Range } from '../common/range';
+import { PersistentPieceTree } from '../persistentPieceTree';
 import { Color, EMPTY, IMeasured, Node } from '../persistentRbTree';
 import { ITextSnapshot, PieceTreeBase } from '../pieceTreeBase';
 import { DefaultEndOfLine, PieceTreeTextBufferBuilder } from '../pieceTreeBuilder';
 import { NodeColor, SENTINEL, TreeNode } from '../rbTreeBase';
 
-export function createTextBuffer(val: string[], normalizeEOL: boolean = true): PieceTreeBase {
+/**
+ * The public surface the two piece trees share; the ported tests and the
+ * differential harness are written against it so they run against both.
+ */
+export interface IPieceTree {
+	insert(offset: number, value: string, eolNormalized?: boolean): void;
+	delete(offset: number, cnt: number): void;
+	setEOL(newEOL: '\r\n' | '\n'): void;
+	getEOL(): string;
+	getLength(): number;
+	getLineCount(): number;
+	getLinesRawContent(): string;
+	getLineRawContent(lineNumber: number, endOffset?: number): string;
+	getLinesContent(): string[];
+	getLineContent(lineNumber: number): string;
+	getLineCharCode(lineNumber: number, index: number): number;
+	getLineLength(lineNumber: number): number;
+	getOffsetAt(lineNumber: number, column: number): number;
+	getPositionAt(offset: number): Position;
+	getValueInRange(range: Range, eol?: string): string;
+	createSnapshot(BOM: string): ITextSnapshot;
+}
+
+export type TreeFlavor = 'mutable' | 'persistent';
+
+let treeFlavor: TreeFlavor = 'mutable';
+
+/**
+ * Selects which piece tree `createTextBuffer` and `assertTreeInvariants` work
+ * on. A test file sets it once, at module load, before the suites run.
+ */
+export function setTreeFlavor(flavor: TreeFlavor): void {
+	treeFlavor = flavor;
+}
+
+export function getTreeFlavor(): TreeFlavor {
+	return treeFlavor;
+}
+
+export function createTextBuffer(val: string[], normalizeEOL: boolean = true): IPieceTree {
 	const bufferBuilder = new PieceTreeTextBufferBuilder();
 	for (const chunk of val) {
 		bufferBuilder.acceptChunk(chunk);
 	}
 	const factory = bufferBuilder.finish(normalizeEOL);
-	return factory.create(DefaultEndOfLine.LF);
+	return treeFlavor === 'persistent' ? factory.createPersistent(DefaultEndOfLine.LF) : factory.create(DefaultEndOfLine.LF);
+}
+
+/** `equal` is not on the shared interface, since each tree compares with its own kind. */
+export function treesEqual(a: IPieceTree, b: IPieceTree): boolean {
+	if (a instanceof PieceTreeBase && b instanceof PieceTreeBase) {
+		return a.equal(b);
+	}
+	if (a instanceof PersistentPieceTree && b instanceof PersistentPieceTree) {
+		return a.equal(b);
+	}
+	throw new Error('trees of different kinds');
 }
 
 export function readSnapshot(snapshot: ITextSnapshot): string {
@@ -25,9 +78,17 @@ export function readSnapshot(snapshot: ITextSnapshot): string {
 
 /**
  * Checks the red-black tree invariants plus the piece tree's cached
- * subtree metadata (size_left / lf_left) against a full recount.
+ * subtree metadata (size_left / lf_left, or the subtree totals of the
+ * persistent tree) against a full recount.
  */
-export function assertTreeInvariants(T: PieceTreeBase): void {
+export function assertTreeInvariants(T: IPieceTree): void {
+	if (T instanceof PersistentPieceTree) {
+		assertPersistentTreeInvariants(T.getVersion().root);
+		return;
+	}
+	if (!(T instanceof PieceTreeBase)) {
+		throw new Error('unknown tree kind');
+	}
 	assert(SENTINEL.color === NodeColor.Black);
 	assert(SENTINEL.parent === SENTINEL);
 	assert(SENTINEL.left === SENTINEL);

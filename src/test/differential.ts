@@ -1,14 +1,14 @@
 import assert from 'assert';
 import { Range } from '../common/range';
-import { PieceTreeBase } from '../pieceTreeBase';
 import { DefaultEndOfLine, PieceTreeTextBufferBuilder } from '../pieceTreeBuilder';
 import { LinesTextBuffer } from './linesTextBuffer';
 import { Prng } from './prng';
-import { assertTreeInvariants, createTextBuffer, readSnapshot } from './testUtils';
+import { IPieceTree, assertTreeInvariants, createTextBuffer, getTreeFlavor, readSnapshot, treesEqual } from './testUtils';
 
 /**
- * Differential testing harness: the same edits are applied to a PieceTreeBase
- * and to the trivially-correct LinesTextBuffer, and every observable query is
+ * Differential testing harness: the same edits are applied to a piece tree
+ * (PieceTreeBase or PersistentPieceTree, see setTreeFlavor in testUtils) and
+ * to the trivially-correct LinesTextBuffer, and every observable query is
  * compared after each step. A divergence is reported as a self-contained,
  * shrunk Scenario that can be pasted into differential.test.ts as a pinned
  * regression.
@@ -45,13 +45,14 @@ export interface Divergence {
 	error: Error;
 }
 
-export function createTree(scenario: Scenario): PieceTreeBase {
+export function createTree(scenario: Scenario): IPieceTree {
 	const builder = new PieceTreeTextBufferBuilder();
 	for (const chunk of scenario.chunks) {
 		builder.acceptChunk(chunk);
 	}
 	const factory = builder.finish(scenario.mode === 'normalized');
-	return factory.create(scenario.defaultEOL === '\r\n' ? DefaultEndOfLine.CRLF : DefaultEndOfLine.LF);
+	const defaultEOL = scenario.defaultEOL === '\r\n' ? DefaultEndOfLine.CRLF : DefaultEndOfLine.LF;
+	return getTreeFlavor() === 'persistent' ? factory.createPersistent(defaultEOL) : factory.create(defaultEOL);
 }
 
 export function createModel(scenario: Scenario): LinesTextBuffer {
@@ -91,7 +92,7 @@ export function detectEOL(text: string, defaultEOL: EOL): EOL {
  * current document so that shrunk scenarios (with ops removed) stay valid;
  * both sides always receive the identical, clamped operation.
  */
-export function applyOp(tree: PieceTreeBase, model: LinesTextBuffer, op: Op, mode: Mode): void {
+export function applyOp(tree: IPieceTree, model: LinesTextBuffer, op: Op, mode: Mode): void {
 	const length = model.getLength();
 	switch (op.op) {
 		case 'insert': {
@@ -141,7 +142,7 @@ export interface CheckOptions {
  * Compares every public query of the tree with the reference model.
  * Uses node's assert instead of expect(): this runs in tight loops.
  */
-export function assertEquivalent(tree: PieceTreeBase, model: LinesTextBuffer, options: CheckOptions): void {
+export function assertEquivalent(tree: IPieceTree, model: LinesTextBuffer, options: CheckOptions): void {
 	const { rng } = options;
 	const raw = model.getLinesRawContent();
 	const lineCount = model.getLineCount();
@@ -203,11 +204,11 @@ export function assertEquivalent(tree: PieceTreeBase, model: LinesTextBuffer, op
 
 	if (options.thorough) {
 		assert.strictEqual(readSnapshot(tree.createSnapshot('')), raw, 'createSnapshot()');
-		assert.ok(tree.equal(createTextBuffer([raw], false)), 'equal(tree built from the same text)');
+		assert.ok(treesEqual(tree, createTextBuffer([raw], false)), 'equal(tree built from the same text)');
 	}
 }
 
-function checkOffset(tree: PieceTreeBase, model: LinesTextBuffer, offset: number): void {
+function checkOffset(tree: IPieceTree, model: LinesTextBuffer, offset: number): void {
 	const expected = model.getPositionAt(offset);
 	const actual = tree.getPositionAt(offset);
 	assert.ok(actual.equals(expected), `getPositionAt(${offset}): got ${actual}, want ${expected}`);
@@ -219,7 +220,7 @@ export interface RunOptions {
 	checkEvery?: number;
 	thorough?: boolean;
 	/** Override how the tree under test is built (used to self-test the harness). */
-	createTree?: (scenario: Scenario) => PieceTreeBase;
+	createTree?: (scenario: Scenario) => IPieceTree;
 }
 
 /**
