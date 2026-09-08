@@ -52,6 +52,23 @@ history.redo();                         // an edit after an undo discards the re
 
 Versions keep the tree nodes they were taken with alive, which is O(log n) nodes per edit; the text buffers are shared by all versions (the change buffer only ever grows). The idea and the design follow [fredbuf](https://github.com/cdacamar/fredbuf), described in [Text Editor Data Structures](https://cdacamar.github.io/data%20structures/algorithms/benchmarking/text%20editors/c++/editor-data-structures/).
 
+## Correctness testing
+
+`npm test` runs the VS Code piece tree test suite (ported), the builder tests and a differential fuzzer (random editing sessions compared after every edit with a trivially correct array-of-lines buffer, `src/test/linesTextBuffer.ts`) twice: once on `PieceTreeBase` and once on `PersistentPieceTree`. Failures of the differential tests print a shrunk, replayable scenario that can be pinned as a regression test.
+
+`npm run fuzz` is the long-running version of that, for as many cores and minutes as you give it:
+
+```
+npm run fuzz                          # all cores but one, 10 minutes
+npm run fuzz -- --minutes 60          # a longer campaign
+npm run fuzz -- --seed 7 --workers 1  # reproducible single-process run
+npm run fuzz -- --json report.json    # also save the statistics and any failure
+```
+
+Every scenario is a random editing session (document size from empty to several hundred KB, edit size from single characters to inserts above the 64 KB buffer chunk size, normalized or mixed line endings, `setEOL` in the middle) applied step by step to three buffers: the persistent piece tree, `PieceTreeBase`, and the array-of-lines buffer. After every edit the three must agree on the text, the line count and a sample of line, offset/position and range queries; at checkpoints and at the end every public query of both trees is compared with the model exhaustively and the tree invariants are checked. The persistent tree is also tested for what only it can do: a version is taken after every edit and old versions are restored and re-read while the session goes on; half of the sessions branch off random earlier versions and continue editing from there, the other half drive a `PieceTreeHistory` and finally undo and redo every edit, then walk the undo stops at random. A divergence is shrunk and printed as a scenario to pin in `src/test/differential.test.ts`; planted bugs (a dropped CRLF fix-up, a `redo()` that forgets the version it leaves, a `restoreVersion()` that forgets the buffers) are each found within seconds. The [Fuzz workflow](.github/workflows/fuzz.yml) runs a 30-minute campaign nightly and on demand.
+
+The last campaign on this branch (`npm run fuzz -- --minutes 60 --workers 7 --seed 20260908`, Node 22.14; statistics in [`docs/fuzz/campaign-2026-09-08.json`](docs/fuzz/campaign-2026-09-08.json), reproducible with `--scenarios 35274` instead of the time budget): 35,274 scenarios, 9,184,550 edits each followed by the three-way comparison, 13,754,036 exhaustive comparisons of a tree with the model, 26,669,618 old versions restored and re-read, 182,479 branches off earlier versions, 18,460,368 undo/redo steps, 183,960 `setEOL`, 6,529 inserts above the buffer chunk size, largest document 944,909 characters. No divergence.
+
 ## Benchmarks
 
 `npm run bench` reproduces the comparisons of the [Text Buffer Reimplementation](https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation) post between the piece tree and the line array it replaced, using the workloads of the text buffer benchmarks VS Code had at the time:
