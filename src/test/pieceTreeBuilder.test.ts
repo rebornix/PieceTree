@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { PieceTreeTextBufferBuilder } from '../pieceTreeBuilder';
 import { createTextBuffer } from './testUtils';
 
 function splitLines(text: string): string[] {
@@ -56,6 +57,28 @@ describe('PieceTreeTextBufferBuilder', () => {
 			expect(createTextBuffer(['a\r', '\r', 'b'], true).getLinesRawContent()).toBe('a\r\n\r\nb');
 			// a lone \r is outvoted by two \n
 			expect(createTextBuffer(['a\n', 'b\n', 'c\r'], true).getLinesRawContent()).toBe('a\nb\nc\n');
+		});
+	});
+
+	describe('getFirstLineText', () => {
+		function factory(chunks: string[]) {
+			const builder = new PieceTreeTextBufferBuilder();
+			for (const chunk of chunks) {
+				builder.acceptChunk(chunk);
+			}
+			return builder.finish(true);
+		}
+
+		it('returns the first line, cut at the length limit', () => {
+			expect(factory(['hello world\nsecond line']).getFirstLineText(100)).toBe('hello world');
+			expect(factory(['hello world\nsecond line']).getFirstLineText(5)).toBe('hello');
+			expect(factory(['no line break at all']).getFirstLineText(1000)).toBe('no line break at all');
+		});
+
+		it('treats every kind of line break as the end of the first line', () => {
+			expect(factory(['a\r\nb']).getFirstLineText(100)).toBe('a');
+			expect(factory(['a\rb']).getFirstLineText(100)).toBe('a');
+			expect(factory(['\nb']).getFirstLineText(100)).toBe('');
 		});
 	});
 

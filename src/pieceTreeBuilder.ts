@@ -27,7 +27,9 @@ export const enum DefaultEndOfLine {
 export class PieceTreeTextBufferFactory {
 	constructor(
 		private readonly _chunks: StringBuffer[],
-		private readonly _bom: string,
+		// The BOM is detected and stripped by the builder; upstream hands it to
+		// the text buffer, which this library does not include.
+		_bom: string,
 		private readonly _cr: number,
 		private readonly _lf: number,
 		private readonly _crlf: number,
@@ -69,7 +71,7 @@ export class PieceTreeTextBufferFactory {
 	}
 
 	public getFirstLineText(lengthLimit: number): string {
-		return this._chunks[0].buffer.substr(0, 100).split(/\r\n|\r|\n/)[0];
+		return this._chunks[0].buffer.substr(0, lengthLimit).split(/\r\n|\r|\n/)[0];
 	}
 }
 
