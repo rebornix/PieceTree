@@ -2,11 +2,9 @@ name: Fuzz
 
 # Long-running differential fuzzing of the persistent piece tree against
 # PieceTreeBase and the array-of-lines model (npm run fuzz). Not a PR gate:
-# CI runs a short fuzz as part of the tests; this runs for much longer, every
-# night on the default branch and on demand for any branch.
+# CI runs a short fuzz as part of the tests; this runs for much longer when
+# manually requested for any branch.
 on:
-  schedule:
-    - cron: '17 3 * * *'
   workflow_dispatch:
     inputs:
       minutes:

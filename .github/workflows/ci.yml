@@ -54,8 +54,8 @@ jobs:
       - name: Benchmark smoke run
         run: npm run bench -- --smoke
 
-      # A short, fixed-seed fuzz campaign (about ten seconds); the long ones
-      # run in the Fuzz workflow, nightly and on demand.
+      # A short, fixed-seed fuzz campaign (about ten seconds); long campaigns
+      # are available on demand in the Fuzz workflow.
       - name: Fuzz smoke run
         run: npm run fuzz -- --scenarios 60 --workers 2 --seed 1
 
