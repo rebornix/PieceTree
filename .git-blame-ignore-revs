@@ -1,0 +1,4 @@
+# git blame --ignore-revs-file .git-blame-ignore-revs (GitHub applies this file automatically)
+
+# Normalize indentation to tabs
+89e196fe4a44a63c07721312205eaf061e4ad2b7
