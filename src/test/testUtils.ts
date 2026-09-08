@@ -32,15 +32,12 @@ export interface IPieceTree {
 
 export type TreeFlavor = 'mutable' | 'persistent';
 
-let treeFlavor: TreeFlavor = 'mutable';
-
 /**
- * Selects which piece tree `createTextBuffer` and `assertTreeInvariants` work
- * on. A test file sets it once, at module load, before the suites run.
+ * Which piece tree `createTextBuffer` (and the differential harness) build.
+ * Set per Vitest project in vitest.config.ts, so that the suites written
+ * against IPieceTree run on both implementations.
  */
-export function setTreeFlavor(flavor: TreeFlavor): void {
-	treeFlavor = flavor;
-}
+const treeFlavor: TreeFlavor = process.env.PIECE_TREE_FLAVOR === 'persistent' ? 'persistent' : 'mutable';
 
 export function getTreeFlavor(): TreeFlavor {
 	return treeFlavor;
