@@ -27,6 +27,8 @@
  * What the tree stores. `length` must be positive: values are addressed by
  * the offset at which they start, and an empty value would share its offset
  * with its neighbour, so it could be inserted but never found or removed.
+ * `lineFeedCnt` must be a count (zero or more); a bad one would poison the
+ * totals of every node on its path, in every version sharing them.
  */
 export interface IMeasured {
 	readonly length: number;
@@ -37,11 +39,15 @@ function checkValue(value: IMeasured): void {
 	if (!(value.length > 0)) {
 		throw new RangeError(`values must have a positive length, got ${value.length}`);
 	}
+	if (!(value.lineFeedCnt >= 0)) {
+		throw new RangeError(`values must have a non-negative line feed count, got ${value.lineFeedCnt}`);
+	}
 }
 
+/** Same numbering as NodeColor in rbTreeBase.ts, so that the two trees read alike. */
 export const enum Color {
-	Red = 0,
-	Black = 1
+	Black = 0,
+	Red = 1
 }
 
 export interface Node<T extends IMeasured> {
@@ -101,9 +107,11 @@ function insideValue(offset: number): never {
 /* Insertion                                                                  */
 
 /**
- * Kahrs's `balance`, applied to a black node whose child was just rebuilt:
- * two red children are recolored, a red child with a red child is rotated
- * into a red node with two black children.
+ * Kahrs's `balance`: builds the node for `value` between two subtrees that
+ * may each carry one red-red violation at their root (a child just rebuilt by
+ * an insertion, or a sibling just repainted red by a deletion). Two red
+ * children are recolored; a red child with a red child is rotated into a red
+ * node with two black children; anything else is simply a black node.
  */
 function balance<T extends IMeasured>(left: Node<T>, value: T, right: Node<T>): Node<T> {
 	if (isRed(left) && isRed(right)) {
@@ -288,9 +296,11 @@ export function replaceAt<T extends IMeasured>(root: Node<T>, offset: number, va
 
 /**
  * Builds a balanced tree holding `values` in order, in O(n). Every node of the
- * deepest level is red and every other node is black; since the levels of a
- * tree built by halving differ by at most one, this satisfies the red-black
- * invariants.
+ * deepest level (floor(log2 n) below the root) is red and every other node is
+ * black. Halving puts every empty child at that level or the one below it, so
+ * every path to an empty child passes the same number of black nodes and no
+ * red node has a red child. The final paint only matters for a single value,
+ * whose one node is both the root and the deepest level.
  */
 export function fromValues<T extends IMeasured>(values: readonly T[]): Node<T> {
 	if (values.length === 0) {
@@ -330,7 +340,8 @@ export interface NodePosition<T extends IMeasured> {
 /**
  * Finds the value containing `offset`. Like `PieceTreeBase.nodeAt`, an offset
  * at the very end of a value is reported as that value with `remainder` equal
- * to its length when the descent reaches it first.
+ * to its length when the descent reaches it first. Returns null for an empty
+ * tree and for offsets outside [0, size] (including NaN).
  */
 export function nodeAt<T extends IMeasured>(root: Node<T>, offset: number): NodePosition<T> | null {
 	const path: Path<T> = [];

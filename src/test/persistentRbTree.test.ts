@@ -17,7 +17,8 @@ interface Item extends IMeasured {
 let nextId = 0;
 
 function item(length: number, lineFeedCnt: number = 0): Item {
-	assert(lineFeedCnt <= length);
+	// a sanity check on the tests' own values; deliberately bad counts (negative, NaN) pass through to the tree
+	assert(!(lineFeedCnt > length));
 	return { id: nextId++, length, lineFeedCnt };
 }
 
@@ -123,10 +124,10 @@ function assertMatchesModel(root: Node<Item>, model: readonly Item[]): void {
 describe('persistent red-black tree', () => {
 	describe('invariant checker', () => {
 		// hand-built nodes, to make sure the checker used everywhere below rejects broken trees
-		const leaf = (color: Color, value: Item, left: Node<Item> = EMPTY, right: Node<Item> = EMPTY, size?: number): Node<Item> => ({
+		const leaf = (color: Color, value: Item, left: Node<Item> = EMPTY, right: Node<Item> = EMPTY, size?: number, lf?: number): Node<Item> => ({
 			color, left, right, value,
 			size: size ?? left.size + value.length + right.size,
-			lf: left.lf + value.lineFeedCnt + right.lf
+			lf: lf ?? left.lf + value.lineFeedCnt + right.lf
 		});
 
 		it('accepts valid trees', () => {
@@ -152,6 +153,13 @@ describe('persistent red-black tree', () => {
 		it('rejects wrong subtree totals', () => {
 			const root = leaf(Color.Black, item(1), leaf(Color.Red, item(1)), EMPTY, 5);
 			expect(() => assertPersistentTreeInvariants(root)).toThrow(/size is the subtree total/);
+			const badLf = leaf(Color.Black, item(1, 1), leaf(Color.Red, item(1, 1)), EMPTY, undefined, 1);
+			expect(() => assertPersistentTreeInvariants(badLf)).toThrow(/lf is the subtree total/);
+		});
+
+		it('rejects values that cannot be addressed', () => {
+			expect(() => assertPersistentTreeInvariants(leaf(Color.Black, item(0)))).toThrow(/positive length/);
+			expect(() => assertPersistentTreeInvariants(leaf(Color.Black, item(1, -1)))).toThrow(/positive length/);
 		});
 	});
 
@@ -224,27 +232,40 @@ describe('persistent red-black tree', () => {
 			assertMatchesModel(root, expected);
 		});
 
-		it('rejects offsets that are out of range or inside a value', () => {
+		it('rejects offsets that are out of range, not whole numbers, or inside a value', () => {
 			const root = fromValues([item(3), item(3), item(3)]);
-			expect(() => insertAt(root, -1, item(1))).toThrow(RangeError);
-			expect(() => insertAt(root, 10, item(1))).toThrow(RangeError);
+			for (const bad of [-1, 10, 0.5, NaN, Infinity, -Infinity]) {
+				expect(() => insertAt(root, bad, item(1)), `insertAt ${bad}`).toThrow(RangeError);
+			}
 			expect(() => insertAt(root, 4, item(1))).toThrow(/not a boundary/);
-			expect(() => removeAt(root, 9)).toThrow(RangeError);
+			for (const bad of [-1, 9, 10, 0.5, NaN, Infinity]) {
+				expect(() => removeAt(root, bad), `removeAt ${bad}`).toThrow(RangeError);
+				expect(() => replaceAt(root, bad, item(1)), `replaceAt ${bad}`).toThrow(RangeError);
+			}
 			expect(() => removeAt(root, 5)).toThrow(/not a boundary/);
 			expect(() => removeAt(EMPTY, 0)).toThrow(RangeError);
-			expect(() => replaceAt(root, 9, item(1))).toThrow(RangeError);
 			expect(() => replaceAt(root, 7, item(1))).toThrow(/not a boundary/);
 			// the failed operations did not touch the tree
 			assertMatchesModel(root, toArray(root));
+			// lookups outside the sequence find nothing rather than throwing
+			for (const outside of [-1, 10, NaN]) {
+				assert.strictEqual(nodeAt(root, outside), null);
+			}
+			assert.strictEqual(nodeAt(root, 0)!.remainder, 0);
+			assert.strictEqual(nodeAt(root, 9)!.remainder, 3);
 		});
 
-		it('rejects zero-length values, which could be inserted but never addressed again', () => {
+		it('rejects values that could not be addressed or counted', () => {
 			const root = fromValues([item(3), item(3)]);
 			expect(() => insertAt(root, 3, item(0))).toThrow(/positive length/);
 			expect(() => insertAt(root, 6, item(0))).toThrow(/positive length/);
 			expect(() => insertAt(EMPTY, 0, item(0))).toThrow(/positive length/);
 			expect(() => replaceAt(root, 0, item(0))).toThrow(/positive length/);
 			expect(() => fromValues([item(1), item(0)])).toThrow(/positive length/);
+			expect(() => insertAt(root, 3, item(1, -1))).toThrow(/line feed count/);
+			expect(() => insertAt(root, 3, item(1, NaN))).toThrow(/line feed count/);
+			expect(() => replaceAt(root, 0, item(1, -1))).toThrow(/line feed count/);
+			expect(() => fromValues([item(1, NaN)])).toThrow(/line feed count/);
 			assertMatchesModel(root, toArray(root));
 		});
 
@@ -353,6 +374,40 @@ describe('persistent red-black tree', () => {
 				run(seed, 400);
 			});
 		}
+
+		it('random operations on a tree of a few thousand values, where deletions rebalance several levels up', () => {
+			const rng = new Prng(2024);
+			let root: Node<Item> = EMPTY;
+			const model: Item[] = [];
+			const grow = (count: number) => {
+				for (let i = 0; i < count; i++) {
+					const index = rng.nextInt(model.length + 1);
+					const value = randomItem(rng);
+					root = insertAt(root, boundaries(model)[index], value);
+					model.splice(index, 0, value);
+				}
+			};
+			grow(3000);
+			assertMatchesModel(root, model);
+			const before = { root, ids: ids(root) };
+			for (let i = 0; i < 3000; i++) {
+				const starts = boundaries(model);
+				const index = rng.nextInt(model.length);
+				if (i % 3 === 0) {
+					const value = randomItem(rng);
+					root = replaceAt(root, starts[index], value);
+					model[index] = value;
+				} else {
+					root = removeAt(root, starts[index]);
+					model.splice(index, 1);
+				}
+				if (i % 100 === 99) {
+					assertPersistentTreeInvariants(root);
+				}
+			}
+			assertMatchesModel(root, model);
+			assert.deepStrictEqual(ids(before.root), before.ids);
+		});
 
 		it('a long session that grows and then empties the tree', () => {
 			const rng = new Prng(99);

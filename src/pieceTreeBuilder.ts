@@ -69,7 +69,11 @@ export class PieceTreeTextBufferFactory {
 		return new PersistentPieceTree(this._chunksFor(eol), eol, this._normalizeEOL);
 	}
 
-	/** The chunks with their line breaks normalized to `eol`, when normalization was asked for and is needed. */
+	/**
+	 * The chunks with their line breaks normalized to `eol`, when normalization
+	 * was asked for and is needed. Trees created from the same factory share the
+	 * StringBuffer instances; neither tree ever writes to an original chunk.
+	 */
 	private _chunksFor(eol: '\r\n' | '\n'): StringBuffer[] {
 		if (this._normalizeEOL &&
 			((eol === '\r\n' && (this._cr > 0 || this._lf > 0))

@@ -302,6 +302,7 @@ export class PersistentPieceTree {
 		this._EOL = version.eol;
 		this._EOLLength = version.eol.length;
 		this._EOLNormalized = version.eolNormalized;
+		// the line cache is keyed by root, so it needs no reset; the last visited line is not
 		this._lastVisitedLine = { lineNumber: 0, value: '' };
 	}
 
@@ -549,7 +550,8 @@ export class PersistentPieceTree {
 	 * Inserts `value` at `offset`. `eolNormalized` says the text only contains
 	 * the buffer's EOL; the flag is sticky, one unnormalized insert turns the
 	 * EOL fast paths off for good, as in PieceTreeBase. An empty insert is a
-	 * no-op (PieceTreeBase would store an empty piece).
+	 * no-op, flag included (PieceTreeBase would store an empty piece), and so
+	 * is a rejected one.
 	 */
 	public insert(offset: number, value: string, eolNormalized: boolean = false): void {
 		this._checkRange(offset, 0);
@@ -569,7 +571,10 @@ export class PersistentPieceTree {
 		const pieceStart = position.nodeStartOffset;
 		const remainder = position.remainder;
 
-		// typing at the end of the piece that ends at the end of the change buffer: extend it
+		// Typing at the end of the piece that ends at the end of the change buffer: extend it.
+		// Safe for the versions sharing the buffer: the piece's end equals the buffer's end only
+		// if nothing was appended since the piece was made, so no other piece covers what is
+		// appended now, and the extended piece exists only in the new root.
 		if (piece.bufferIndex === 0
 			&& piece.end.line === this._state.lastChangeBufferPos.line
 			&& piece.end.column === this._state.lastChangeBufferPos.column
@@ -817,8 +822,9 @@ export class PersistentPieceTree {
 
 	/**
 	 * PieceTreeBase.createNewPieces: stores `text` and returns the pieces for
-	 * it. Text below AverageBufferSize is appended to the change buffer, larger
-	 * text gets buffers of its own, split at line breaks and surrogate pairs.
+	 * it. Text of up to AverageBufferSize characters is appended to the change
+	 * buffer, longer text gets buffers of its own, cut so that no \r\n or
+	 * surrogate pair is split.
 	 */
 	private _createNewPieces(text: string): Piece[] {
 		const bufferList = this._buffers;
@@ -990,7 +996,7 @@ export class PersistentPieceTree {
 	 * end of a piece is reported as that piece with `remainder` equal to its
 	 * length when the descent reaches it first.
 	 */
-	nodeAt(offset: number): NodePosition {
+	public nodeAt(offset: number): NodePosition {
 		const position = rb.nodeAt(this._root, offset);
 		if (position === null) {
 			throw new RangeError(`offset ${offset} is outside the document`);
@@ -1017,7 +1023,7 @@ export class PersistentPieceTree {
 	}
 
 	/** The piece containing the character at `lineNumber`/`column` (1-based); the column may point just past the line. */
-	nodeAt2(lineNumber: number, column: number): NodePosition {
+	public nodeAt2(lineNumber: number, column: number): NodePosition {
 		const position = this._descendToLine(lineNumber);
 		if (position === null) {
 			throw new RangeError(`line ${lineNumber} is outside the document`);
@@ -1056,7 +1062,7 @@ export class PersistentPieceTree {
 	}
 
 	/** The raw content of a line, including its line break unless `endOffset` characters are cut off the end. */
-	getLineRawContent(lineNumber: number, endOffset: number = 0): string {
+	public getLineRawContent(lineNumber: number, endOffset: number = 0): string {
 		let ret = '';
 		let path: Path;
 

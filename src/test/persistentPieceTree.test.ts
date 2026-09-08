@@ -380,6 +380,54 @@ describe('PersistentPieceTree (reads)', () => {
 			expect(tree.getLinesRawContent()).toBe('a\r\nb');
 		});
 
+		it('an empty chunk among the others is skipped by both trees', () => {
+			// PieceTreeBase numbered buffers by chunk index while only keeping the non-empty
+			// chunks, so a piece after an empty chunk pointed past the buffer list
+			for (const chunks of [['', 'abc\n', 'def'], ['abc\n', '', 'def'], ['', '', 'x'], ['a', '', '', 'b\n', '']]) {
+				const expected = chunks.join('');
+				const persistent = new PersistentPieceTree(toBuffers(chunks), '\n', true);
+				const mutable = new PieceTreeBase(toBuffers(chunks), '\n', true);
+				expect(persistent.getLinesRawContent()).toBe(expected);
+				expect(mutable.getLinesRawContent()).toBe(expected);
+				expect(persistent.getLinesContent()).toEqual(mutable.getLinesContent());
+				persistent.insert(1, 'Z');
+				mutable.insert(1, 'Z');
+				expect(persistent.getLinesRawContent()).toBe(mutable.getLinesRawContent());
+			}
+		});
+
+		it('editing restored versions through the append fast path and the change-buffer filler keeps every version intact', () => {
+			// typing (the append fast path) and a \n typed after a \r (the filler path) are the two
+			// ways an edit touches the change buffer that all versions share
+			const rng = new Prng(77);
+			const tree = fromBuilder(['start\n'], false);
+			const versions: { version: PieceTreeVersion; raw: string }[] = [{ version: tree.getVersion(), raw: 'start\n' }];
+			for (let step = 0; step < 400; step++) {
+				if (rng.next() < 0.25) {
+					// branch off an earlier version
+					tree.restoreVersion(versions[rng.nextInt(versions.length)].version);
+				}
+				const at = rng.next() < 0.6 ? tree.getLength() : rng.nextInt(tree.getLength() + 1);
+				const text = rng.next() < 0.5 ? rng.nextString('ab\r\n', 1) : rng.nextString('xy\r\n ', 1 + rng.nextInt(4));
+				tree.insert(at, text, false);
+				if (rng.next() < 0.15 && tree.getLength() > 0) {
+					const offset = rng.nextInt(tree.getLength());
+					tree.delete(offset, 1 + rng.nextInt(Math.min(3, tree.getLength() - offset)));
+				}
+				versions.push({ version: tree.getVersion(), raw: tree.getLinesRawContent() });
+				if (step % 40 === 39) {
+					for (const { version, raw } of versions) {
+						tree.restoreVersion(version);
+						assert.strictEqual(tree.getLinesRawContent(), raw);
+						assert.strictEqual(tree.getLineCount(), raw.split(/\r\n|\r|\n/).length);
+					}
+					tree.restoreVersion(versions[versions.length - 1].version);
+				}
+			}
+			const model = new LinesTextBuffer(tree.getLinesRawContent());
+			assertEquivalent(tree, model, { rng, checkLineLength: false, thorough: false });
+		});
+
 		for (const mode of ['normalized', 'mixed'] as Mode[]) {
 			it(`every version of a random ${mode} session still reads as it did when it was taken`, () => {
 				for (const seed of [1, 2, 3]) {
