@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CharCode } from './common/charCode';
-import { StringBuffer, createLineStarts, createLineStartsFast, PieceTreeBase } from './pieceTreeBase';
+import { StringBuffer, createLineStarts, createLineStartsFast } from './pieceBuffers';
+import { PieceTreeBase } from './pieceTreeBase';
 
 export const UTF8_BOM_CHARACTER = String.fromCharCode(CharCode.UTF8_BOM);
 
