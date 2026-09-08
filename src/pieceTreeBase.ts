@@ -184,8 +184,10 @@ export class PieceTreeBase {
 					chunks[i].lineStarts = createLineStartsFast(chunks[i].buffer);
 				}
 
+				// the piece indexes the buffer list as it is being built: empty chunks are skipped,
+				// so `i + 1` (as upstream has it) would point past the buffers when one precedes this chunk
 				const piece = new Piece(
-					i + 1,
+					this._buffers.length,
 					{ line: 0, column: 0 },
 					{ line: chunks[i].lineStarts.length - 1, column: chunks[i].buffer.length - chunks[i].lineStarts[chunks[i].lineStarts.length - 1] },
 					chunks[i].lineStarts.length - 1,
