@@ -15,6 +15,7 @@
         "typecheck": "tsc -p tsconfig.json --noEmit",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
+        "check:consumer": "tsc -p tsconfig.consumer.json && node --import tsx scripts/consumer-check.ts",
         "test": "vitest run",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",

@@ -12,7 +12,12 @@ export function startsWithUTF8BOM(str: string): boolean {
 	return !!(str && str.length > 0 && str.charCodeAt(0) === CharCode.UTF8_BOM);
 }
 
-export const enum DefaultEndOfLine {
+/**
+ * A plain enum, not a const enum: it is part of the public API, and a const
+ * enum has no runtime value for JavaScript consumers and cannot be used from
+ * TypeScript compiled with isolatedModules (every bundler-based setup).
+ */
+export enum DefaultEndOfLine {
 	/**
 	 * Use line feed (\n) as the end of line character.
 	 */
