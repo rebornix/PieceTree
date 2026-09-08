@@ -1,0 +1,21 @@
+# https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+
+# YAML cannot use tabs; the JSON configs in this repository use 2 spaces
+[*.{yml,yaml,json}]
+indent_style = space
+indent_size = 2
+
+# npm preserves the indentation it finds; package.json is 4 spaces today
+[package.json]
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false

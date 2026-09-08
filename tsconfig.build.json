@@ -1,12 +1,12 @@
 {
   // Build config for the published library (lib/): CommonJS + declarations,
-  // tests and benchmarks excluded.
+  // tests and benchmarks excluded. Strictness lives in tsconfig.base.json.
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "target": "es2015",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./lib",
-    "esModuleInterop": true
+    "outDir": "./lib"
   },
   "include": ["src"],
   "exclude": ["src/test", "src/benchmark"]

@@ -1,0 +1,15 @@
+{
+  // Type-checks scripts/consumer-check.ts against lib/ the way a bundler-based
+  // consumer would (isolatedModules, strict). Run by `npm run check:consumer`.
+  "compilerOptions": {
+    "strict": true,
+    "isolatedModules": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "target": "es2020",
+    "types": ["node"],
+    "noEmit": true
+  },
+  "files": ["scripts/consumer-check.ts"]
+}

@@ -1,0 +1,20 @@
+{
+  // Compiler strictness shared by the type-checking config (tsconfig.json) and
+  // the build config (tsconfig.build.json): microsoft/vscode's set from
+  // src/tsconfig.base.json, plus noUnusedParameters and
+  // noFallthroughCasesInSwitch. Not noUncheckedIndexedAccess (VS Code does not
+  // use it either) and not exactOptionalPropertyTypes (it changes what
+  // consumers of the library may pass).
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true
+  }
+}

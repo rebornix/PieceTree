@@ -1,12 +1,12 @@
 {
   // Type-checking config for editors and `npm run typecheck`: covers the
   // library, the tests and the Vitest config. The publishable build uses
-  // tsconfig.build.json instead.
+  // tsconfig.build.json instead. Strictness lives in tsconfig.base.json.
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "target": "es2022",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true,
     "types": ["node"],

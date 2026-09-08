@@ -35,8 +35,16 @@ jobs:
       - name: Build library
         run: npm run build
 
+      # Uses lib/ like a consumer of the package would (isolatedModules, the
+      # .d.ts rather than the sources).
+      - name: Consumer check
+        run: npm run check:consumer
+
       - name: Type-check (including tests)
         run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
 
       - name: Test
         run: npm run test:coverage
