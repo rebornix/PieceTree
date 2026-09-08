@@ -11,11 +11,11 @@ function createPieceTree(chunks: string[]) {
 
 describe('readme example', () => {
 	it('builds from chunks and inserts', () => {
-		let pieceTreeTextBufferBuilder = new PieceTreeTextBufferBuilder();
+		const pieceTreeTextBufferBuilder = new PieceTreeTextBufferBuilder();
 		pieceTreeTextBufferBuilder.acceptChunk('abc\n');
 		pieceTreeTextBufferBuilder.acceptChunk('def');
-		let pieceTreeFactory = pieceTreeTextBufferBuilder.finish(true);
-		let pieceTree = pieceTreeFactory.create(DefaultEndOfLine.LF);
+		const pieceTreeFactory = pieceTreeTextBufferBuilder.finish(true);
+		const pieceTree = pieceTreeFactory.create(DefaultEndOfLine.LF);
 
 		expect(pieceTree.getLineCount()).toEqual(2);
 		expect(pieceTree.getLineContent(1)).toEqual('abc');
