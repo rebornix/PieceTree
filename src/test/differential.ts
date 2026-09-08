@@ -3,7 +3,7 @@ import { Range } from '../common/range';
 import { DefaultEndOfLine, PieceTreeTextBufferBuilder } from '../pieceTreeBuilder';
 import { LinesTextBuffer } from './linesTextBuffer';
 import { Prng } from './prng';
-import { IPieceTree, assertTreeInvariants, createTextBuffer, getTreeFlavor, readSnapshot, treesEqual } from './testUtils';
+import { IPieceTree, TreeFlavor, assertTreeInvariants, equalsText, getTreeFlavor, readSnapshot } from './testUtils';
 
 /**
  * Differential testing harness: the same edits are applied to a piece tree
@@ -45,14 +45,15 @@ export interface Divergence {
 	error: Error;
 }
 
-export function createTree(scenario: Scenario): IPieceTree {
+/** Builds the scenario's initial document on the tree of the given flavor (the project's flavor by default). */
+export function createTree(scenario: Scenario, flavor: TreeFlavor = getTreeFlavor()): IPieceTree {
 	const builder = new PieceTreeTextBufferBuilder();
 	for (const chunk of scenario.chunks) {
 		builder.acceptChunk(chunk);
 	}
 	const factory = builder.finish(scenario.mode === 'normalized');
 	const defaultEOL = scenario.defaultEOL === '\r\n' ? DefaultEndOfLine.CRLF : DefaultEndOfLine.LF;
-	return getTreeFlavor() === 'persistent' ? factory.createPersistent(defaultEOL) : factory.create(defaultEOL);
+	return flavor === 'persistent' ? factory.createPersistent(defaultEOL) : factory.create(defaultEOL);
 }
 
 export function createModel(scenario: Scenario): LinesTextBuffer {
@@ -88,37 +89,67 @@ export function detectEOL(text: string, defaultEOL: EOL): EOL {
 }
 
 /**
- * Applies `op` to both buffers. Offsets and lengths are clamped against the
- * current document so that shrunk scenarios (with ops removed) stay valid;
- * both sides always receive the identical, clamped operation.
+ * The operation as it will be applied to a document of `length` characters:
+ * offsets and lengths are clamped so that shrunk scenarios (with ops removed)
+ * stay valid, and an edit that would change nothing becomes null. Every
+ * buffer under test receives this identical operation.
  */
-export function applyOp(tree: IPieceTree, model: LinesTextBuffer, op: Op, mode: Mode): void {
-	const length = model.getLength();
+export function effectiveOp(op: Op, length: number): Op | null {
 	switch (op.op) {
 		case 'insert': {
 			if (op.text.length === 0) {
-				return;
+				return null;
 			}
-			const offset = clamp(op.offset, 0, length);
-			tree.insert(offset, op.text, mode === 'normalized');
-			model.insert(offset, op.text);
-			return;
+			return { op: 'insert', offset: clamp(op.offset, 0, length), text: op.text };
 		}
 		case 'delete': {
 			const offset = clamp(op.offset, 0, length);
 			const cnt = clamp(op.length, 0, length - offset);
-			if (cnt === 0) {
-				return;
-			}
-			tree.delete(offset, cnt);
-			model.delete(offset, cnt);
-			return;
+			return cnt === 0 ? null : { op: 'delete', offset, length: cnt };
 		}
 		case 'setEOL':
+			return op;
+	}
+}
+
+/** Applies an effective op (see effectiveOp) to a tree. */
+export function applyOpToTree(tree: IPieceTree, op: Op, mode: Mode): void {
+	switch (op.op) {
+		case 'insert':
+			tree.insert(op.offset, op.text, mode === 'normalized');
+			return;
+		case 'delete':
+			tree.delete(op.offset, op.length);
+			return;
+		case 'setEOL':
 			tree.setEOL(op.eol);
+			return;
+	}
+}
+
+/** Applies an effective op (see effectiveOp) to the reference model. */
+export function applyOpToModel(model: LinesTextBuffer, op: Op): void {
+	switch (op.op) {
+		case 'insert':
+			model.insert(op.offset, op.text);
+			return;
+		case 'delete':
+			model.delete(op.offset, op.length);
+			return;
+		case 'setEOL':
 			model.setEOL(op.eol);
 			return;
 	}
+}
+
+/** Applies `op` to both buffers, clamped against the current document. */
+export function applyOp(tree: IPieceTree, model: LinesTextBuffer, op: Op, mode: Mode): void {
+	const effective = effectiveOp(op, model.getLength());
+	if (effective === null) {
+		return;
+	}
+	applyOpToTree(tree, effective, mode);
+	applyOpToModel(model, effective);
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -204,7 +235,7 @@ export function assertEquivalent(tree: IPieceTree, model: LinesTextBuffer, optio
 
 	if (options.thorough) {
 		assert.strictEqual(readSnapshot(tree.createSnapshot('')), raw, 'createSnapshot()');
-		assert.ok(treesEqual(tree, createTextBuffer([raw], false)), 'equal(tree built from the same text)');
+		assert.ok(equalsText(tree, raw), 'equal(tree built from the same text)');
 	}
 }
 

@@ -16,8 +16,8 @@ const libraryImports = (...patterns) => ['error', {
 	paths: nodeBuiltins.map(name => ({ name, message: 'The library must stay platform-neutral: no Node.js modules in src/*.ts or src/common/.' })),
 	patterns: [
 		{
-			group: ['./test/*', '../test/*', './benchmark/*', '../benchmark/*', 'vitest', 'vitest/*'],
-			message: 'The library must not depend on its tests or benchmarks.'
+			group: ['./test/*', '../test/*', './benchmark/*', '../benchmark/*', './fuzz/*', '../fuzz/*', 'vitest', 'vitest/*'],
+			message: 'The library must not depend on its tests, benchmarks or fuzzer.'
 		},
 		...patterns
 	]
@@ -135,7 +135,7 @@ export default defineConfig(
 		files: ['src/test/**/*.ts'],
 		rules: {
 			'no-restricted-imports': ['error', {
-				patterns: [{ group: ['../benchmark/*'], message: 'Tests must not depend on the benchmark.' }]
+				patterns: [{ group: ['../benchmark/*', '../fuzz/*'], message: 'Tests must not depend on the benchmark or the fuzzer.' }]
 			}],
 			'no-restricted-syntax': [
 				'error',
@@ -158,7 +158,18 @@ export default defineConfig(
 		rules: {
 			// The benchmark shares the deterministic PRNG with the tests and nothing else.
 			'no-restricted-imports': ['error', {
-				patterns: [{ group: ['../test/*', '!../test/prng'], message: 'The benchmark may only use src/test/prng from the tests.' }]
+				patterns: [{ group: ['../test/*', '!../test/prng', '../fuzz/*'], message: 'The benchmark may only use src/test/prng from the tests.' }]
+			}]
+		}
+	},
+
+	// ---- fuzzer -------------------------------------------------------------------
+	// The fuzzer is test tooling: it drives the differential harness and the reference model from src/test/.
+	{
+		files: ['src/fuzz/**/*.ts'],
+		rules: {
+			'no-restricted-imports': ['error', {
+				patterns: [{ group: ['../benchmark/*'], message: 'The fuzzer must not depend on the benchmark.' }]
 			}]
 		}
 	}

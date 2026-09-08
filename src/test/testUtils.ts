@@ -52,6 +52,20 @@ export function createTextBuffer(val: string[], normalizeEOL: boolean = true): I
 	return treeFlavor === 'persistent' ? factory.createPersistent(DefaultEndOfLine.LF) : factory.create(DefaultEndOfLine.LF);
 }
 
+/** Whether `tree.equal()` holds against a tree of the same kind built from `text` (unnormalized, one chunk). */
+export function equalsText(tree: IPieceTree, text: string): boolean {
+	const factory = new PieceTreeTextBufferBuilder();
+	factory.acceptChunk(text);
+	const finished = factory.finish(false);
+	if (tree instanceof PersistentPieceTree) {
+		return tree.equal(finished.createPersistent(DefaultEndOfLine.LF));
+	}
+	if (tree instanceof PieceTreeBase) {
+		return tree.equal(finished.create(DefaultEndOfLine.LF));
+	}
+	throw new Error('unknown tree kind');
+}
+
 /** `equal` is not on the shared interface, since each tree compares with its own kind. */
 export function treesEqual(a: IPieceTree, b: IPieceTree): boolean {
 	if (a instanceof PieceTreeBase && b instanceof PieceTreeBase) {
