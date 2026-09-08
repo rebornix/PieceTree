@@ -537,6 +537,7 @@ function main(): void {
 	const start = Date.now();
 	const stats = emptyStats();
 	const failures: IFailure[] = [];
+	let workerCrashes = 0;
 	let running = options.workers;
 	const progress = () => {
 		process.stderr.write(`\r  ${formatCount(stats.scenarios)} scenarios, ${formatCount(stats.ops)} edits, ${failures.length} failure${failures.length === 1 ? '' : 's'}, ${formatDuration(Date.now() - start)}   `);
@@ -555,7 +556,7 @@ function main(): void {
 			}, null, 2));
 			process.stderr.write(`wrote ${options.json}\n`);
 		}
-		process.exit(failures.length === 0 ? 0 : 1);
+		process.exit(failures.length === 0 && workerCrashes === 0 ? 0 : 1);
 	};
 
 	process.stderr.write(`Fuzzing with seed ${options.seed} on ${options.workers} worker${options.workers === 1 ? '' : 's'}` +
@@ -575,9 +576,10 @@ function main(): void {
 				failures.push(message.failure);
 			}
 		});
-		child.on('exit', code => {
-			if (code !== 0 && code !== null) {
-				process.stderr.write(`\nworker ${w} exited with code ${code}\n`);
+		child.on('exit', (code, signal) => {
+			if (code !== 0) {
+				workerCrashes++;
+				process.stderr.write(`\nworker ${w} exited with ${signal === null ? `code ${code}` : `signal ${signal}`}\n`);
 			}
 			if (--running === 0) {
 				finish();
