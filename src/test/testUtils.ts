@@ -83,7 +83,7 @@ export function readSnapshot(snapshot: ITextSnapshot): string {
  */
 export function assertTreeInvariants(T: IPieceTree): void {
 	if (T instanceof PersistentPieceTree) {
-		assertPersistentTreeInvariants(T.getVersion().root);
+		assertPersistentTreeInvariants(T.root);
 		return;
 	}
 	if (!(T instanceof PieceTreeBase)) {

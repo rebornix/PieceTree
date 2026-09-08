@@ -154,7 +154,7 @@ function ins<T extends IMeasured>(node: Node<T>, offset: number, value: T): Node
  */
 export function insertAt<T extends IMeasured>(root: Node<T>, offset: number, value: T): Node<T> {
 	checkValue(value);
-	if (offset < 0 || offset > root.size) {
+	if (!Number.isInteger(offset) || offset < 0 || offset > root.size) {
 		throw new RangeError(`offset ${offset} is out of range [0, ${root.size}]`);
 	}
 	return paint(ins(root, offset, value), Color.Black);
@@ -247,7 +247,7 @@ function del<T extends IMeasured>(node: Node<T>, offset: number): Node<T> {
 
 /** Removes the value that starts at `offset`. */
 export function removeAt<T extends IMeasured>(root: Node<T>, offset: number): Node<T> {
-	if (offset < 0 || offset >= root.size) {
+	if (!Number.isInteger(offset) || offset < 0 || offset >= root.size) {
 		throw new RangeError(`offset ${offset} is out of range [0, ${root.size})`);
 	}
 	return paint(del(root, offset), Color.Black);
@@ -277,7 +277,7 @@ function rep<T extends IMeasured>(node: Node<T>, offset: number, value: T): Node
  */
 export function replaceAt<T extends IMeasured>(root: Node<T>, offset: number, value: T): Node<T> {
 	checkValue(value);
-	if (offset < 0 || offset >= root.size) {
+	if (!Number.isInteger(offset) || offset < 0 || offset >= root.size) {
 		throw new RangeError(`offset ${offset} is out of range [0, ${root.size})`);
 	}
 	return rep(root, offset, value);
@@ -410,7 +410,11 @@ export function rightmost<T extends IMeasured>(root: Node<T>): Path<T> {
 	return path;
 }
 
-/** Moves the path to the next value in the sequence; returns false (leaving the path empty) at the end. */
+/**
+ * Moves the path to the next value in the sequence; returns false (leaving the
+ * path empty) at the end. The path must be non-empty, as are the paths nodeAt,
+ * descend, leftmost and rightmost return for a non-empty tree.
+ */
 export function next<T extends IMeasured>(path: Path<T>): boolean {
 	let node = path[path.length - 1];
 	if (node.right !== EMPTY) {
@@ -431,7 +435,7 @@ export function next<T extends IMeasured>(path: Path<T>): boolean {
 	return false;
 }
 
-/** Moves the path to the previous value in the sequence; returns false (leaving the path empty) at the start. */
+/** Moves the path to the previous value in the sequence; returns false (leaving the path empty) at the start. The path must be non-empty. */
 export function prev<T extends IMeasured>(path: Path<T>): boolean {
 	let node = path[path.length - 1];
 	if (node.left !== EMPTY) {
@@ -452,7 +456,7 @@ export function prev<T extends IMeasured>(path: Path<T>): boolean {
 	return false;
 }
 
-/** Offset at which the value at the end of the path starts. */
+/** Offset at which the value at the end of the (non-empty) path starts. */
 export function startOffsetOf<T extends IMeasured>(path: Path<T>): number {
 	let offset = 0;
 	for (let i = 0; i < path.length - 1; i++) {

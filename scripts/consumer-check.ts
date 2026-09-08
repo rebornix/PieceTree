@@ -10,7 +10,7 @@
  * value for JavaScript consumers.
  */
 import assert from 'node:assert';
-import { DefaultEndOfLine, PieceTreeTextBufferBuilder } from '../lib';
+import { DefaultEndOfLine, PieceTreeHistory, PieceTreeTextBufferBuilder, PieceTreeVersion } from '../lib';
 
 const builder = new PieceTreeTextBufferBuilder();
 builder.acceptChunk('abc\n');
@@ -26,5 +26,21 @@ assert.strictEqual(tree.getLineContent(2), 'def');
 assert.strictEqual(DefaultEndOfLine.LF, 1);
 assert.strictEqual(DefaultEndOfLine.CRLF, 2);
 assert.strictEqual(DefaultEndOfLine[DefaultEndOfLine.CRLF], 'CRLF');
+
+// the persistent tree: versions and undo/redo through the public types only
+const persistent = builder.finish(true).createPersistent(DefaultEndOfLine.LF);
+const before: PieceTreeVersion = persistent.getVersion();
+const history = new PieceTreeHistory(persistent, 10);
+history.pushUndoStop();
+persistent.insert(0, '> ');
+assert.strictEqual(persistent.getLineContent(1), '> abc');
+assert.strictEqual(before.length, 7);
+assert.strictEqual(before.lineCount, 2);
+assert.ok(history.undo());
+assert.strictEqual(persistent.getLineContent(1), 'abc');
+assert.ok(history.redo());
+assert.strictEqual(persistent.getLineContent(1), '> abc');
+persistent.restoreVersion(before);
+assert.strictEqual(persistent.getLinesRawContent(), 'abc\ndef');
 
 console.log('consumer check: ok');

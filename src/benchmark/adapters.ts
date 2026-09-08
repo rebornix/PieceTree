@@ -1,5 +1,5 @@
 import { Range } from '../common/range';
-import { PersistentPieceTree } from '../persistentPieceTree';
+import { PersistentPieceTree, PieceTreeVersion } from '../persistentPieceTree';
 import { PieceTreeBase } from '../pieceTreeBase';
 import { DefaultEndOfLine, PieceTreeTextBufferBuilder } from '../pieceTreeBuilder';
 import { IAppliedEdit, IEditRange, LineArrayBufferBuilder } from './lineArrayBuffer';
@@ -22,13 +22,13 @@ export interface IBenchBuffer {
 	getValue(): string;
 	applyEdit(range: IEditRange, text: string): IAppliedEdit;
 	/**
-	 * Buffers that keep versions implement these: `snapshot` captures the
-	 * current document in O(1), `restore` brings it back in O(1). The undo
-	 * benchmark uses them where available and replays inverse edits otherwise,
-	 * which is how an undo stack of edits (VS Code's) works.
+	 * Buffers that keep versions implement these: `captureVersion` takes the
+	 * current document in O(1), `restoreVersion` brings it back in O(1). The
+	 * undo benchmark uses them where available and replays inverse edits
+	 * otherwise, which is how an undo stack of edits (VS Code's) works.
 	 */
-	snapshot?(): unknown;
-	restore?(snapshot: unknown): void;
+	captureVersion?(): unknown;
+	restoreVersion?(version: unknown): void;
 }
 
 export interface IBufferImplementation {
@@ -91,12 +91,12 @@ class PersistentPieceTreeBenchBuffer extends PieceTreeBenchBuffer {
 		super(_persistent);
 	}
 
-	snapshot(): unknown {
+	captureVersion(): unknown {
 		return this._persistent.getVersion();
 	}
 
-	restore(snapshot: unknown): void {
-		this._persistent.setVersion(snapshot as ReturnType<PersistentPieceTree['getVersion']>);
+	restoreVersion(version: unknown): void {
+		this._persistent.restoreVersion(version as PieceTreeVersion);
 	}
 }
 

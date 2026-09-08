@@ -234,6 +234,41 @@ describe('PersistentPieceTree (reads)', () => {
 			expect(() => tree.insert(8, 'x')).toThrow(RangeError);
 			expect(() => tree.delete(6, 5)).toThrow(RangeError);
 		});
+
+		it('rejects edits outside the document or at fractional offsets, before changing anything', () => {
+			const tree = new PersistentPieceTree(toBuffers(['abc']), '\n', true);
+			for (const bad of [() => tree.insert(4, 'x'), () => tree.insert(-1, 'x'), () => tree.insert(1.5, 'x'), () => tree.insert(NaN, 'x', false),
+				() => tree.delete(0, 4), () => tree.delete(2, 2), () => tree.delete(-1, 1), () => tree.delete(0, -1), () => tree.delete(0.5, 1), () => tree.delete(0, 1.5)]) {
+				expect(bad).toThrow(RangeError);
+			}
+			expect(tree.getLinesRawContent()).toBe('abc');
+			// the failed unnormalized insert did not turn the EOL fast paths off
+			expect(tree.getVersion().eolNormalized).toBe(true);
+
+			const empty = new PersistentPieceTree([], '\n', true);
+			expect(() => empty.insert(5, 'x')).toThrow(RangeError);
+			expect(() => empty.delete(0, 1)).toThrow(RangeError);
+			empty.delete(0, 0);
+			empty.insert(0, 'x');
+			expect(empty.getLinesRawContent()).toBe('x');
+		});
+
+		it('equal() compares the current versions, after edits and restores', () => {
+			const a = new PersistentPieceTree(toBuffers(['ab', 'c\nd']), '\n', true);
+			const b = new PersistentPieceTree(toBuffers(['abc\nd']), '\n', true);
+			expect(a.equal(b)).toBe(true);
+			expect(a.getLineContent(2)).toBe('d'); // warm the caches
+			const before = b.getVersion();
+			b.insert(2, 'X');
+			expect(a.equal(b)).toBe(false);
+			expect(b.equal(a)).toBe(false);
+			a.insert(2, 'X');
+			expect(a.equal(b)).toBe(true);
+			b.restoreVersion(before);
+			expect(a.equal(b)).toBe(false);
+			a.delete(2, 1);
+			expect(a.equal(b)).toBe(true);
+		});
 	});
 
 	/*
@@ -252,10 +287,10 @@ describe('PersistentPieceTree (reads)', () => {
 
 		it('an empty insert or delete changes nothing and stores no empty piece', () => {
 			const tree = fromBuilder(['abc\ndef']);
-			const before = tree.getVersion();
+			const beforeRoot = tree.root;
 			tree.insert(2, '');
 			tree.delete(2, 0);
-			expect(tree.getVersion().root).toBe(before.root);
+			expect(tree.root).toBe(beforeRoot);
 			expect(tree.getLinesRawContent()).toBe('abc\ndef');
 		});
 
@@ -271,12 +306,12 @@ describe('PersistentPieceTree (reads)', () => {
 			expect(v0.length).toBe(7);
 			expect(v0.lineCount).toBe(2);
 			expect(v1.length).toBe(11);
-			tree.setVersion(v0);
+			tree.restoreVersion(v0);
 			expect(tree.getLinesRawContent()).toBe('abc\ndef');
 			expect(tree.getLineContent(1)).toBe('abc');
-			tree.setVersion(v1);
+			tree.restoreVersion(v1);
 			expect(tree.getLinesRawContent()).toBe('abc xyz\ndef');
-			tree.setVersion(v2);
+			tree.restoreVersion(v2);
 			expect(tree.getLinesRawContent()).toBe('xyz\ndef\nend');
 			expect(tree.getLineCount()).toBe(3);
 		});
@@ -286,18 +321,20 @@ describe('PersistentPieceTree (reads)', () => {
 			const base = tree.getVersion();
 			tree.insert(0, 'A ');
 			const branchA = tree.getVersion();
-			tree.setVersion(base);
+			tree.restoreVersion(base);
 			tree.insert(tree.getLength(), ' B');
 			const branchB = tree.getVersion();
 
-			tree.setVersion(branchA);
+			tree.restoreVersion(branchA);
 			expect(tree.getLinesRawContent()).toBe('A one\ntwo\nthree');
-			tree.setVersion(branchB);
+			tree.restoreVersion(branchB);
 			expect(tree.getLinesRawContent()).toBe('one\ntwo\nthree B');
-			tree.setVersion(base);
+			tree.restoreVersion(branchA);
+			assertPersistentTreeInvariants(tree.root);
+			tree.restoreVersion(branchB);
+			assertPersistentTreeInvariants(tree.root);
+			tree.restoreVersion(base);
 			expect(tree.getLinesRawContent()).toBe('one\ntwo\nthree');
-			assertPersistentTreeInvariants(branchA.root);
-			assertPersistentTreeInvariants(branchB.root);
 		});
 
 		it('older versions keep their buffers across setEOL', () => {
@@ -307,20 +344,40 @@ describe('PersistentPieceTree (reads)', () => {
 			const crlf = tree.getVersion();
 			expect(tree.getLinesRawContent()).toBe('a\r\nb\r\nc');
 			tree.insert(1, 'X');
-			tree.setVersion(mixed);
+			tree.restoreVersion(mixed);
 			expect(tree.getLinesRawContent()).toBe('a\r\nb\nc');
 			expect(tree.getEOL()).toBe('\n');
 			tree.insert(0, 'Y');
 			expect(tree.getLinesRawContent()).toBe('Ya\r\nb\nc');
-			tree.setVersion(crlf);
+			tree.restoreVersion(crlf);
 			expect(tree.getLinesRawContent()).toBe('a\r\nb\r\nc');
 			expect(tree.getEOL()).toBe('\r\n');
 		});
 
-		it('rejects a version of another tree', () => {
+		it('rejects a version of another tree, and anything that is not a version', () => {
 			const a = fromBuilder(['abc']);
 			const b = fromBuilder(['abc']);
-			expect(() => a.setVersion(b.getVersion())).toThrow(/different tree/);
+			expect(() => a.restoreVersion(b.getVersion())).toThrow(TypeError);
+			const fake: PieceTreeVersion = { eol: '\n', eolNormalized: true, length: 3, lineCount: 1 };
+			expect(() => a.restoreVersion(fake)).toThrow(TypeError);
+			expect(a.getLinesRawContent()).toBe('abc');
+		});
+
+		it('restores the line-ending flags with the version', () => {
+			const tree = fromBuilder(['a\nb']);
+			const normalized = tree.getVersion();
+			expect(normalized.eolNormalized).toBe(true);
+			tree.insert(1, '\r', false);
+			const mixed = tree.getVersion();
+			expect(mixed.eolNormalized).toBe(false);
+			tree.restoreVersion(normalized);
+			expect(tree.getVersion().eolNormalized).toBe(true);
+			// the flag is what enables the EOL fast paths: a normalized insert keeps them
+			tree.insert(0, '\n', true);
+			expect(tree.getVersion().eolNormalized).toBe(true);
+			tree.restoreVersion(mixed);
+			expect(tree.getVersion().eolNormalized).toBe(false);
+			expect(tree.getLinesRawContent()).toBe('a\r\nb');
 		});
 
 		for (const mode of ['normalized', 'mixed'] as Mode[]) {
@@ -342,7 +399,7 @@ describe('PersistentPieceTree (reads)', () => {
 
 					const rng = new Prng(seed);
 					for (const { version, raw, lines } of taken) {
-						tree.setVersion(version);
+						tree.restoreVersion(version);
 						assert.strictEqual(tree.getLinesRawContent(), raw, `seed ${seed}: version taken after ${version.length} chars`);
 						assert.deepStrictEqual(tree.getLinesContent(), lines);
 						assert.strictEqual(readSnapshot(tree.createSnapshot('')), raw);
@@ -373,7 +430,7 @@ describe('PersistentPieceTree (reads)', () => {
 					assert.strictEqual(tree.getLinesRawContent(), base.getLinesRawContent());
 					assert.strictEqual(tree.getLineCount(), base.getLineCount());
 					assert.deepStrictEqual(tree.getLinesContent(), base.getLinesContent());
-					assertPersistentTreeInvariants(tree.getVersion().root);
+					assertPersistentTreeInvariants(tree.root);
 					// and back out again
 					tree.delete(5, text.length);
 					assert.strictEqual(tree.getLinesRawContent(), 'head\n');
@@ -393,9 +450,9 @@ describe('PersistentPieceTree (reads)', () => {
 			expect(history.canUndo).toBe(false);
 			expect(history.undo()).toBe(false);
 
-			history.snapshot();
+			history.pushUndoStop();
 			tree.insert(5, ' world');
-			history.snapshot();
+			history.pushUndoStop();
 			tree.insert(0, '> ');
 			expect(tree.getLinesRawContent()).toBe('> hello world');
 
@@ -413,25 +470,91 @@ describe('PersistentPieceTree (reads)', () => {
 			expect(history.redo()).toBe(false);
 		});
 
-		it('a new snapshot after an undo discards the redo branch', () => {
+		it('an edit after an undo discards the redo branch', () => {
 			const tree = fromText('a');
 			const history = new PieceTreeHistory(tree);
-			history.snapshot();
+			history.pushUndoStop();
 			tree.insert(1, 'b');
 			history.undo();
-			history.snapshot();
+			expect(history.canRedo).toBe(true);
+			history.pushUndoStop();
 			tree.insert(1, 'c');
 			expect(history.canRedo).toBe(false);
+			expect(history.redo()).toBe(false);
+			expect(tree.getLinesRawContent()).toBe('ac');
 			expect(history.undo()).toBe(true);
 			expect(tree.getLinesRawContent()).toBe('a');
 			expect(history.redo()).toBe(true);
 			expect(tree.getLinesRawContent()).toBe('ac');
 		});
 
+		it('an edit without a new undo stop also discards the redo branch, and is undone to the last stop', () => {
+			const tree = fromText('a');
+			const history = new PieceTreeHistory(tree);
+			history.pushUndoStop();
+			tree.insert(1, 'b');
+			history.undo();
+			tree.insert(1, 'c');
+			expect(history.canRedo).toBe(false);
+			expect(history.redo()).toBe(false);
+			expect(tree.getLinesRawContent()).toBe('ac');
+			// 'a' was never made a stop after the undo, so there is nothing to go back to
+			expect(history.canUndo).toBe(false);
+			expect(history.undo()).toBe(false);
+			expect(tree.getLinesRawContent()).toBe('ac');
+		});
+
+		it('an undo stop without edits after it is not a step, and does not discard the redo branch', () => {
+			const tree = fromText('a');
+			const history = new PieceTreeHistory(tree);
+			history.pushUndoStop();
+			history.pushUndoStop();
+			expect(history.canUndo).toBe(false);
+			expect(history.undo()).toBe(false);
+			tree.insert(1, 'b');
+			history.pushUndoStop();
+			history.pushUndoStop();
+			expect(history.undo()).toBe(true);
+			expect(tree.getLinesRawContent()).toBe('a');
+			expect(history.canUndo).toBe(false);
+			history.pushUndoStop();
+			expect(history.canRedo).toBe(true);
+			expect(history.redo()).toBe(true);
+			expect(tree.getLinesRawContent()).toBe('ab');
+			expect(history.undo()).toBe(true);
+			expect(tree.getLinesRawContent()).toBe('a');
+			expect(history.undo()).toBe(false);
+		});
+
+		it('undo and redo alternate freely', () => {
+			const tree = fromText('');
+			const history = new PieceTreeHistory(tree);
+			const texts = [''];
+			for (const ch of 'abcdef') {
+				history.pushUndoStop();
+				tree.insert(tree.getLength(), ch);
+				texts.push(tree.getLinesRawContent());
+			}
+			let at = texts.length - 1;
+			const rng = new Prng(11);
+			for (let i = 0; i < 200; i++) {
+				if (rng.next() < 0.5) {
+					expect(history.undo()).toBe(at > 0);
+					at = Math.max(0, at - 1);
+				} else {
+					expect(history.redo()).toBe(at < texts.length - 1);
+					at = Math.min(texts.length - 1, at + 1);
+				}
+				expect(tree.getLinesRawContent()).toBe(texts[at]);
+				expect(history.canUndo).toBe(at > 0);
+				expect(history.canRedo).toBe(at < texts.length - 1);
+			}
+		});
+
 		it('groups several edits under one snapshot', () => {
 			const tree = fromText('');
 			const history = new PieceTreeHistory(tree);
-			history.snapshot();
+			history.pushUndoStop();
 			for (const ch of 'typing') {
 				tree.insert(tree.getLength(), ch);
 			}
@@ -446,7 +569,7 @@ describe('PersistentPieceTree (reads)', () => {
 			const tree = fromText('');
 			const history = new PieceTreeHistory(tree, 3);
 			for (let i = 0; i < 6; i++) {
-				history.snapshot();
+				history.pushUndoStop();
 				tree.insert(tree.getLength(), String(i));
 			}
 			expect(tree.getLinesRawContent()).toBe('012345');
@@ -457,12 +580,13 @@ describe('PersistentPieceTree (reads)', () => {
 			expect(undone).toBe(3);
 			expect(tree.getLinesRawContent()).toBe('012');
 			expect(() => new PieceTreeHistory(tree, 0)).toThrow(RangeError);
+			expect(() => new PieceTreeHistory(tree, 2.5)).toThrow(RangeError);
 		});
 
 		it('undo across setEOL restores the old line breaks', () => {
 			const tree = new PersistentPieceTree(toBuffers(['a\nb']), '\n', true);
 			const history = new PieceTreeHistory(tree);
-			history.snapshot();
+			history.pushUndoStop();
 			tree.setEOL('\r\n');
 			expect(tree.getLinesRawContent()).toBe('a\r\nb');
 			history.undo();
@@ -478,7 +602,7 @@ describe('PersistentPieceTree (reads)', () => {
 			const history = new PieceTreeHistory(tree, 10000);
 			const raws = [tree.getLinesRawContent()];
 			for (let i = 0; i < 300; i++) {
-				history.snapshot();
+				history.pushUndoStop();
 				if (rng.next() < 0.7 || tree.getLength() === 0) {
 					tree.insert(rng.nextInt(tree.getLength() + 1), rng.nextString('ab\n', 1 + rng.nextInt(5)), true);
 				} else {
@@ -497,7 +621,7 @@ describe('PersistentPieceTree (reads)', () => {
 				assert.strictEqual(tree.getLinesRawContent(), raws[i]);
 			}
 			assert(!history.redo());
-			assertPersistentTreeInvariants(tree.getVersion().root);
+			assertPersistentTreeInvariants(tree.root);
 		});
 	});
 });

@@ -48,15 +48,31 @@ interface BufferState {
 }
 
 /**
- * A version of the document: an immutable root plus the state it was taken
- * with. Taking one is O(1), restoring one is O(1); what it keeps alive is the
- * O(log n) nodes each edit since the previous version allocated.
+ * A version of the document, as returned by `PersistentPieceTree.getVersion()`
+ * and accepted by `restoreVersion()`. Taking one is O(1), restoring one is
+ * O(1); what it keeps alive is the O(log n) tree nodes each edit since the
+ * previous version allocated. It is only ever created by the tree.
  */
-export class PieceTreeVersion {
+export interface PieceTreeVersion {
+	readonly eol: '\r\n' | '\n';
+	readonly eolNormalized: boolean;
+	readonly length: number;
+	readonly lineCount: number;
+}
+
+/**
+ * The version as the tree sees it: an immutable root plus the buffer state
+ * the root's pieces refer to. The state is shared with every other version on
+ * the same buffers and is not copied: the change buffer only grows at its end,
+ * so old pieces keep their meaning, and `lastChangeBufferPos` must stay the
+ * buffer's current end (a version-private copy would let a later append
+ * overwrite text another version relies on).
+ */
+class Version implements PieceTreeVersion {
 	constructor(
-		/** @internal */ readonly tree: PersistentPieceTree,
-		/** @internal */ readonly root: Node,
-		/** @internal */ readonly state: BufferState,
+		readonly tree: PersistentPieceTree,
+		readonly root: Node,
+		readonly state: BufferState,
 		readonly eol: '\r\n' | '\n',
 		readonly eolNormalized: boolean
 	) { }
@@ -68,61 +84,109 @@ export class PieceTreeVersion {
 	get lineCount(): number {
 		return this.root.lf + 1;
 	}
+
+	/** The same document state: same root, same buffers, same line-ending flags. */
+	sameAs(other: Version): boolean {
+		return this.root === other.root && this.state === other.state && this.eol === other.eol && this.eolNormalized === other.eolNormalized;
+	}
 }
 
 /**
  * Undo/redo for a PersistentPieceTree as two stacks of versions. Call
- * `snapshot()` before a change or a group of changes to make it undoable;
- * `undo()` and `redo()` switch the tree's version in O(1). The oldest undo
- * points are dropped beyond `limit`, so the history's memory is bounded by
- * `limit` times the nodes an edit allocates.
+ * `pushUndoStop()` before a change or a group of changes to make it undoable;
+ * `undo()` and `redo()` switch the tree's version in O(1). Edits made after
+ * an undo without a new undo stop still discard the redo stack, as they do in
+ * an editor: the history notices that the tree moved on without it. The
+ * oldest undo stops are dropped beyond `limit`, so the history's memory is
+ * bounded by `limit` times what the edits between two stops allocate.
  */
 export class PieceTreeHistory {
-	private readonly _undo: PieceTreeVersion[] = [];
-	private readonly _redo: PieceTreeVersion[] = [];
+	private readonly _undo: Version[] = [];
+	private readonly _redo: Version[] = [];
+	/** The version the history last recorded or restored; the tree being elsewhere means it was edited since. */
+	private _last: Version;
 
-	constructor(private readonly _tree: PersistentPieceTree, private readonly _limit: number = 1000) {
-		if (!(_limit >= 1)) {
-			throw new RangeError('the history needs a limit of at least 1');
+	private readonly _tree: PersistentPieceTree;
+	private readonly _limit: number;
+
+	constructor(tree: PersistentPieceTree, limit: number = 1000) {
+		if (!Number.isInteger(limit) || limit < 1) {
+			throw new RangeError(`the history needs a limit of at least 1, got ${limit}`);
 		}
+		this._tree = tree;
+		this._limit = limit;
+		this._last = tree.getVersion() as Version;
 	}
 
+	/** Whether `undo()` would change the document. */
 	get canUndo(): boolean {
-		return this._undo.length > 0;
+		const top = this._undo[this._undo.length - 1];
+		return top !== undefined && (this._undo.length > 1 || !top.sameAs(this._tree.getVersion() as Version));
 	}
 
+	/** Whether `redo()` would change the document; false once the tree was edited after an undo. */
 	get canRedo(): boolean {
-		return this._redo.length > 0;
+		return this._redo.length > 0 && (this._tree.getVersion() as Version).sameAs(this._last);
 	}
 
-	/** Records the current version as an undo point and clears the redo stack. */
-	snapshot(): void {
-		if (this._undo.length >= this._limit) {
-			this._undo.shift();
+	/** Makes the current version an undo stop; the edits that follow are undone together, back to it. */
+	pushUndoStop(): void {
+		const current = this._tree.getVersion() as Version;
+		this._noteEditsSince(current);
+		const top = this._undo[this._undo.length - 1];
+		if (top === undefined || !top.sameAs(current)) {
+			this._pushUndo(current);
 		}
-		this._undo.push(this._tree.getVersion());
-		this._redo.length = 0;
+		this._last = current;
 	}
 
-	/** Returns to the last undo point; the current version becomes redoable. */
+	/** Returns to the last undo stop; the version left behind becomes redoable. */
 	undo(): boolean {
-		const version = this._undo.pop();
-		if (version === undefined) {
+		const current = this._tree.getVersion() as Version;
+		this._noteEditsSince(current);
+		// an undo stop at the current version has nothing to undo yet; it stays for the edits to come
+		let i = this._undo.length - 1;
+		while (i >= 0 && this._undo[i].sameAs(current)) {
+			i--;
+		}
+		if (i < 0) {
 			return false;
 		}
-		this._redo.push(this._tree.getVersion());
-		this._tree.setVersion(version);
+		const target = this._undo[i];
+		this._undo.length = i;
+		this._redo.push(current);
+		this._tree.restoreVersion(target);
+		this._last = target;
 		return true;
 	}
 
 	redo(): boolean {
-		const version = this._redo.pop();
-		if (version === undefined) {
+		const current = this._tree.getVersion() as Version;
+		this._noteEditsSince(current);
+		const target = this._redo.pop();
+		if (target === undefined) {
 			return false;
 		}
-		this._undo.push(this._tree.getVersion());
-		this._tree.setVersion(version);
+		this._pushUndo(current);
+		this._tree.restoreVersion(target);
+		this._last = target;
 		return true;
+	}
+
+	/** Edits made since the history last saw the tree start a new future: the old one cannot be redone. */
+	private _noteEditsSince(current: Version): void {
+		if (!current.sameAs(this._last)) {
+			this._redo.length = 0;
+			this._last = current;
+		}
+	}
+
+	private _pushUndo(version: Version): void {
+		if (this._undo.length >= this._limit) {
+			// dropping the oldest stop is O(limit); fine for the sizes a history has
+			this._undo.shift();
+		}
+		this._undo.push(version);
 	}
 }
 
@@ -140,14 +204,15 @@ function last(path: Path): Node {
 }
 
 /**
- * The most recent lookup, reused when the next one lands in the same piece
- * (reading consecutive lines does this all the time). Tied to the root it was
- * taken from, since a path into another version is meaningless here.
+ * The piece the most recent line lookup ended in, reused when the next line
+ * is in the same piece (reading consecutive lines does this all the time).
+ * Tied to the root it was taken from, since a path into another version is
+ * meaningless here.
  */
-interface CacheEntry {
+interface LineCacheEntry {
 	readonly root: Node;
 	readonly path: Path;
-	readonly nodeStartOffset: number;
+	/** The line on which the piece starts. */
 	readonly nodeStartLineNumber: number;
 }
 
@@ -181,7 +246,7 @@ export class PersistentPieceTree {
 	private _EOLLength!: number;
 	private _EOLNormalized!: boolean;
 	private _lastVisitedLine!: { lineNumber: number; value: string };
-	private _cache!: CacheEntry | null;
+	private _lineCache!: LineCacheEntry | null;
 
 	constructor(chunks: StringBuffer[], eol: '\r\n' | '\n', eolNormalized: boolean) {
 		this._create(chunks, eol, eolNormalized);
@@ -193,7 +258,7 @@ export class PersistentPieceTree {
 		this._EOLLength = eol.length;
 		this._EOLNormalized = eolNormalized;
 		this._lastVisitedLine = { lineNumber: 0, value: '' };
-		this._cache = null;
+		this._lineCache = null;
 
 		const pieces: Piece[] = [];
 		for (const chunk of chunks) {
@@ -224,13 +289,13 @@ export class PersistentPieceTree {
 
 	/** The current version, O(1). It stays valid whatever happens to the tree afterwards. */
 	public getVersion(): PieceTreeVersion {
-		return new PieceTreeVersion(this, this._root, this._state, this._EOL, this._EOLNormalized);
+		return new Version(this, this._root, this._state, this._EOL, this._EOLNormalized);
 	}
 
-	/** Makes `version` the current one, O(1). It must have been taken from this tree. */
-	public setVersion(version: PieceTreeVersion): void {
-		if (version.tree !== this) {
-			throw new Error('the version belongs to a different tree');
+	/** Makes `version` the current document again, O(1). It must have been taken from this tree. */
+	public restoreVersion(version: PieceTreeVersion): void {
+		if (!(version instanceof Version) || version.tree !== this) {
+			throw new TypeError('not a version of this tree');
 		}
 		this._root = version.root;
 		this._state = version.state;
@@ -238,6 +303,11 @@ export class PersistentPieceTree {
 		this._EOLLength = version.eol.length;
 		this._EOLNormalized = version.eolNormalized;
 		this._lastVisitedLine = { lineNumber: 0, value: '' };
+	}
+
+	/** The root of the current version. Read-only, as is everything reachable from it. */
+	public get root(): Node {
+		return this._root;
 	}
 
 	// #endregion
@@ -432,17 +502,17 @@ export class PersistentPieceTree {
 			return this._lastVisitedLine.value;
 		}
 
-		this._lastVisitedLine.lineNumber = lineNumber;
-
+		let value: string;
 		if (lineNumber === this.getLineCount()) {
-			this._lastVisitedLine.value = this.getLineRawContent(lineNumber);
+			value = this.getLineRawContent(lineNumber);
 		} else if (this._EOLNormalized) {
-			this._lastVisitedLine.value = this.getLineRawContent(lineNumber, this._EOLLength);
+			value = this.getLineRawContent(lineNumber, this._EOLLength);
 		} else {
-			this._lastVisitedLine.value = this.getLineRawContent(lineNumber).replace(/(\r\n|\r|\n)$/, '');
+			value = this.getLineRawContent(lineNumber).replace(/(\r\n|\r|\n)$/, '');
 		}
-
-		return this._lastVisitedLine.value;
+		// remembered only once known, so that a lookup that throws leaves no stale entry behind
+		this._lastVisitedLine = { lineNumber, value };
+		return value;
 	}
 
 	public getLineCharCode(lineNumber: number, index: number): number {
@@ -482,6 +552,7 @@ export class PersistentPieceTree {
 	 * no-op (PieceTreeBase would store an empty piece).
 	 */
 	public insert(offset: number, value: string, eolNormalized: boolean = false): void {
+		this._checkRange(offset, 0);
 		if (value.length === 0) {
 			return;
 		}
@@ -493,10 +564,7 @@ export class PersistentPieceTree {
 			return;
 		}
 
-		const position = rb.nodeAt(this._root, offset);
-		if (position === null) {
-			throw new RangeError(`offset ${offset} is outside the document`);
-		}
+		const position = rb.nodeAt(this._root, offset)!;
 		const piece = last(position.path).value;
 		const pieceStart = position.nodeStartOffset;
 		const remainder = position.remainder;
@@ -521,17 +589,14 @@ export class PersistentPieceTree {
 	}
 
 	public delete(offset: number, cnt: number): void {
-		this._lastVisitedLine = { lineNumber: 0, value: '' };
-
-		if (cnt <= 0 || this._root === rb.EMPTY) {
+		this._checkRange(offset, cnt);
+		if (cnt === 0) {
 			return;
 		}
+		this._lastVisitedLine = { lineNumber: 0, value: '' };
 
-		const startPosition = rb.nodeAt(this._root, offset);
-		const endPosition = rb.nodeAt(this._root, offset + cnt);
-		if (startPosition === null || endPosition === null) {
-			throw new RangeError(`range ${offset}..${offset + cnt} is outside the document`);
-		}
+		const startPosition = rb.nodeAt(this._root, offset)!;
+		const endPosition = rb.nodeAt(this._root, offset + cnt)!;
 		const startNode = last(startPosition.path);
 		const endNode = last(endPosition.path);
 		const startPiece = startNode.value;
@@ -545,18 +610,18 @@ export class PersistentPieceTree {
 				if (cnt === startPiece.length) {
 					// the whole piece goes; what followed it now meets what preceded it
 					this._root = rb.removeAt(this._root, startStart);
-					this._validateCRLFWithPrevPiece(startStart);
+					this._validateCRLFAt(startStart);
 					return;
 				}
 				this._root = rb.replaceAt(this._root, startStart, this._pieceWithStart(startPiece, endSplit));
-				this._validateCRLFWithPrevPiece(startStart);
+				this._validateCRLFAt(startStart);
 				return;
 			}
 
 			if (startStart + startPiece.length === offset + cnt) {
 				const shortened = this._pieceWithEnd(startPiece, startSplit);
 				this._root = rb.replaceAt(this._root, startStart, shortened);
-				this._validateCRLFWithNextPiece(startStart + shortened.length);
+				this._validateCRLFAt(startStart + shortened.length);
 				return;
 			}
 
@@ -565,7 +630,7 @@ export class PersistentPieceTree {
 			const right = this._pieceWithStart(startPiece, endSplit);
 			this._root = rb.replaceAt(this._root, startStart, left);
 			this._root = rb.insertAt(this._root, startStart + left.length, right);
-			this._validateCRLFWithPrevPiece(startStart + left.length);
+			this._validateCRLFAt(startStart + left.length);
 			return;
 		}
 
@@ -575,23 +640,29 @@ export class PersistentPieceTree {
 		const left = this._pieceWithEnd(startPiece, buffers.positionInBuffer(this._buffers, startPiece, startPosition.remainder));
 		const right = this._pieceWithStart(endPiece, buffers.positionInBuffer(this._buffers, endPiece, endPosition.remainder));
 
-		let root = this._root;
+		// where the pieces in between start, read off the current tree before anything moves
+		const between: number[] = [];
+		const path = startPosition.path.slice();
+		for (let at = startStart + startPiece.length; rb.next(path) && last(path) !== endNode; at += last(path).value.length) {
+			between.push(at);
+		}
+
 		// right to left, so that the offsets of what is still to be done do not move
+		let root = this._root;
 		root = right.length === 0 ? rb.removeAt(root, endStart) : rb.replaceAt(root, endStart, right);
-		for (let at = endStart; at > startStart + startPiece.length;) {
-			// the piece ending at `at`: nodeAt(at) is either it (remainder === length) or its successor
-			const position = rb.nodeAt(root, at)!;
-			if (position.remainder === last(position.path).value.length) {
-				at = position.nodeStartOffset;
-			} else {
-				rb.prev(position.path);
-				at -= last(position.path).value.length;
-			}
-			root = rb.removeAt(root, at);
+		for (let i = between.length - 1; i >= 0; i--) {
+			root = rb.removeAt(root, between[i]);
 		}
 		root = left.length === 0 ? rb.removeAt(root, startStart) : rb.replaceAt(root, startStart, left);
 		this._root = root;
-		this._validateCRLFWithNextPiece(startStart + left.length);
+		this._validateCRLFAt(startStart + left.length);
+	}
+
+	/** Rejects a range that is not a whole number of characters inside the document. */
+	private _checkRange(offset: number, cnt: number): void {
+		if (!Number.isInteger(offset) || !Number.isInteger(cnt) || offset < 0 || cnt < 0 || offset + cnt > this._root.size) {
+			throw new RangeError(`range ${offset}..${offset + cnt} is not inside the document (length ${this._root.size})`);
+		}
 	}
 
 	/** PieceTreeBase.appendToNode. Returns false when the append would need to rewrite the change buffer's line starts. */
@@ -632,7 +703,7 @@ export class PersistentPieceTree {
 			value += '\n';
 		}
 		this._insertPieces(pieceStart, this._createNewPieces(value));
-		this._validateCRLFWithPrevPiece(pieceStart);
+		this._validateCRLFAt(pieceStart);
 	}
 
 	/** PieceTreeBase.insertContentToNodeRight: `value` goes right after the piece starting at `pieceStart`. */
@@ -642,7 +713,7 @@ export class PersistentPieceTree {
 			value += '\n';
 		}
 		this._insertPieces(at, this._createNewPieces(value));
-		this._validateCRLFWithPrevPiece(at);
+		this._validateCRLFAt(at);
 	}
 
 	/** `value` goes into the middle of the piece starting at `pieceStart`, `remainder` characters in. */
@@ -700,8 +771,14 @@ export class PersistentPieceTree {
 		return true;
 	}
 
-	/** PieceTreeBase.validateCRLFWithPrevNode, for the piece starting at `offset` and the one ending there. */
-	private _validateCRLFWithPrevPiece(offset: number): void {
+	/**
+	 * PieceTreeBase.validateCRLFWithPrevNode / validateCRLFWithNextNode: when
+	 * the piece ending at `offset` ends with \r and the piece starting there
+	 * starts with \n, the two are joined into one \r\n piece. Both of
+	 * PieceTreeBase's variants come down to this check at the boundary they
+	 * are given a side of.
+	 */
+	private _validateCRLFAt(offset: number): void {
 		if (!this._shouldCheckCRLF()) {
 			return;
 		}
@@ -710,11 +787,6 @@ export class PersistentPieceTree {
 		if (next !== null && prev !== null && this._startWithLF(next) && this._endWithCR(prev)) {
 			this._fixCRLF(offset, prev, next);
 		}
-	}
-
-	/** PieceTreeBase.validateCRLFWithNextNode, for the piece ending at `offset` and the one starting there. */
-	private _validateCRLFWithNextPiece(offset: number): void {
-		this._validateCRLFWithPrevPiece(offset);
 	}
 
 	/**
@@ -919,25 +991,21 @@ export class PersistentPieceTree {
 	 * length when the descent reaches it first.
 	 */
 	nodeAt(offset: number): NodePosition {
-		const cache = this._cache;
-		if (cache !== null && cache.root === this._root) {
-			const piece = last(cache.path).value;
-			if (cache.nodeStartOffset <= offset && offset <= cache.nodeStartOffset + piece.length) {
-				return { path: cache.path.slice(), nodeStartOffset: cache.nodeStartOffset, remainder: offset - cache.nodeStartOffset };
-			}
-		}
-
 		const position = rb.nodeAt(this._root, offset);
 		if (position === null) {
 			throw new RangeError(`offset ${offset} is outside the document`);
 		}
-		this._cache = { root: this._root, path: position.path.slice(), nodeStartOffset: position.nodeStartOffset, nodeStartLineNumber: 0 };
 		return position;
 	}
 
-	/** The piece containing the character at `lineNumber`/`column` (1-based); the column may point just past the line. */
-	nodeAt2(lineNumber: number, column: number): NodePosition {
-		const position = rb.descend(this._root, (node, _nodeStartOffset, nodeStartLf) => {
+	/**
+	 * The piece in which line `lineNumber` (1-based) starts, or null past the
+	 * last line. The descent stops at the first piece whose line feeds reach
+	 * the line; when the line starts right after a piece's last line feed, the
+	 * piece before the line is reported, with the line starting at its end.
+	 */
+	private _descendToLine(lineNumber: number): rb.DescentPosition<Piece> | null {
+		return rb.descend(this._root, (node, _nodeStartOffset, nodeStartLf) => {
 			if (node.left !== rb.EMPTY && nodeStartLf >= lineNumber - 1) {
 				return -1;
 			}
@@ -946,6 +1014,11 @@ export class PersistentPieceTree {
 			}
 			return 1;
 		});
+	}
+
+	/** The piece containing the character at `lineNumber`/`column` (1-based); the column may point just past the line. */
+	nodeAt2(lineNumber: number, column: number): NodePosition {
+		const position = this._descendToLine(lineNumber);
 		if (position === null) {
 			throw new RangeError(`line ${lineNumber} is outside the document`);
 		}
@@ -987,8 +1060,8 @@ export class PersistentPieceTree {
 		let ret = '';
 		let path: Path;
 
-		const cache = this._cache;
-		if (cache !== null && cache.root === this._root && cache.nodeStartLineNumber > 0
+		const cache = this._lineCache;
+		if (cache !== null && cache.root === this._root
 			&& cache.nodeStartLineNumber < lineNumber && cache.nodeStartLineNumber + last(cache.path).value.lineFeedCnt >= lineNumber) {
 			path = cache.path.slice();
 			const piece = last(path).value;
@@ -1002,15 +1075,7 @@ export class PersistentPieceTree {
 				return buffer.substring(startOffset + prevAccumulatedValue, startOffset + accumulatedValue - endOffset);
 			}
 		} else {
-			const position = rb.descend(this._root, (node, _nodeStartOffset, nodeStartLf) => {
-				if (node.left !== rb.EMPTY && nodeStartLf >= lineNumber - 1) {
-					return -1;
-				}
-				if (nodeStartLf + node.value.lineFeedCnt >= lineNumber - 1) {
-					return 0;
-				}
-				return 1;
-			});
+			const position = this._descendToLine(lineNumber);
 			if (position === null) {
 				return '';
 			}
@@ -1023,7 +1088,7 @@ export class PersistentPieceTree {
 			if (position.nodeStartLf + piece.lineFeedCnt > lineNumber - 1) {
 				// the line ends inside this piece; remember the piece for the lines that follow
 				const accumulatedValue = buffers.getAccumulatedValue(this._buffers, piece, lineNumber - position.nodeStartLf - 1);
-				this._cache = { root: this._root, path: path.slice(), nodeStartOffset: position.nodeStartOffset, nodeStartLineNumber: position.nodeStartLf + 1 };
+				this._lineCache = { root: this._root, path: path.slice(), nodeStartLineNumber: position.nodeStartLf + 1 };
 				return buffer.substring(startOffset + prevAccumulatedValue, startOffset + accumulatedValue - endOffset);
 			}
 			// the line starts in this piece and runs on into the following ones
