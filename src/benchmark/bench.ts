@@ -5,6 +5,7 @@ import { IBenchBuffer, IBufferImplementation, implementations, pieceTreeImplemen
 import {
 	CORPUS_FILES, IDocument, SYNTHETIC_SPECS, corpusPath, fileDocument, repeatDocument, syntheticDocument
 } from './corpus';
+import { IEditRange } from './lineArrayBuffer';
 import { canMeasureMemory, measureRetainedHeap, stats, timeMs } from './measure';
 import { IEdit, generateRandomEdits, generateSequentialInserts, generateWindowStarts, splitIntoLines } from './workloads';
 
@@ -20,6 +21,12 @@ import { IEdit, generateRandomEdits, generateSequentialInserts, generateWindowSt
  *   3. editing: 1000 random edits, 1000 sequential inserts
  *   4. reading: getLineContent for all lines / for 10 windows of 100 lines, after those edits
  *   5. saving: reading back the full text after those edits
+ *
+ * and, for the persistent piece tree, what its versions buy:
+ *
+ *   6. undo/redo: taking back and replaying those edits one by one, as versions
+ *      where the buffer keeps them and as edits (VS Code's undo stack) where it does not
+ *   7. memory after those edits, without and with the undo history alive
  *
  * Usage: npm run bench -- [options]     (see --help)
  */
@@ -39,7 +46,7 @@ const HELP = `Usage: npm run bench -- [options]
 
   --sizes <list>      synthetic documents to run: ${Object.keys(SYNTHETIC_SPECS).join(', ')} or "none"
                       (default: small,medium,large)
-  --corpus            also run the blog post's real files from bench-corpus/ (npm run bench:corpus downloads them)
+  --corpus            also run the blog post's real files from test/benchmark/corpus/
   --file <path>       also run an arbitrary file (repeatable)
   --huge              add the 54 MB synthetic document (unless --sizes none) and, with --corpus, "checker.ts x 128";
                       takes several minutes
@@ -105,7 +112,7 @@ function loadDocuments(options: IOptions): IDocument[] {
 		for (const file of CORPUS_FILES) {
 			const filePath = corpusPath(file);
 			if (!fs.existsSync(filePath)) {
-				throw new Error(`${filePath} is missing; run "npm run bench:corpus" first`);
+				throw new Error(`vendored benchmark corpus file ${filePath} is missing`);
 			}
 			const doc = fileDocument(filePath);
 			documents.push(doc);
@@ -142,21 +149,37 @@ const BENCHMARKS = {
 	edits: (kind: string) => `Editing: ${kind}`,
 	readAll: (kind: string) => `Reading: all lines after ${kind}`,
 	readWindows: (kind: string) => `Reading: 10 windows of 100 lines after ${kind}`,
-	save: (kind: string) => `Saving: full text after ${kind}`
+	save: (kind: string) => `Saving: full text after ${kind}`,
+	undo: (kind: string) => `Undo: ${kind}, one by one`,
+	redo: (kind: string) => `Redo: ${kind}, one by one`,
+	memoryAfterEdits: (kind: string) => `Memory after ${kind}`,
+	memoryWithHistory: (kind: string) => `Memory after ${kind} with undo history`
 };
 
 function progress(message: string): void {
 	process.stderr.write(`  ${message}\n`);
 }
 
+/** The same "use the string" trick as the original benchmark, folded into a checksum. */
+function addLine(checksum: number, str: string): number {
+	return (checksum + str.length * 31 + (str.length > 0 ? str.charCodeAt(0) : 0)) | 0;
+}
+
 function readLines(buffer: IBenchBuffer, from: number, to: number): number {
-	// the same "use the string" trick as the original benchmark, folded into a checksum
 	let checksum = 0;
 	for (let lineNumber = from; lineNumber <= to; lineNumber++) {
-		const str = buffer.getLineContent(lineNumber);
-		checksum = (checksum + str.length * 31 + (str.length > 0 ? str.charCodeAt(0) : 0)) | 0;
+		checksum = addLine(checksum, buffer.getLineContent(lineNumber));
 	}
 	return checksum;
+}
+
+/** What readLines over the whole buffer returns for a document made of these lines. */
+function checksumOfLines(lines: string[]): number {
+	let checksum = 0;
+	for (const line of lines) {
+		checksum = addLine(checksum, line);
+	}
+	return (lines.length * 31 + checksum) | 0;
 }
 
 function applyEdits(buffer: IBenchBuffer, edits: IEdit[]): number {
@@ -170,12 +193,81 @@ function applyEdits(buffer: IBenchBuffer, edits: IEdit[]): number {
 	return checksum;
 }
 
+/**
+ * What undo or redo needs per edit: a version to restore where the buffer has
+ * versions, or an edit to apply where it does not.
+ */
+type HistoryRecord = { version: unknown } | { range: IEditRange; text: string };
+
+interface IEditHistory {
+	undo: HistoryRecord[];
+	redo: HistoryRecord[];
+}
+
+const EOL_REGEX = /\r\n|\r|\n/;
+
+/** Applies the edits, keeping what undoing and redoing each of them needs. */
+function applyEditsRecording(buffer: IBenchBuffer, edits: IEdit[]): IEditHistory {
+	const undo: HistoryRecord[] = [];
+	const redo: HistoryRecord[] = [];
+	const versions = typeof buffer.captureVersion === 'function' && typeof buffer.restoreVersion === 'function';
+	const eol = buffer.getEOL();
+	for (let i = 0; i < edits.length; i++) {
+		if (versions) {
+			undo.push({ version: buffer.captureVersion!() });
+			buffer.applyEdit(edits[i].range, edits[i].text);
+			redo.push({ version: buffer.captureVersion!() });
+			continue;
+		}
+		const applied = buffer.applyEdit(edits[i].range, edits[i].text);
+		const insertedLength = edits[i].text.length > 0 ? edits[i].text.split(EOL_REGEX).join(eol).length : 0;
+		const start = buffer.getPositionAt(applied.rangeOffset);
+		const end = buffer.getPositionAt(applied.rangeOffset + insertedLength);
+		undo.push({
+			range: { startLineNumber: start.lineNumber, startColumn: start.column, endLineNumber: end.lineNumber, endColumn: end.column },
+			text: applied.oldText
+		});
+		redo.push(edits[i]);
+	}
+	return { undo, redo };
+}
+
+/** Takes the edits back in reverse order. */
+function undoAll(buffer: IBenchBuffer, records: HistoryRecord[]): number {
+	for (let i = records.length - 1; i >= 0; i--) {
+		const record = records[i];
+		if ('version' in record) {
+			buffer.restoreVersion!(record.version);
+		} else {
+			buffer.applyEdit(record.range, record.text);
+		}
+	}
+	return records.length;
+}
+
+/** Replays the edits in their original order. */
+function redoAll(buffer: IBenchBuffer, records: HistoryRecord[]): number {
+	for (let i = 0; i < records.length; i++) {
+		const record = records[i];
+		if ('version' in record) {
+			buffer.restoreVersion!(record.version);
+		} else {
+			buffer.applyEdit(record.range, record.text);
+		}
+	}
+	return records.length;
+}
+
 interface ITimedBenchmark {
 	name: string;
 	/** Unmeasured preparation of a freshly built buffer. */
 	prepare?: (buffer: IBenchBuffer) => void;
-	/** The measured part; returns a checksum. */
+	/** The measured part; returns a checksum of what it read (the implementations must agree on it). */
 	run: (buffer: IBenchBuffer) => number;
+	/** Unmeasured check of the resulting document; its checksum is added to `run`'s. */
+	verify?: (buffer: IBenchBuffer) => number;
+	/** What the checksum must be, when it is known independently of the implementations. */
+	expected?: number;
 }
 
 class Runner {
@@ -233,19 +325,19 @@ class Runner {
 		const eol = pieceTreeImplementation.build(chunks).getEOL();
 		const rng = new Prng(this.options.seed);
 		const lines = splitIntoLines(chunks);
-		const editKinds: { kind: string; edits: IEdit[]; lineCountAfter: number }[] = [];
+		const editKinds: { kind: string; edits: IEdit[]; lineCountAfter: number; checksumAfter: number }[] = [];
 		{
 			const model = lines.slice();
 			const edits = generateRandomEdits(model, this.options.edits, rng);
-			editKinds.push({ kind: `${this.options.edits} random edits`, edits, lineCountAfter: model.length });
+			editKinds.push({ kind: `${this.options.edits} random edits`, edits, lineCountAfter: model.length, checksumAfter: checksumOfLines(model) });
 		}
 		{
 			const model = lines.slice();
 			const edits = generateSequentialInserts(model, this.options.edits, eol, rng);
-			editKinds.push({ kind: `${this.options.edits} sequential inserts`, edits, lineCountAfter: model.length });
+			editKinds.push({ kind: `${this.options.edits} sequential inserts`, edits, lineCountAfter: model.length, checksumAfter: checksumOfLines(model) });
 		}
 
-		for (const { kind, edits, lineCountAfter } of editKinds) {
+		for (const { kind, edits, lineCountAfter, checksumAfter } of editKinds) {
 			const windows = generateWindowStarts(lineCountAfter, 10, 100, rng);
 
 			this.runTimed(document, chunks, {
@@ -281,7 +373,54 @@ class Runner {
 					return (value.length * 31 + value.charCodeAt(value.length >> 1)) | 0;
 				}
 			});
+
+			// 6. undo, one edit at a time: versions where the buffer has them, inverse edits otherwise.
+			// The undo itself is what is timed; that the whole document is back to the original is
+			// checked afterwards, against the original.
+			const undoRecords = new WeakMap<IBenchBuffer, HistoryRecord[]>();
+			this.runTimed(document, chunks, {
+				name: BENCHMARKS.undo(kind),
+				prepare: buffer => { undoRecords.set(buffer, applyEditsRecording(buffer, edits).undo); },
+				run: buffer => undoAll(buffer, undoRecords.get(buffer)!),
+				verify: buffer => (buffer.getLineCount() * 31 + readLines(buffer, 1, buffer.getLineCount())) | 0,
+				expected: (edits.length + checksumOfLines(lines)) | 0
+			});
+
+			const redoRecords = new WeakMap<IBenchBuffer, HistoryRecord[]>();
+			this.runTimed(document, chunks, {
+				name: BENCHMARKS.redo(kind),
+				prepare: buffer => {
+					const history = applyEditsRecording(buffer, edits);
+					undoAll(buffer, history.undo);
+					redoRecords.set(buffer, history.redo);
+				},
+				run: buffer => redoAll(buffer, redoRecords.get(buffer)!),
+				verify: buffer => (buffer.getLineCount() * 31 + readLines(buffer, 1, buffer.getLineCount())) | 0,
+				expected: (edits.length + checksumAfter) | 0
+			});
+
+			// 7. memory after the edits, without and with everything an undo of each of them needs
+			if (canMeasureMemory()) {
+				this.measureMemory(document, BENCHMARKS.memoryAfterEdits(kind), buffer => { applyEdits(buffer, edits); return buffer; });
+				this.measureMemory(document, BENCHMARKS.memoryWithHistory(kind), buffer => ({ buffer, records: applyEditsRecording(buffer, edits).undo }));
+			}
 		}
+	}
+
+	/** Retained heap of what `prepare` returns for a freshly built buffer, per implementation. */
+	private measureMemory(document: IDocument, benchmark: string, prepare: (buffer: IBenchBuffer) => object): void {
+		for (const implementation of implementations) {
+			let lineCount = 0;
+			const bytes = measureRetainedHeap(() => {
+				const buffer = implementation.build(document.load());
+				const retained = prepare(buffer);
+				lineCount = buffer.getLineCount();
+				return retained;
+			});
+			this.record(document, benchmark, implementation, [bytes], lineCount);
+		}
+		this.checkAgreement(document, benchmark);
+		progress(benchmark);
 	}
 
 	private runTimed(document: IDocument, chunks: string[], benchmark: ITimedBenchmark, timeBuild: boolean = false): void {
@@ -309,6 +448,12 @@ class Runner {
 					ms = timeMs(() => {
 						checksum = benchmark.run(buffer);
 					});
+				}
+				if (benchmark.verify !== undefined) {
+					checksum = (checksum + benchmark.verify(buffer)) | 0;
+				}
+				if (benchmark.expected !== undefined && checksum !== benchmark.expected) {
+					throw new Error(`${implementation.name} got "${benchmark.name}" wrong for ${document.name}: checksum ${checksum}, expected ${benchmark.expected}`);
 				}
 				if (iteration >= 0) {
 					samples.get(implementation)!.push(ms);
@@ -375,12 +520,16 @@ function report(options: IOptions, documents: IDocument[], results: IResult[]): 
 	}
 
 	for (const benchmark of benchmarks) {
-		const isMemory = benchmark === BENCHMARKS.memory;
+		const isMemory = benchmark === BENCHMARKS.memory || benchmark.startsWith('Memory after ');
 		out.push('');
 		out.push(`## ${benchmark}${isMemory ? '' : ' (ms)'}`);
 		out.push('');
-		out.push(`| document | ${names.join(' | ')} | piece tree vs line array |`);
-		out.push(`|---|${names.map(() => '---:').join('|')}|---|`);
+		// every implementation is compared with the one before it in the column order:
+		// the piece tree with the line array (the blog post's comparison), the
+		// persistent tree with the piece tree it is a reimplementation of
+		const comparisons = names.slice(1).map((name, i) => `${name} vs ${names[i]}`);
+		out.push(`| document | ${names.join(' | ')} | ${comparisons.join(' | ')} |`);
+		out.push(`|---|${names.map(() => '---:').join('|')}|${comparisons.map(() => '---').join('|')}|`);
 		for (const doc of documents) {
 			const row = names.map(name => results.find(r => r.document === doc.name && r.benchmark === benchmark && r.implementation === name));
 			if (row.some(r => r === undefined)) {
@@ -388,10 +537,10 @@ function report(options: IOptions, documents: IDocument[], results: IResult[]): 
 			}
 			const values = row.map(r => r!.median);
 			const cells = values.map(v => isMemory ? formatBytes(v) : formatMs(v));
-			const comparison = isMemory
-				? (values[0] > 0 && values[1] > 0 ? `${(values[1] / values[0] * 100).toFixed(0)}% of line array` : '')
-				: formatRatio(values[0], values[1]);
-			out.push(`| ${doc.name} | ${cells.join(' | ')} | ${comparison} |`);
+			const compared = comparisons.map((_, i) => isMemory
+				? (values[i] > 0 && values[i + 1] > 0 ? `${(values[i + 1] / values[i] * 100).toFixed(0)}% of ${names[i]}` : '')
+				: formatRatio(values[i], values[i + 1]));
+			out.push(`| ${doc.name} | ${cells.join(' | ')} | ${compared.join(' | ')} |`);
 		}
 	}
 	return out.join('\n') + '\n';

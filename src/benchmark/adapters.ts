@@ -1,4 +1,5 @@
 import { Range } from '../common/range';
+import { PersistentPieceTree, PieceTreeVersion } from '../persistentPieceTree';
 import { PieceTreeBase } from '../pieceTreeBase';
 import { DefaultEndOfLine, PieceTreeTextBufferBuilder } from '../pieceTreeBuilder';
 import { IAppliedEdit, IEditRange, LineArrayBufferBuilder } from './lineArrayBuffer';
@@ -16,9 +17,18 @@ export interface IBenchBuffer {
 	getEOL(): string;
 	getLineCount(): number;
 	getLineContent(lineNumber: number): string;
+	getPositionAt(offset: number): { lineNumber: number; column: number };
 	/** The full text, as a save would read it. */
 	getValue(): string;
 	applyEdit(range: IEditRange, text: string): IAppliedEdit;
+	/**
+	 * Buffers that keep versions implement these: `captureVersion` takes the
+	 * current document in O(1), `restoreVersion` brings it back in O(1). The
+	 * undo/redo benchmarks use them where available and replay edits otherwise,
+	 * which is how an undo stack of edits (VS Code's) works.
+	 */
+	captureVersion?(): unknown;
+	restoreVersion?(version: unknown): void;
 }
 
 export interface IBufferImplementation {
@@ -30,7 +40,7 @@ export interface IBufferImplementation {
 const EOL_REGEX = /\r\n|\r|\n/;
 
 class PieceTreeBenchBuffer implements IBenchBuffer {
-	constructor(private readonly _tree: PieceTreeBase) { }
+	constructor(protected readonly _tree: PieceTreeBase | PersistentPieceTree) { }
 
 	getEOL(): string {
 		return this._tree.getEOL();
@@ -42,6 +52,10 @@ class PieceTreeBenchBuffer implements IBenchBuffer {
 
 	getLineContent(lineNumber: number): string {
 		return this._tree.getLineContent(lineNumber);
+	}
+
+	getPositionAt(offset: number): { lineNumber: number; column: number } {
+		return this._tree.getPositionAt(offset);
 	}
 
 	getValue(): string {
@@ -71,14 +85,40 @@ class PieceTreeBenchBuffer implements IBenchBuffer {
 	}
 }
 
+/** The same protocol on the persistent tree, plus versions as snapshots. */
+class PersistentPieceTreeBenchBuffer extends PieceTreeBenchBuffer {
+	constructor(private readonly _persistent: PersistentPieceTree) {
+		super(_persistent);
+	}
+
+	captureVersion(): unknown {
+		return this._persistent.getVersion();
+	}
+
+	restoreVersion(version: unknown): void {
+		this._persistent.restoreVersion(version as PieceTreeVersion);
+	}
+}
+
+function chunkBuilder(chunks: string[]): PieceTreeTextBufferBuilder {
+	const builder = new PieceTreeTextBufferBuilder();
+	for (let i = 0; i < chunks.length; i++) {
+		builder.acceptChunk(chunks[i]);
+	}
+	return builder;
+}
+
 export const pieceTreeImplementation: IBufferImplementation = {
 	name: 'piece tree',
 	build(chunks: string[]): IBenchBuffer {
-		const builder = new PieceTreeTextBufferBuilder();
-		for (let i = 0; i < chunks.length; i++) {
-			builder.acceptChunk(chunks[i]);
-		}
-		return new PieceTreeBenchBuffer(builder.finish(true).create(DefaultEndOfLine.LF));
+		return new PieceTreeBenchBuffer(chunkBuilder(chunks).finish(true).create(DefaultEndOfLine.LF));
+	}
+};
+
+export const persistentPieceTreeImplementation: IBufferImplementation = {
+	name: 'persistent piece tree',
+	build(chunks: string[]): IBenchBuffer {
+		return new PersistentPieceTreeBenchBuffer(chunkBuilder(chunks).finish(true).createPersistent(DefaultEndOfLine.LF));
 	}
 };
 
@@ -93,5 +133,5 @@ export const lineArrayImplementation: IBufferImplementation = {
 	}
 };
 
-/** In the column order of the blog post's charts. */
-export const implementations: IBufferImplementation[] = [lineArrayImplementation, pieceTreeImplementation];
+/** In the column order of the blog post's charts, plus the persistent tree. */
+export const implementations: IBufferImplementation[] = [lineArrayImplementation, pieceTreeImplementation, persistentPieceTreeImplementation];

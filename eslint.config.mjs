@@ -10,6 +10,19 @@ import { builtinModules } from 'node:module';
 
 const nodeBuiltins = [...builtinModules, ...builtinModules.map(name => `node:${name}`)];
 
+// Options of `no-restricted-imports` do not merge between config objects:
+// every layer below repeats the library-wide restrictions and adds its own.
+const libraryImports = (...patterns) => ['error', {
+	paths: nodeBuiltins.map(name => ({ name, message: 'The library must stay platform-neutral: no Node.js modules in src/*.ts or src/common/.' })),
+	patterns: [
+		{
+			group: ['./test/*', '../test/*', './benchmark/*', '../benchmark/*', './fuzz/*', '../fuzz/*', 'vitest', 'vitest/*'],
+			message: 'The library must not depend on its tests, benchmarks or fuzzer.'
+		},
+		...patterns
+	]
+}];
+
 // Options of `no-restricted-syntax` do not merge between config objects, so the
 // selectors that apply to every file live here and are spread into each override.
 const noUnsafeCasts = [
@@ -24,7 +37,7 @@ const noUnsafeCasts = [
 ];
 
 export default defineConfig(
-	globalIgnores(['lib/', 'coverage/', 'bench-corpus/']),
+	globalIgnores(['lib/', 'coverage/', 'test/benchmark/corpus/']),
 
 	// ---- every TypeScript file ------------------------------------------------
 	{
@@ -74,17 +87,12 @@ export default defineConfig(
 	// Platform-neutral and self-contained: no Node.js modules, no tests, no benchmarks.
 	{
 		files: ['src/*.ts', 'src/common/**/*.ts'],
-		rules: {
-			'no-restricted-imports': ['error', {
-				paths: nodeBuiltins.map(name => ({ name, message: 'The library must stay platform-neutral: no Node.js modules in src/*.ts or src/common/.' })),
-				patterns: [{
-					group: ['./test/*', '../test/*', './benchmark/*', '../benchmark/*', 'vitest', 'vitest/*'],
-					message: 'The library must not depend on its tests or benchmarks.'
-				}]
-			}]
-		}
+		rules: { 'no-restricted-imports': libraryImports() }
 	},
-	// src/common/ is the leaf layer (VS Code's vs/base and editor/common/core): it must not import the tree.
+	// Layering inside the library, bottom up. src/common/ (VS Code's vs/base and
+	// editor/common/core) knows nothing about the tree; pieceBuffers.ts and
+	// persistentRbTree.ts are leaves the two trees are built on; each tree is
+	// unaware of the other; the builder is the only module that knows both.
 	{
 		files: ['src/common/**/*.ts'],
 		rules: {
@@ -94,13 +102,40 @@ export default defineConfig(
 			}]
 		}
 	},
+	{
+		files: ['src/pieceBuffers.ts', 'src/persistentRbTree.ts'],
+		rules: {
+			'no-restricted-imports': libraryImports({
+				group: ['./pieceBuffers', './pieceTree*', './rbTreeBase', './persistent*', './index'],
+				message: 'pieceBuffers.ts and persistentRbTree.ts are leaf modules: they only import from src/common/.'
+			})
+		}
+	},
+	{
+		files: ['src/persistentPieceTree.ts'],
+		rules: {
+			'no-restricted-imports': libraryImports({
+				group: ['./pieceTreeBase', './rbTreeBase', './pieceTreeBuilder', './index'],
+				message: 'The persistent tree must not depend on the mutable one; shared code goes to pieceBuffers.ts or src/common/.'
+			})
+		}
+	},
+	{
+		files: ['src/pieceTreeBase.ts', 'src/rbTreeBase.ts'],
+		rules: {
+			'no-restricted-imports': libraryImports({
+				group: ['./persistent*', './pieceTreeBuilder', './index'],
+				message: 'The mutable tree must not depend on the persistent one or on the builder.'
+			})
+		}
+	},
 
 	// ---- tests ------------------------------------------------------------------
 	{
 		files: ['src/test/**/*.ts'],
 		rules: {
 			'no-restricted-imports': ['error', {
-				patterns: [{ group: ['../benchmark/*'], message: 'Tests must not depend on the benchmark.' }]
+				patterns: [{ group: ['../benchmark/*', '../fuzz/*'], message: 'Tests must not depend on the benchmark or the fuzzer.' }]
 			}],
 			'no-restricted-syntax': [
 				'error',
@@ -123,7 +158,18 @@ export default defineConfig(
 		rules: {
 			// The benchmark shares the deterministic PRNG with the tests and nothing else.
 			'no-restricted-imports': ['error', {
-				patterns: [{ group: ['../test/*', '!../test/prng'], message: 'The benchmark may only use src/test/prng from the tests.' }]
+				patterns: [{ group: ['../test/*', '!../test/prng', '../fuzz/*'], message: 'The benchmark may only use src/test/prng from the tests.' }]
+			}]
+		}
+	},
+
+	// ---- fuzzer -------------------------------------------------------------------
+	// The fuzzer is test tooling: it drives the differential harness and the reference model from src/test/.
+	{
+		files: ['src/fuzz/**/*.ts'],
+		rules: {
+			'no-restricted-imports': ['error', {
+				patterns: [{ group: ['../benchmark/*'], message: 'The fuzzer must not depend on the benchmark.' }]
 			}]
 		}
 	}
