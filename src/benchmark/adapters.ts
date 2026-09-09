@@ -16,6 +16,8 @@ export interface IBenchBuffer {
 	getEOL(): string;
 	getLineCount(): number;
 	getLineContent(lineNumber: number): string;
+	/** Walk every line; piece tree uses one tree walk, line array indexes the array. */
+	forEachLine(callback: (line: string) => void): void;
 	/** The full text, as a save would read it. */
 	getValue(): string;
 	applyEdit(range: IEditRange, text: string): IAppliedEdit;
@@ -42,6 +44,10 @@ class PieceTreeBenchBuffer implements IBenchBuffer {
 
 	getLineContent(lineNumber: number): string {
 		return this._tree.getLineContent(lineNumber);
+	}
+
+	forEachLine(callback: (line: string) => void): void {
+		this._tree.forEachLine(line => callback(line));
 	}
 
 	getValue(): string {

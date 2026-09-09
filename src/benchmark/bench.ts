@@ -141,12 +141,21 @@ const BENCHMARKS = {
 	open: 'File opening',
 	edits: (kind: string) => `Editing: ${kind}`,
 	readAll: (kind: string) => `Reading: all lines after ${kind}`,
+	readForEach: (kind: string) => `Reading: forEachLine after ${kind}`,
 	readWindows: (kind: string) => `Reading: 10 windows of 100 lines after ${kind}`,
 	save: (kind: string) => `Saving: full text after ${kind}`
 };
 
 function progress(message: string): void {
 	process.stderr.write(`  ${message}\n`);
+}
+
+function readLinesForEach(buffer: IBenchBuffer): number {
+	let checksum = 0;
+	buffer.forEachLine(str => {
+		checksum = (checksum + str.length * 31 + (str.length > 0 ? str.charCodeAt(0) : 0)) | 0;
+	});
+	return checksum;
 }
 
 function readLines(buffer: IBenchBuffer, from: number, to: number): number {
@@ -257,6 +266,12 @@ class Runner {
 				name: BENCHMARKS.readAll(kind),
 				prepare: buffer => applyEdits(buffer, edits),
 				run: buffer => readLines(buffer, 1, buffer.getLineCount())
+			});
+
+			this.runTimed(document, chunks, {
+				name: BENCHMARKS.readForEach(kind),
+				prepare: buffer => applyEdits(buffer, edits),
+				run: buffer => readLinesForEach(buffer)
 			});
 
 			this.runTimed(document, chunks, {

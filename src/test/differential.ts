@@ -133,8 +133,10 @@ export interface CheckOptions {
 	 * buffers.
 	 */
 	checkLineLength: boolean;
-	/** Also verify snapshots and `equal()`, both O(n). */
+	/** Also verify snapshots, `equal()`, line iterators, and (optionally) compact(). */
 	thorough: boolean;
+	/** After a thorough check, rebuild into ~64KB chunks and compare again. */
+	compact?: boolean;
 }
 
 /**
@@ -184,7 +186,13 @@ export function assertEquivalent(tree: PieceTreeBase, model: LinesTextBuffer, op
 			raw.charCodeAt(offset),
 			`getLineCharCode(${pos.lineNumber}, ${pos.column - 1}) (offset ${offset})`
 		);
+		assert.strictEqual(tree.getCharCode(offset), raw.charCodeAt(offset), `getCharCode(${offset})`);
+		const chunk = tree.getNearestChunk(offset);
+		assert.strictEqual(chunk, raw.substring(offset, offset + chunk.length), `getNearestChunk(${offset})`);
+		assert.ok(chunk.length > 0, `getNearestChunk(${offset}) empty inside the document`);
 	}
+	assert.strictEqual(tree.getCharCode(raw.length), 0, 'getCharCode(end)');
+	assert.strictEqual(tree.getNearestChunk(raw.length), '', 'getNearestChunk(end)');
 
 	// ranges, biased towards short ones
 	for (let i = 0; i < 24; i++) {
@@ -204,6 +212,19 @@ export function assertEquivalent(tree: PieceTreeBase, model: LinesTextBuffer, op
 	if (options.thorough) {
 		assert.strictEqual(readSnapshot(tree.createSnapshot('')), raw, 'createSnapshot()');
 		assert.ok(tree.equal(createTextBuffer([raw], false)), 'equal(tree built from the same text)');
+
+		const walked: string[] = [];
+		tree.forEachLine((line, lineNumber) => {
+			assert.strictEqual(lineNumber, walked.length + 1, `forEachLine lineNumber at ${walked.length}`);
+			walked.push(line);
+		});
+		assert.deepStrictEqual(walked, model.getLinesContent(), 'forEachLine()');
+		assert.deepStrictEqual([...tree.iterateLineContents()], model.getLinesContent(), 'iterateLineContents()');
+
+		if (options.compact) {
+			tree.compact();
+			assertEquivalent(tree, model, { ...options, thorough: false, compact: false });
+		}
 	}
 }
 
@@ -218,6 +239,8 @@ export interface RunOptions {
 	/** Run the full comparison after every `checkEvery`-th op (and always after the last). */
 	checkEvery?: number;
 	thorough?: boolean;
+	/** After each thorough check, compact() the tree and compare again. */
+	compact?: boolean;
 	/** Override how the tree under test is built (used to self-test the harness). */
 	createTree?: (scenario: Scenario) => PieceTreeBase;
 }
@@ -235,6 +258,7 @@ export function runScenario(scenario: Scenario, options: RunOptions = {}): Diver
 		rng: new Prng(0x5eed),
 		checkLineLength: scenario.mode === 'normalized',
 		thorough: options.thorough ?? true,
+		compact: options.compact ?? false,
 	};
 
 	try {

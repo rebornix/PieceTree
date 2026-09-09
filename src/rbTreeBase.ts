@@ -192,6 +192,7 @@ export function rbDelete(tree: PieceTreeBase, z: TreeNode) {
 		z.detach();
 		resetSentinel();
 		tree.root.parent = SENTINEL;
+		tree._nodeCount--;
 
 		return;
 	}
@@ -246,6 +247,8 @@ export function rbDelete(tree: PieceTreeBase, z: TreeNode) {
 	}
 
 	z.detach();
+
+	tree._nodeCount--;
 
 	if (x.parent.left === x) {
 		const newSizeLeft = calculateSize(x);
