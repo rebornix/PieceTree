@@ -1,0 +1,41 @@
+{
+  "environment": {
+    "node": "v22.14.0",
+    "v8": "12.4.254.21-node.22",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "date": "2026-09-08T08:47:29.599Z"
+  },
+  "options": {
+    "minutes": 60,
+    "scenarios": null,
+    "seed": 20260908,
+    "workers": 7
+  },
+  "elapsedMs": 3601693,
+  "stats": {
+    "scenarios": 35274,
+    "ops": 9184550,
+    "quickChecks": 9184550,
+    "fullChecks": 13754036,
+    "versionsVerified": 26669618,
+    "branches": 182479,
+    "undoRedoSteps": 18460368,
+    "setEOLs": 183960,
+    "hugeInserts": 6529,
+    "maxDocumentLength": 944909,
+    "byMode": {
+      "normalized": 17823,
+      "mixed": 17451
+    },
+    "bySize": {
+      "tiny": 10590,
+      "small": 10469,
+      "medium": 8930,
+      "large": 3525,
+      "huge inserts": 1760
+    }
+  },
+  "failures": []
+}

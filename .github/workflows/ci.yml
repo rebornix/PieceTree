@@ -50,9 +50,14 @@ jobs:
         run: npm run test:coverage
 
       # Not a performance gate (CI runners are too noisy for that); this only
-      # makes sure the benchmark still runs and both buffers still agree.
+      # makes sure the benchmark still runs and all buffers still agree.
       - name: Benchmark smoke run
         run: npm run bench -- --smoke
+
+      # A short, fixed-seed fuzz campaign (about ten seconds); long campaigns
+      # are available on demand in the Fuzz workflow.
+      - name: Fuzz smoke run
+        run: npm run fuzz -- --scenarios 60 --workers 2 --seed 1
 
   # Single, stable status check to mark as "required" in branch protection,
   # so the matrix above can change without having to update repo settings.

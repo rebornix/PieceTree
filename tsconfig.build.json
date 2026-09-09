@@ -1,6 +1,7 @@
 {
   // Build config for the published library (lib/): CommonJS + declarations,
-  // tests and benchmarks excluded. Strictness lives in tsconfig.base.json.
+  // tests, benchmarks and the fuzzer excluded. Strictness lives in
+  // tsconfig.base.json.
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "target": "es2015",

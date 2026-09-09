@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { PersistentPieceTree } from '../persistentPieceTree';
+import { PieceTreeBase } from '../pieceTreeBase';
 import { createTree, expectNoDivergence, generateScenario, Mode, runScenario, Scenario } from './differential';
+import { createTextBuffer, getTreeFlavor } from './testUtils';
 
 /**
  * Differential tests: random editing sessions are applied to the piece tree
@@ -49,6 +52,14 @@ const PINNED: { name: string; scenario: Scenario }[] = [
 		},
 	},
 ];
+
+describe(`tree flavor: ${getTreeFlavor()}`, () => {
+	it('is the tree the suites in this project are built on', () => {
+		const expected = getTreeFlavor() === 'persistent' ? PersistentPieceTree : PieceTreeBase;
+		expect(createTextBuffer(['a\nb'])).toBeInstanceOf(expected);
+		expect(createTree(generateScenario({ seed: 1, mode: 'mixed', opCount: 1 }))).toBeInstanceOf(expected);
+	});
+});
 
 describe('differential: piece tree vs LinesTextBuffer', () => {
 	describe('pinned scenarios', () => {

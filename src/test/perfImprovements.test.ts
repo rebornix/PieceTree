@@ -1,7 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { AverageBufferSize, PieceTreeBase } from '../pieceTreeBase';
 import { SENTINEL } from '../rbTreeBase';
-import { assertTreeInvariants, createTextBuffer, readSnapshot } from './testUtils';
+import { assertTreeInvariants, readSnapshot } from './testUtils';
+import { DefaultEndOfLine, PieceTreeTextBufferBuilder } from '../pieceTreeBuilder';
+
+function createTree(chunks: string[], normalizeEOL: boolean = true): PieceTreeBase {
+	const builder = new PieceTreeTextBufferBuilder();
+	for (const chunk of chunks) {
+		builder.acceptChunk(chunk);
+	}
+	return builder.finish(normalizeEOL).create(DefaultEndOfLine.LF);
+}
 
 function countNodes(tree: PieceTreeBase): number {
 	let n = 0;
@@ -27,7 +36,7 @@ function collectBufferIndices(tree: PieceTreeBase): Set<number> {
 
 describe('change buffer rotation', () => {
 	it('keeps content correct when sequential typing exceeds AverageBufferSize', () => {
-		const tree = createTextBuffer(['']);
+		const tree = createTree(['']);
 		let expected = '';
 		const chunk = 'abcdefghij'; // 10 chars
 		const rounds = Math.ceil((AverageBufferSize * 2.5) / chunk.length);
@@ -44,7 +53,7 @@ describe('change buffer rotation', () => {
 	});
 
 	it('keeps the append fast path until the current change buffer is full', () => {
-		const tree = createTextBuffer(['abc']);
+		const tree = createTree(['abc']);
 		tree.insert(3, 'd');
 		tree.insert(4, 'e');
 		expect(tree.getLineContent(1)).toBe('abcde');
@@ -53,7 +62,7 @@ describe('change buffer rotation', () => {
 	});
 
 	it('pushes line starts onto the change buffer across many newlines', () => {
-		const tree = createTextBuffer(['x']);
+		const tree = createTree(['x']);
 		let expected = 'x';
 		for (let i = 0; i < 2000; i++) {
 			tree.insert(expected.length, '\n' + i);
@@ -68,7 +77,7 @@ describe('change buffer rotation', () => {
 
 describe('compact', () => {
 	it('rebuilds a fragmented tree without changing the text', () => {
-		const tree = createTextBuffer(['abcdefghij']);
+		const tree = createTree(['abcdefghij']);
 		let expected = 'abcdefghij';
 		for (let i = 0; i < 200; i++) {
 			const pos = (i * 3) % (expected.length + 1);
@@ -89,7 +98,7 @@ describe('compact', () => {
 	});
 
 	it('does not change a snapshot taken before compact', () => {
-		const tree = createTextBuffer(['abc\ndef']);
+		const tree = createTree(['abc\ndef']);
 		tree.insert(1, '!');
 		const expected = tree.getLinesRawContent();
 		const snapshot = tree.createSnapshot('');
@@ -105,7 +114,7 @@ describe('compact', () => {
 
 describe('getCharCode / getNearestChunk', () => {
 	it('getCharCode matches charCodeAt on the full text', () => {
-		const tree = createTextBuffer(['ab\ncd']);
+		const tree = createTree(['ab\ncd']);
 		tree.insert(1, 'X');
 		const text = tree.getLinesRawContent();
 		for (let i = 0; i < text.length; i++) {
@@ -114,7 +123,7 @@ describe('getCharCode / getNearestChunk', () => {
 	});
 
 	it('getNearestChunk returns the rest of the piece', () => {
-		const tree = createTextBuffer(['hello world']);
+		const tree = createTree(['hello world']);
 		expect(tree.getNearestChunk(0)).toBe('hello world');
 		expect(tree.getNearestChunk(6)).toBe('world');
 		tree.insert(5, '!');
@@ -124,10 +133,10 @@ describe('getCharCode / getNearestChunk', () => {
 	});
 
 	it('getCharCode / getNearestChunk at EOF and on an empty tree', () => {
-		const tree = createTextBuffer(['ab']);
+		const tree = createTree(['ab']);
 		expect(tree.getCharCode(2)).toBe(0);
 		expect(tree.getNearestChunk(2)).toBe('');
-		const empty = createTextBuffer(['']);
+		const empty = createTree(['']);
 		expect(empty.getCharCode(0)).toBe(0);
 		expect(empty.getNearestChunk(0)).toBe('');
 		empty.compact();
@@ -138,7 +147,7 @@ describe('getCharCode / getNearestChunk', () => {
 
 describe('sequential line iteration', () => {
 	it('forEachLine / iterateLineContents match getLineContent', () => {
-		const tree = createTextBuffer(['a\nb\ncde\n', 'fg\n']);
+		const tree = createTree(['a\nb\ncde\n', 'fg\n']);
 		tree.insert(3, 'X\nY');
 		const fromGet: string[] = [];
 		for (let i = 1; i <= tree.getLineCount(); i++) {
@@ -155,7 +164,7 @@ describe('sequential line iteration', () => {
 	});
 
 	it('getLinesContent handles mixed CR / CRLF across pieces', () => {
-		const tree = createTextBuffer(['abc\r', 'def\r\nghi'], false);
+		const tree = createTree(['abc\r', 'def\r\nghi'], false);
 		expect(tree.getLinesContent()).toEqual(['abc', 'def', 'ghi']);
 	});
 });

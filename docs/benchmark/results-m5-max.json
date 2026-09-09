@@ -1,0 +1,5637 @@
+{
+  "environment": {
+    "node": "v22.14.0",
+    "v8": "12.4.254.21-node.22",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M5 Max",
+    "date": "2026-09-09T00:13:47.582Z"
+  },
+  "options": {
+    "sizes": [
+      "small",
+      "medium",
+      "large",
+      "huge"
+    ],
+    "corpus": true,
+    "files": [],
+    "huge": true,
+    "iterations": 5,
+    "edits": 1000,
+    "seed": 2018,
+    "json": "docs/benchmark/results-m5-max.json"
+  },
+  "documents": [
+    {
+      "name": "synthetic small",
+      "bytes": 1529046,
+      "lines": 26000
+    },
+    {
+      "name": "synthetic medium",
+      "bytes": 4553436,
+      "lines": 128000
+    },
+    {
+      "name": "synthetic large",
+      "bytes": 14615305,
+      "lines": 552000
+    },
+    {
+      "name": "synthetic huge",
+      "bytes": 56756489,
+      "lines": 3000000
+    },
+    {
+      "name": "checker.ts",
+      "bytes": 1530587,
+      "lines": 26617
+    },
+    {
+      "name": "sqlite3.c",
+      "bytes": 4524348,
+      "lines": 128417
+    },
+    {
+      "name": "Russian-English Bilingual.dic",
+      "bytes": 14926158,
+      "lines": 552283
+    },
+    {
+      "name": "checker.ts x 128",
+      "bytes": 195915136,
+      "lines": 3406849
+    }
+  ],
+  "results": [
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory usage after load",
+      "implementation": "line array",
+      "samples": [
+        2606056
+      ],
+      "median": 2606056,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory usage after load",
+      "implementation": "piece tree",
+      "samples": [
+        1593480
+      ],
+      "median": 1593480,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory usage after load",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1562640
+      ],
+      "median": 1562640,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "File opening",
+      "implementation": "line array",
+      "samples": [
+        2.171042,
+        2.033458,
+        1.764166,
+        2.276833,
+        1.967333
+      ],
+      "median": 2.033458,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "File opening",
+      "implementation": "piece tree",
+      "samples": [
+        2.297791,
+        2.134459,
+        1.926875,
+        2.749208,
+        2.295041
+      ],
+      "median": 2.295041,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "File opening",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.5805,
+        1.861708,
+        2.257042,
+        2.201417,
+        2.29375
+      ],
+      "median": 2.257042,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        5.800208,
+        4.459083,
+        3.42475,
+        3.602166,
+        3.251542
+      ],
+      "median": 3.602166,
+      "checksum": 757429557
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        5.022833,
+        2.043334,
+        2.493291,
+        1.701042,
+        1.998708
+      ],
+      "median": 2.043334,
+      "checksum": 757429557
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        3.018083,
+        2.202542,
+        2.45925,
+        2.1855,
+        1.937125
+      ],
+      "median": 2.202542,
+      "checksum": 757429557
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.420375,
+        0.160625,
+        0.161292,
+        0.200375,
+        0.154709
+      ],
+      "median": 0.161292,
+      "checksum": 47128194
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        4.166625,
+        2.449333,
+        2.561708,
+        2.718667,
+        2.388458
+      ],
+      "median": 2.561708,
+      "checksum": 47128194
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        3.037042,
+        2.953916,
+        3.754833,
+        3.246875,
+        2.62675
+      ],
+      "median": 3.037042,
+      "checksum": 47128194
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.021625,
+        0.012,
+        0.0135,
+        0.011916,
+        0.010834
+      ],
+      "median": 0.012,
+      "checksum": 1809060
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.099583,
+        0.102167,
+        0.102292,
+        0.103541,
+        0.097791
+      ],
+      "median": 0.102167,
+      "checksum": 1809060
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.112709,
+        0.112375,
+        0.111875,
+        0.117083,
+        0.112334
+      ],
+      "median": 0.112375,
+      "checksum": 1809060
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.697084,
+        0.77425,
+        0.740542,
+        0.592708,
+        0.589625
+      ],
+      "median": 0.697084,
+      "checksum": 47086352
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.636459,
+        0.287584,
+        0.289833,
+        0.30475,
+        0.309583
+      ],
+      "median": 0.30475,
+      "checksum": 47086352
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.4155,
+        0.307042,
+        0.320916,
+        0.284875,
+        0.471416
+      ],
+      "median": 0.320916,
+      "checksum": 47086352
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        4.050167,
+        3.659166,
+        3.485792,
+        4.158542,
+        3.836083
+      ],
+      "median": 3.836083,
+      "checksum": 48245885
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        2.5205,
+        2.105417,
+        2.823041,
+        1.857583,
+        1.87425
+      ],
+      "median": 2.105417,
+      "checksum": 48245885
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.008833,
+        0.011541,
+        0.01425,
+        0.012417,
+        0.017625
+      ],
+      "median": 0.012417,
+      "checksum": 48245885
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        3.328959,
+        4.680542,
+        4.997041,
+        4.819042,
+        3.8645
+      ],
+      "median": 4.680542,
+      "checksum": 47935194
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        2.155042,
+        2.85225,
+        2.805959,
+        2.0225,
+        2.141875
+      ],
+      "median": 2.155042,
+      "checksum": 47935194
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.007292,
+        0.0145,
+        0.008042,
+        0.008458,
+        0.006459
+      ],
+      "median": 0.008042,
+      "checksum": 47935194
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        2627072
+      ],
+      "median": 2627072,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        1631880
+      ],
+      "median": 1631880,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1780896
+      ],
+      "median": 1780896,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "line array",
+      "samples": [
+        2774232
+      ],
+      "median": 2774232,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        1916360
+      ],
+      "median": 1916360,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2566184
+      ],
+      "median": 2566184,
+      "checksum": 26000
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        8.051042,
+        5.131375,
+        6.154125,
+        6.254333,
+        8.164042
+      ],
+      "median": 6.254333,
+      "checksum": 1529858576
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.196333,
+        0.732334,
+        0.694875,
+        0.571,
+        0.543542
+      ],
+      "median": 0.694875,
+      "checksum": 1529858576
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.956958,
+        0.820416,
+        0.633125,
+        0.560875,
+        0.498
+      ],
+      "median": 0.633125,
+      "checksum": 1529858576
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.514709,
+        0.105791,
+        0.111709,
+        0.1075,
+        0.104458
+      ],
+      "median": 0.1075,
+      "checksum": 47491075
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        2.582875,
+        2.400166,
+        2.18375,
+        2.216667,
+        2.261958
+      ],
+      "median": 2.261958,
+      "checksum": 47491075
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.9395,
+        2.72175,
+        2.420125,
+        2.611708,
+        2.348083
+      ],
+      "median": 2.611708,
+      "checksum": 47491075
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.012666,
+        0.012583,
+        0.014416,
+        0.014958,
+        0.017958
+      ],
+      "median": 0.014416,
+      "checksum": 1879102
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.114625,
+        0.112458,
+        0.152958,
+        0.13225,
+        0.258416
+      ],
+      "median": 0.13225,
+      "checksum": 1879102
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.118542,
+        0.120875,
+        0.119375,
+        0.167125,
+        0.193708
+      ],
+      "median": 0.120875,
+      "checksum": 1879102
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.623875,
+        0.659458,
+        0.567875,
+        0.543209,
+        0.584375
+      ],
+      "median": 0.584375,
+      "checksum": 47439498
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.174167,
+        0.154667,
+        0.33575,
+        0.167416,
+        0.18625
+      ],
+      "median": 0.174167,
+      "checksum": 47439498
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.180959,
+        0.211417,
+        0.17775,
+        0.160292,
+        0.206375
+      ],
+      "median": 0.180959,
+      "checksum": 47439498
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        6.369542,
+        5.694958,
+        3.308667,
+        3.462583,
+        3.262125
+      ],
+      "median": 3.462583,
+      "checksum": 48245885
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.157667,
+        2.5665,
+        1.070875,
+        1.054791,
+        1.096917
+      ],
+      "median": 1.096917,
+      "checksum": 48245885
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.089125,
+        0.015167,
+        0.016667,
+        0.011625,
+        0.009834
+      ],
+      "median": 0.015167,
+      "checksum": 48245885
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        3.3535,
+        3.386208,
+        3.9405,
+        4.11275,
+        3.979792
+      ],
+      "median": 3.9405,
+      "checksum": 48312893
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        0.663792,
+        0.658542,
+        0.667291,
+        0.773375,
+        0.707166
+      ],
+      "median": 0.667291,
+      "checksum": 48312893
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.013125,
+        0.009208,
+        0.012458,
+        0.01375,
+        0.0115
+      ],
+      "median": 0.012458,
+      "checksum": 48312893
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        2568072
+      ],
+      "median": 2568072,
+      "checksum": 26478
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1457144
+      ],
+      "median": 1457144,
+      "checksum": 26478
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1509600
+      ],
+      "median": 1509600,
+      "checksum": 26478
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "line array",
+      "samples": [
+        2690256
+      ],
+      "median": 2690256,
+      "checksum": 26478
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        1682144
+      ],
+      "median": 1682144,
+      "checksum": 26478
+    },
+    {
+      "document": "synthetic small",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2122800
+      ],
+      "median": 2122800,
+      "checksum": 26478
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory usage after load",
+      "implementation": "line array",
+      "samples": [
+        9753152
+      ],
+      "median": 9753152,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory usage after load",
+      "implementation": "piece tree",
+      "samples": [
+        4578224
+      ],
+      "median": 4578224,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory usage after load",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4583640
+      ],
+      "median": 4583640,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "File opening",
+      "implementation": "line array",
+      "samples": [
+        5.781625,
+        6.01475,
+        5.68475,
+        5.689041,
+        6.161
+      ],
+      "median": 5.781625,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "File opening",
+      "implementation": "piece tree",
+      "samples": [
+        7.556,
+        7.02925,
+        7.472041,
+        6.718167,
+        6.587958
+      ],
+      "median": 7.02925,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "File opening",
+      "implementation": "persistent piece tree",
+      "samples": [
+        7.044459,
+        6.85625,
+        8.388875,
+        6.821292,
+        6.3445
+      ],
+      "median": 6.85625,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        23.361375,
+        19.147167,
+        15.464083,
+        15.131959,
+        32.874542
+      ],
+      "median": 19.147167,
+      "checksum": -2027329382
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        3.534916,
+        1.806042,
+        1.984542,
+        2.032875,
+        2.811375
+      ],
+      "median": 2.032875,
+      "checksum": -2027329382
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        3.579542,
+        1.845875,
+        1.89575,
+        2.667917,
+        2.932625
+      ],
+      "median": 2.667917,
+      "checksum": -2027329382
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        1.617875,
+        0.627292,
+        0.656292,
+        0.574292,
+        0.666583
+      ],
+      "median": 0.656292,
+      "checksum": 141255486
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        11.441209,
+        11.87875,
+        10.797625,
+        11.175083,
+        13.455416
+      ],
+      "median": 11.441209,
+      "checksum": 141255486
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        12.740708,
+        12.673292,
+        13.939292,
+        12.972334,
+        14.971208
+      ],
+      "median": 12.972334,
+      "checksum": 141255486
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.018625,
+        0.016875,
+        0.017417,
+        0.016583,
+        0.016916
+      ],
+      "median": 0.016916,
+      "checksum": 1128112
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.141833,
+        0.095042,
+        0.096542,
+        0.099666,
+        0.103875
+      ],
+      "median": 0.099666,
+      "checksum": 1128112
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.156375,
+        0.103791,
+        0.102,
+        0.098875,
+        0.101542
+      ],
+      "median": 0.102,
+      "checksum": 1128112
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        3.000125,
+        2.65675,
+        2.777667,
+        2.75725,
+        2.700666
+      ],
+      "median": 2.75725,
+      "checksum": 141017892
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.684625,
+        0.642209,
+        0.613083,
+        0.646292,
+        0.666459
+      ],
+      "median": 0.646292,
+      "checksum": 141017892
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.674584,
+        0.610042,
+        0.597875,
+        0.547667,
+        0.508917
+      ],
+      "median": 0.597875,
+      "checksum": 141017892
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        17.351333,
+        16.191833,
+        17.06775,
+        16.591208,
+        15.667291
+      ],
+      "median": 16.591208,
+      "checksum": 145358392
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.766917,
+        1.927375,
+        1.760458,
+        1.573542,
+        1.438042
+      ],
+      "median": 1.760458,
+      "checksum": 145358392
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.085209,
+        0.012125,
+        0.016125,
+        0.011458,
+        0.010167
+      ],
+      "median": 0.012125,
+      "checksum": 145358392
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        15.484,
+        16.528,
+        16.949834,
+        15.038708,
+        15.606292
+      ],
+      "median": 15.606292,
+      "checksum": 145224486
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.851208,
+        1.859792,
+        3.29225,
+        1.854667,
+        5.548417
+      ],
+      "median": 1.859792,
+      "checksum": 145224486
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.044,
+        0.012041,
+        0.010291,
+        0.043291,
+        0.006625
+      ],
+      "median": 0.012041,
+      "checksum": 145224486
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        9795768
+      ],
+      "median": 9795768,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        4604984
+      ],
+      "median": 4604984,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4726320
+      ],
+      "median": 4726320,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "line array",
+      "samples": [
+        9902016
+      ],
+      "median": 9902016,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        4953184
+      ],
+      "median": 4953184,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        5638088
+      ],
+      "median": 5638088,
+      "checksum": 128000
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        14.205333,
+        13.121458,
+        14.277958,
+        14.120042,
+        13.023791
+      ],
+      "median": 14.120042,
+      "checksum": 259995280
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.793792,
+        0.599208,
+        0.5895,
+        0.59375,
+        0.583166
+      ],
+      "median": 0.59375,
+      "checksum": 259995280
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.579417,
+        0.548708,
+        0.520458,
+        0.533125,
+        0.517833
+      ],
+      "median": 0.533125,
+      "checksum": 259995280
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        1.566916,
+        0.531708,
+        0.513625,
+        0.499291,
+        0.518167
+      ],
+      "median": 0.518167,
+      "checksum": 141441582
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        10.219125,
+        10.199166,
+        9.972958,
+        10.188625,
+        9.98275
+      ],
+      "median": 10.188625,
+      "checksum": 141441582
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        11.634792,
+        11.530708,
+        11.404833,
+        11.329292,
+        11.159208
+      ],
+      "median": 11.404833,
+      "checksum": 141441582
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.023416,
+        0.015667,
+        0.016042,
+        0.016583,
+        0.017083
+      ],
+      "median": 0.016583,
+      "checksum": 1100064
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.092375,
+        0.092375,
+        0.09525,
+        0.091583,
+        0.090834
+      ],
+      "median": 0.092375,
+      "checksum": 1100064
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.099292,
+        0.102542,
+        0.097375,
+        0.100125,
+        0.116583
+      ],
+      "median": 0.100125,
+      "checksum": 1100064
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        2.435041,
+        2.410375,
+        2.483292,
+        2.415292,
+        2.421666
+      ],
+      "median": 2.421666,
+      "checksum": 141195515
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.423541,
+        0.424208,
+        0.443,
+        0.444042,
+        0.397125
+      ],
+      "median": 0.424208,
+      "checksum": 141195515
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.48625,
+        0.477542,
+        0.475708,
+        0.460625,
+        0.410917
+      ],
+      "median": 0.475708,
+      "checksum": 141195515
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        12.775041,
+        11.747708,
+        12.31675,
+        14.311625,
+        13.499417
+      ],
+      "median": 12.775041,
+      "checksum": 145358392
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.326542,
+        1.102375,
+        1.092833,
+        1.094875,
+        1.173291
+      ],
+      "median": 1.102375,
+      "checksum": 145358392
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.019458,
+        0.006584,
+        0.007541,
+        0.007792,
+        0.006417
+      ],
+      "median": 0.007541,
+      "checksum": 145358392
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        11.76175,
+        15.449667,
+        12.256958,
+        10.897834,
+        11.007041
+      ],
+      "median": 11.76175,
+      "checksum": 145425400
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        0.728666,
+        0.712584,
+        0.7015,
+        0.6995,
+        0.70225
+      ],
+      "median": 0.70225,
+      "checksum": 145425400
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.051875,
+        0.008708,
+        0.011083,
+        0.011416,
+        0.007584
+      ],
+      "median": 0.011083,
+      "checksum": 145425400
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        9719896
+      ],
+      "median": 9719896,
+      "checksum": 128478
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        4515168
+      ],
+      "median": 4515168,
+      "checksum": 128478
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4516536
+      ],
+      "median": 4516536,
+      "checksum": 128478
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "line array",
+      "samples": [
+        9844360
+      ],
+      "median": 9844360,
+      "checksum": 128478
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        4716928
+      ],
+      "median": 4716928,
+      "checksum": 128478
+    },
+    {
+      "document": "synthetic medium",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        5296920
+      ],
+      "median": 5296920,
+      "checksum": 128478
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory usage after load",
+      "implementation": "line array",
+      "samples": [
+        35726312
+      ],
+      "median": 35726312,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory usage after load",
+      "implementation": "piece tree",
+      "samples": [
+        14715152
+      ],
+      "median": 14715152,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory usage after load",
+      "implementation": "persistent piece tree",
+      "samples": [
+        14728344
+      ],
+      "median": 14728344,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "File opening",
+      "implementation": "line array",
+      "samples": [
+        29.580916,
+        31.22375,
+        31.045584,
+        33.422,
+        34.902084
+      ],
+      "median": 31.22375,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "File opening",
+      "implementation": "piece tree",
+      "samples": [
+        22.301292,
+        23.99125,
+        32.937292,
+        31.496125,
+        27.776792
+      ],
+      "median": 27.776792,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "File opening",
+      "implementation": "persistent piece tree",
+      "samples": [
+        21.252,
+        23.380792,
+        26.428208,
+        23.5115,
+        22.788292
+      ],
+      "median": 23.380792,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        80.498208,
+        81.719708,
+        81.579167,
+        99.658709,
+        103.660625
+      ],
+      "median": 81.719708,
+      "checksum": -1310687052
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        2.727,
+        1.790708,
+        1.618292,
+        2.5715,
+        1.704417
+      ],
+      "median": 1.790708,
+      "checksum": -1310687052
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.439583,
+        1.891291,
+        1.868708,
+        2.372,
+        2.672417
+      ],
+      "median": 2.372,
+      "checksum": -1310687052
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        3.7735,
+        2.490875,
+        2.29225,
+        2.175125,
+        2.217916
+      ],
+      "median": 2.29225,
+      "checksum": 454031221
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        47.792917,
+        46.898333,
+        53.522166,
+        49.543167,
+        46.35025
+      ],
+      "median": 47.792917,
+      "checksum": 454031221
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        53.0555,
+        54.275209,
+        52.419709,
+        51.77525,
+        51.153875
+      ],
+      "median": 52.419709,
+      "checksum": 454031221
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.021625,
+        0.017792,
+        0.022583,
+        0.022334,
+        0.022459
+      ],
+      "median": 0.022334,
+      "checksum": 824388
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.100333,
+        0.105541,
+        0.124875,
+        0.103083,
+        0.100375
+      ],
+      "median": 0.103083,
+      "checksum": 824388
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.106833,
+        0.11575,
+        0.112083,
+        0.109583,
+        0.114417
+      ],
+      "median": 0.112083,
+      "checksum": 824388
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        9.780042,
+        9.842833,
+        10.244792,
+        9.64675,
+        9.777083
+      ],
+      "median": 9.780042,
+      "checksum": 453008504
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        1.463834,
+        1.376334,
+        1.6535,
+        1.41325,
+        1.465875
+      ],
+      "median": 1.463834,
+      "checksum": 453008504
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1.455417,
+        1.269333,
+        1.398125,
+        1.386375,
+        1.35225
+      ],
+      "median": 1.386375,
+      "checksum": 453008504
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        77.88825,
+        82.342875,
+        79.313709,
+        79.173,
+        84.496542
+      ],
+      "median": 79.313709,
+      "checksum": 471203772
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.758417,
+        1.827875,
+        1.520791,
+        1.5535,
+        1.999791
+      ],
+      "median": 1.758417,
+      "checksum": 471203772
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.024875,
+        0.0265,
+        0.01525,
+        0.018583,
+        0.012458
+      ],
+      "median": 0.018583,
+      "checksum": 471203772
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        77.345291,
+        76.402334,
+        79.671583,
+        76.201625,
+        78.39125
+      ],
+      "median": 77.345291,
+      "checksum": 471144221
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.819125,
+        1.843875,
+        2.368875,
+        1.758709,
+        1.9325
+      ],
+      "median": 1.843875,
+      "checksum": 471144221
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.029,
+        0.011541,
+        0.008209,
+        0.006959,
+        0.012375
+      ],
+      "median": 0.011541,
+      "checksum": 471144221
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        35735616
+      ],
+      "median": 35735616,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        14797600
+      ],
+      "median": 14797600,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        14895384
+      ],
+      "median": 14895384,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "line array",
+      "samples": [
+        35851744
+      ],
+      "median": 35851744,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        15150248
+      ],
+      "median": 15150248,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        15794784
+      ],
+      "median": 15794784,
+      "checksum": 552000
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        47.202625,
+        47.662208,
+        47.928708,
+        48.313,
+        48.133125
+      ],
+      "median": 47.928708,
+      "checksum": 1734897688
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.167084,
+        1.122875,
+        0.939542,
+        1.034792,
+        1.067459
+      ],
+      "median": 1.067459,
+      "checksum": 1734897688
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.656875,
+        0.588,
+        0.556583,
+        0.598584,
+        0.542625
+      ],
+      "median": 0.588,
+      "checksum": 1734897688
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        3.380917,
+        2.354167,
+        2.056625,
+        2.184709,
+        2.076333
+      ],
+      "median": 2.184709,
+      "checksum": 454142962
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        45.0315,
+        44.600083,
+        45.158,
+        45.12975,
+        53.876667
+      ],
+      "median": 45.12975,
+      "checksum": 454142962
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        49.903917,
+        50.474541,
+        50.834625,
+        48.618708,
+        48.986791
+      ],
+      "median": 49.903917,
+      "checksum": 454142962
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.023667,
+        0.015334,
+        0.017042,
+        0.018292,
+        0.014792
+      ],
+      "median": 0.017042,
+      "checksum": 829103
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.095042,
+        0.094709,
+        0.144666,
+        0.096375,
+        0.100125
+      ],
+      "median": 0.096375,
+      "checksum": 829103
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.0965,
+        0.103,
+        0.096542,
+        0.09975,
+        0.094708
+      ],
+      "median": 0.096542,
+      "checksum": 829103
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        9.562042,
+        9.846541,
+        10.719208,
+        10.892875,
+        15.478334
+      ],
+      "median": 10.719208,
+      "checksum": 453113542
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.225625,
+        0.99325,
+        1.933583,
+        1.106542,
+        1.667708
+      ],
+      "median": 1.225625,
+      "checksum": 453113542
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1.2745,
+        1.221583,
+        1.542583,
+        1.200291,
+        1.188541
+      ],
+      "median": 1.221583,
+      "checksum": 453113542
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        48.012333,
+        48.130875,
+        44.289667,
+        63.390542,
+        49.5625
+      ],
+      "median": 48.130875,
+      "checksum": 471203772
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.717167,
+        1.216125,
+        1.183959,
+        1.141292,
+        1.176792
+      ],
+      "median": 1.183959,
+      "checksum": 471203772
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.03625,
+        0.011333,
+        0.011333,
+        0.007708,
+        0.011
+      ],
+      "median": 0.011333,
+      "checksum": 471203772
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        46.580667,
+        43.801209,
+        43.777125,
+        43.575709,
+        79.454792
+      ],
+      "median": 43.801209,
+      "checksum": 471270780
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        0.761708,
+        0.765416,
+        0.76575,
+        0.767041,
+        1.061417
+      ],
+      "median": 0.76575,
+      "checksum": 471270780
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.025167,
+        0.011458,
+        0.012834,
+        0.010333,
+        0.015917
+      ],
+      "median": 0.012834,
+      "checksum": 471270780
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        35666248
+      ],
+      "median": 35666248,
+      "checksum": 552478
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        14610200
+      ],
+      "median": 14610200,
+      "checksum": 552478
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        14676888
+      ],
+      "median": 14676888,
+      "checksum": 552478
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "line array",
+      "samples": [
+        35807320
+      ],
+      "median": 35807320,
+      "checksum": 552478
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        14835776
+      ],
+      "median": 14835776,
+      "checksum": 552478
+    },
+    {
+      "document": "synthetic large",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        15538872
+      ],
+      "median": 15538872,
+      "checksum": 552478
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory usage after load",
+      "implementation": "line array",
+      "samples": [
+        181318240
+      ],
+      "median": 181318240,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory usage after load",
+      "implementation": "piece tree",
+      "samples": [
+        57183408
+      ],
+      "median": 57183408,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory usage after load",
+      "implementation": "persistent piece tree",
+      "samples": [
+        57185624
+      ],
+      "median": 57185624,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "File opening",
+      "implementation": "line array",
+      "samples": [
+        198.900083,
+        193.839833,
+        192.500041,
+        204.012375,
+        172.384083
+      ],
+      "median": 193.839833,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "File opening",
+      "implementation": "piece tree",
+      "samples": [
+        108.966625,
+        113.686958,
+        113.155417,
+        106.67575,
+        111.525833
+      ],
+      "median": 111.525833,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "File opening",
+      "implementation": "persistent piece tree",
+      "samples": [
+        98.086333,
+        96.947458,
+        104.762209,
+        96.404833,
+        92.0595
+      ],
+      "median": 96.947458,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        453.912625,
+        438.7135,
+        442.999125,
+        446.022125,
+        507.838167
+      ],
+      "median": 446.022125,
+      "checksum": -1795574296
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        2.615875,
+        2.042625,
+        1.90275,
+        1.988417,
+        1.853375
+      ],
+      "median": 1.988417,
+      "checksum": -1795574296
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.593542,
+        2.366916,
+        2.00475,
+        2.006875,
+        2.077584
+      ],
+      "median": 2.077584,
+      "checksum": -1795574296
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        16.118125,
+        15.636375,
+        14.803208,
+        15.9035,
+        15.090125
+      ],
+      "median": 15.636375,
+      "checksum": 1764874318
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        264.069541,
+        252.922125,
+        261.708667,
+        255.718125,
+        252.682959
+      ],
+      "median": 255.718125,
+      "checksum": 1764874318
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        292.668041,
+        284.962125,
+        293.358125,
+        296.921833,
+        303.129
+      ],
+      "median": 293.358125,
+      "checksum": 1764874318
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.018708,
+        0.022791,
+        0.02125,
+        0.018334,
+        0.025791
+      ],
+      "median": 0.02125,
+      "checksum": 590990
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.093833,
+        0.096291,
+        0.101208,
+        0.098917,
+        0.096875
+      ],
+      "median": 0.096875,
+      "checksum": 590990
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.104708,
+        0.107208,
+        0.106208,
+        0.103667,
+        0.105291
+      ],
+      "median": 0.105291,
+      "checksum": 590990
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        61.133208,
+        72.508042,
+        60.07525,
+        74.600958,
+        58.638125
+      ],
+      "median": 61.133208,
+      "checksum": 1759436931
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        4.673708,
+        4.841917,
+        4.984625,
+        4.603084,
+        4.883958
+      ],
+      "median": 4.841917,
+      "checksum": 1759436931
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4.682458,
+        4.53175,
+        5.114167,
+        4.998958,
+        4.942916
+      ],
+      "median": 4.942916,
+      "checksum": 1759436931
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        439.379917,
+        437.113708,
+        444.514709,
+        452.507542,
+        443.520334
+      ],
+      "median": 443.520334,
+      "checksum": 1857884002
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        2.582333,
+        2.749458,
+        2.093584,
+        2.39575,
+        2.11125
+      ],
+      "median": 2.39575,
+      "checksum": 1857884002
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.045125,
+        0.015083,
+        0.019542,
+        0.0195,
+        0.016667
+      ],
+      "median": 0.0195,
+      "checksum": 1857884002
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        434.890625,
+        457.611792,
+        435.017833,
+        497.473708,
+        439.885458
+      ],
+      "median": 439.885458,
+      "checksum": 1857875318
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.961459,
+        1.842125,
+        1.790084,
+        2.638542,
+        1.860208
+      ],
+      "median": 1.860208,
+      "checksum": 1857875318
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.04,
+        0.019167,
+        0.015417,
+        0.023166,
+        0.0125
+      ],
+      "median": 0.019167,
+      "checksum": 1857875318
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        181339528
+      ],
+      "median": 181339528,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        57317248
+      ],
+      "median": 57317248,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        57332568
+      ],
+      "median": 57332568,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "line array",
+      "samples": [
+        181459832
+      ],
+      "median": 181459832,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        57542920
+      ],
+      "median": 57542920,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        58345824
+      ],
+      "median": 58345824,
+      "checksum": 3000000
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        7356.635791,
+        7448.26775,
+        7638.414541,
+        7667.754917,
+        7483.330416
+      ],
+      "median": 7483.330416,
+      "checksum": 943544728
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.185416,
+        1.39575,
+        1.205333,
+        0.968542,
+        1.091542
+      ],
+      "median": 1.185416,
+      "checksum": 943544728
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.939375,
+        0.944125,
+        0.955875,
+        0.992125,
+        0.988958
+      ],
+      "median": 0.955875,
+      "checksum": 943544728
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        24.35975,
+        15.407042,
+        15.049125,
+        24.352542,
+        14.640459
+      ],
+      "median": 15.407042,
+      "checksum": 1764935192
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        260.014833,
+        283.336417,
+        286.156792,
+        254.38225,
+        275.682208
+      ],
+      "median": 275.682208,
+      "checksum": 1764935192
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        289.1285,
+        296.565,
+        298.28875,
+        279.71775,
+        378.382625
+      ],
+      "median": 296.565,
+      "checksum": 1764935192
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.019,
+        0.015583,
+        0.015542,
+        0.016334,
+        0.0155
+      ],
+      "median": 0.015583,
+      "checksum": 583344
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.103584,
+        0.095625,
+        0.10425,
+        0.095583,
+        0.101
+      ],
+      "median": 0.101,
+      "checksum": 583344
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.128583,
+        0.105,
+        0.104917,
+        0.098875,
+        0.103792
+      ],
+      "median": 0.104917,
+      "checksum": 583344
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        163.19675,
+        167.900792,
+        167.692792,
+        167.276958,
+        166.984125
+      ],
+      "median": 167.276958,
+      "checksum": 1759490158
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        4.812334,
+        4.535917,
+        4.459959,
+        4.363541,
+        4.18825
+      ],
+      "median": 4.459959,
+      "checksum": 1759490158
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4.567625,
+        4.374125,
+        4.335333,
+        4.404084,
+        4.113875
+      ],
+      "median": 4.374125,
+      "checksum": 1759490158
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        8591.701209,
+        6700.8825,
+        5844.739041,
+        7373.098333,
+        7363.019042
+      ],
+      "median": 7363.019042,
+      "checksum": 1857884002
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.540041,
+        1.402084,
+        1.462833,
+        1.472541,
+        1.649708
+      ],
+      "median": 1.472541,
+      "checksum": 1857884002
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.024166,
+        0.009875,
+        0.287625,
+        0.010667,
+        0.009834
+      ],
+      "median": 0.010667,
+      "checksum": 1857884002
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        6067.579292,
+        7655.781625,
+        7001.503542,
+        8139.294708,
+        8331.658667
+      ],
+      "median": 7655.781625,
+      "checksum": 1857951010
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.320584,
+        1.100291,
+        1.065333,
+        1.346667,
+        1.083917
+      ],
+      "median": 1.100291,
+      "checksum": 1857951010
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.022166,
+        0.011833,
+        0.010125,
+        0.010084,
+        0.01075
+      ],
+      "median": 0.01075,
+      "checksum": 1857951010
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        181280512
+      ],
+      "median": 181280512,
+      "checksum": 3000478
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        57139168
+      ],
+      "median": 57139168,
+      "checksum": 3000478
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        57155920
+      ],
+      "median": 57155920,
+      "checksum": 3000478
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "line array",
+      "samples": [
+        181423352
+      ],
+      "median": 181423352,
+      "checksum": 3000478
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        57313056
+      ],
+      "median": 57313056,
+      "checksum": 3000478
+    },
+    {
+      "document": "synthetic huge",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        58157672
+      ],
+      "median": 58157672,
+      "checksum": 3000478
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory usage after load",
+      "implementation": "line array",
+      "samples": [
+        2578640
+      ],
+      "median": 2578640,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory usage after load",
+      "implementation": "piece tree",
+      "samples": [
+        1441384
+      ],
+      "median": 1441384,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory usage after load",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1537992
+      ],
+      "median": 1537992,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "File opening",
+      "implementation": "line array",
+      "samples": [
+        2.142167,
+        2.553292,
+        2.137583,
+        2.179834,
+        2.065334
+      ],
+      "median": 2.142167,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "File opening",
+      "implementation": "piece tree",
+      "samples": [
+        2.046292,
+        1.99475,
+        2.029792,
+        2.060792,
+        1.969333
+      ],
+      "median": 2.029792,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "File opening",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.058625,
+        2.263542,
+        2.014584,
+        1.99575,
+        2.303416
+      ],
+      "median": 2.058625,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        3.813375,
+        3.654041,
+        3.416166,
+        3.314583,
+        3.406375
+      ],
+      "median": 3.416166,
+      "checksum": 765848423
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        3.586459,
+        1.57675,
+        1.556,
+        1.45375,
+        1.510834
+      ],
+      "median": 1.556,
+      "checksum": 765848423
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.536667,
+        1.912041,
+        1.85925,
+        1.748542,
+        1.836625
+      ],
+      "median": 1.85925,
+      "checksum": 765848423
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.405375,
+        0.137375,
+        0.152667,
+        0.133292,
+        0.130625
+      ],
+      "median": 0.137375,
+      "checksum": 46284080
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        2.485417,
+        2.477459,
+        2.437875,
+        2.49,
+        2.436666
+      ],
+      "median": 2.477459,
+      "checksum": 46284080
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.924084,
+        2.865833,
+        2.90975,
+        2.944833,
+        3.010916
+      ],
+      "median": 2.924084,
+      "checksum": 46284080
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.007041,
+        0.010042,
+        0.007166,
+        0.006458,
+        0.00625
+      ],
+      "median": 0.007041,
+      "checksum": 1628814
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.097542,
+        0.098292,
+        0.095417,
+        0.102708,
+        0.09425
+      ],
+      "median": 0.097542,
+      "checksum": 1628814
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.107375,
+        0.102291,
+        0.105625,
+        0.105541,
+        0.106333
+      ],
+      "median": 0.105625,
+      "checksum": 1628814
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.573791,
+        0.631917,
+        0.596417,
+        0.567583,
+        0.5775
+      ],
+      "median": 0.5775,
+      "checksum": 47153388
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.370709,
+        0.278792,
+        0.252833,
+        0.291417,
+        0.265916
+      ],
+      "median": 0.278792,
+      "checksum": 47153388
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.242875,
+        0.223042,
+        0.244834,
+        0.218792,
+        0.211417
+      ],
+      "median": 0.223042,
+      "checksum": 47153388
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        3.779583,
+        3.875542,
+        3.503541,
+        3.866958,
+        3.492375
+      ],
+      "median": 3.779583,
+      "checksum": 47400203
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        2.503167,
+        1.642125,
+        1.613375,
+        2.056333,
+        1.508625
+      ],
+      "median": 1.642125,
+      "checksum": 47400203
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.027042,
+        0.005833,
+        0.013167,
+        0.008083,
+        0.013667
+      ],
+      "median": 0.013167,
+      "checksum": 47400203
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        3.358292,
+        9.162166,
+        8.808166,
+        11.713584,
+        13.867708
+      ],
+      "median": 9.162166,
+      "checksum": 47110207
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        2.287458,
+        6.342,
+        11.050458,
+        11.708417,
+        11.845667
+      ],
+      "median": 11.050458,
+      "checksum": 47110207
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.041417,
+        0.041667,
+        0.031125,
+        0.030959,
+        0.275875
+      ],
+      "median": 0.041417,
+      "checksum": 47110207
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        2609032
+      ],
+      "median": 2609032,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        1578568
+      ],
+      "median": 1578568,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1705808
+      ],
+      "median": 1705808,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "line array",
+      "samples": [
+        2768296
+      ],
+      "median": 2768296,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        1904816
+      ],
+      "median": 1904816,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2554992
+      ],
+      "median": 2554992,
+      "checksum": 26617
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        6.636208,
+        5.916625,
+        5.841083,
+        5.525167,
+        5.204125
+      ],
+      "median": 5.841083,
+      "checksum": 1531639811
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.18,
+        0.722792,
+        0.65825,
+        0.753708,
+        0.752416
+      ],
+      "median": 0.752416,
+      "checksum": 1531639811
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.847375,
+        0.559583,
+        0.706167,
+        0.635875,
+        0.731042
+      ],
+      "median": 0.706167,
+      "checksum": 1531639811
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.45975,
+        0.102792,
+        0.12325,
+        0.12225,
+        0.101292
+      ],
+      "median": 0.12225,
+      "checksum": 46626266
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        3.008334,
+        2.160958,
+        2.577333,
+        3.1445,
+        2.833167
+      ],
+      "median": 2.833167,
+      "checksum": 46626266
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.774417,
+        2.980459,
+        2.4275,
+        3.501834,
+        2.585958
+      ],
+      "median": 2.774417,
+      "checksum": 46626266
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.0135,
+        0.01475,
+        0.013667,
+        0.011333,
+        0.020292
+      ],
+      "median": 0.013667,
+      "checksum": 1655147
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.087959,
+        0.113042,
+        0.093792,
+        0.125958,
+        0.116083
+      ],
+      "median": 0.113042,
+      "checksum": 1655147
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.126042,
+        0.138709,
+        0.116,
+        0.093459,
+        0.119666
+      ],
+      "median": 0.119666,
+      "checksum": 1655147
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.5925,
+        0.678292,
+        0.656167,
+        0.725834,
+        0.66025
+      ],
+      "median": 0.66025,
+      "checksum": 47502014
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.213,
+        0.181875,
+        0.191916,
+        0.156083,
+        0.202084
+      ],
+      "median": 0.191916,
+      "checksum": 47502014
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.273334,
+        0.165125,
+        0.168875,
+        0.26175,
+        0.253125
+      ],
+      "median": 0.253125,
+      "checksum": 47502014
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        3.266708,
+        3.401208,
+        2.807916,
+        2.924416,
+        3.037958
+      ],
+      "median": 3.037958,
+      "checksum": 47400203
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.086542,
+        0.933,
+        1.018333,
+        0.835291,
+        0.927375
+      ],
+      "median": 0.933,
+      "checksum": 47400203
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.021083,
+        0.006625,
+        0.00675,
+        0.007709,
+        0.0085
+      ],
+      "median": 0.007709,
+      "checksum": 47400203
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        3.298834,
+        3.318459,
+        2.943584,
+        2.822708,
+        3.051333
+      ],
+      "median": 3.051333,
+      "checksum": 47467211
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        0.650542,
+        0.624042,
+        0.643084,
+        0.634416,
+        0.638458
+      ],
+      "median": 0.638458,
+      "checksum": 47467211
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.007084,
+        0.010541,
+        0.008167,
+        0.012709,
+        0.009625
+      ],
+      "median": 0.009625,
+      "checksum": 47467211
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        2537512
+      ],
+      "median": 2537512,
+      "checksum": 27095
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1418408
+      ],
+      "median": 1418408,
+      "checksum": 27095
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1479976
+      ],
+      "median": 1479976,
+      "checksum": 27095
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "line array",
+      "samples": [
+        2696024
+      ],
+      "median": 2696024,
+      "checksum": 27095
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        1680888
+      ],
+      "median": 1680888,
+      "checksum": 27095
+    },
+    {
+      "document": "checker.ts",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2128168
+      ],
+      "median": 2128168,
+      "checksum": 27095
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory usage after load",
+      "implementation": "line array",
+      "samples": [
+        9555696
+      ],
+      "median": 9555696,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory usage after load",
+      "implementation": "piece tree",
+      "samples": [
+        4614104
+      ],
+      "median": 4614104,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory usage after load",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4620232
+      ],
+      "median": 4620232,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "File opening",
+      "implementation": "line array",
+      "samples": [
+        6.567917,
+        6.246792,
+        6.314917,
+        6.073792,
+        6.089125
+      ],
+      "median": 6.246792,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "File opening",
+      "implementation": "piece tree",
+      "samples": [
+        6.320708,
+        6.262625,
+        6.616792,
+        6.433292,
+        5.990791
+      ],
+      "median": 6.320708,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "File opening",
+      "implementation": "persistent piece tree",
+      "samples": [
+        6.686709,
+        6.285791,
+        6.357542,
+        6.690916,
+        6.024125
+      ],
+      "median": 6.357542,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        15.265459,
+        15.391542,
+        15.095958,
+        15.600584,
+        15.694958
+      ],
+      "median": 15.391542,
+      "checksum": -1985811721
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        2.04225,
+        1.4985,
+        1.581125,
+        1.426791,
+        1.38825
+      ],
+      "median": 1.4985,
+      "checksum": -1985811721
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.150583,
+        1.585,
+        1.627292,
+        1.686334,
+        1.916625
+      ],
+      "median": 1.686334,
+      "checksum": -1985811721
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        1.593834,
+        0.6765,
+        0.711375,
+        0.673959,
+        0.668584
+      ],
+      "median": 0.6765,
+      "checksum": 140882005
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        11.443042,
+        10.957292,
+        10.92775,
+        10.942209,
+        10.847917
+      ],
+      "median": 10.942209,
+      "checksum": 140882005
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        11.864,
+        12.030292,
+        11.740166,
+        12.144166,
+        12.222292
+      ],
+      "median": 12.030292,
+      "checksum": 140882005
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.01575,
+        0.015791,
+        0.013833,
+        0.014458,
+        0.014458
+      ],
+      "median": 0.014458,
+      "checksum": 1095553
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.101834,
+        0.098625,
+        0.107042,
+        0.09875,
+        0.097333
+      ],
+      "median": 0.09875,
+      "checksum": 1095553
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.106958,
+        0.110042,
+        0.1105,
+        0.108375,
+        0.110667
+      ],
+      "median": 0.110042,
+      "checksum": 1095553
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        9.40975,
+        9.401208,
+        9.542667,
+        8.784875,
+        9.753875
+      ],
+      "median": 9.40975,
+      "checksum": 140117962
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        6.167166,
+        6.025042,
+        6.113083,
+        6.138459,
+        5.946083
+      ],
+      "median": 6.113083,
+      "checksum": 140117962
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1.362791,
+        1.179416,
+        1.184708,
+        1.2755,
+        0.833417
+      ],
+      "median": 1.184708,
+      "checksum": 140117962
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        15.0725,
+        15.158292,
+        15.365292,
+        17.003583,
+        15.839083
+      ],
+      "median": 15.365292,
+      "checksum": 144995687
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.875792,
+        2.114,
+        1.518167,
+        1.499541,
+        1.906958
+      ],
+      "median": 1.875792,
+      "checksum": 144995687
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.010625,
+        0.00775,
+        0.007792,
+        0.014209,
+        0.009292
+      ],
+      "median": 0.009292,
+      "checksum": 144995687
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        15.2115,
+        15.085125,
+        15.78625,
+        15.134208,
+        17.183167
+      ],
+      "median": 15.2115,
+      "checksum": 144863932
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.719167,
+        1.907375,
+        1.902334,
+        1.941792,
+        2.193208
+      ],
+      "median": 1.907375,
+      "checksum": 144863932
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.009416,
+        0.011875,
+        0.007917,
+        0.007125,
+        0.00775
+      ],
+      "median": 0.007917,
+      "checksum": 144863932
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        9566472
+      ],
+      "median": 9566472,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        4706400
+      ],
+      "median": 4706400,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4796696
+      ],
+      "median": 4796696,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "line array",
+      "samples": [
+        9705736
+      ],
+      "median": 9705736,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        5026472
+      ],
+      "median": 5026472,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        5676704
+      ],
+      "median": 5676704,
+      "checksum": 128417
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        17.103708,
+        17.075709,
+        16.938,
+        17.447916,
+        24.506333
+      ],
+      "median": 17.103708,
+      "checksum": 230909199
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.796833,
+        0.592667,
+        0.614792,
+        0.589542,
+        0.809917
+      ],
+      "median": 0.614792,
+      "checksum": 230909199
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.636084,
+        0.557166,
+        0.529875,
+        0.537875,
+        0.716
+      ],
+      "median": 0.557166,
+      "checksum": 230909199
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        1.59725,
+        0.629875,
+        0.6335,
+        0.610625,
+        0.644083
+      ],
+      "median": 0.6335,
+      "checksum": 141065950
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        10.419208,
+        10.300333,
+        10.811291,
+        10.426375,
+        10.625542
+      ],
+      "median": 10.426375,
+      "checksum": 141065950
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        11.511333,
+        11.444459,
+        11.6495,
+        11.396125,
+        11.866208
+      ],
+      "median": 11.511333,
+      "checksum": 141065950
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.015208,
+        0.014125,
+        0.014667,
+        0.013583,
+        0.016833
+      ],
+      "median": 0.014667,
+      "checksum": 1025696
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.088458,
+        0.087333,
+        0.095917,
+        0.091209,
+        0.093667
+      ],
+      "median": 0.091209,
+      "checksum": 1025696
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.096625,
+        0.091958,
+        0.092417,
+        0.090333,
+        0.106875
+      ],
+      "median": 0.092417,
+      "checksum": 1025696
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        3.822042,
+        3.834459,
+        3.750292,
+        3.693583,
+        3.864042
+      ],
+      "median": 3.822042,
+      "checksum": 140293825
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.133208,
+        1.1555,
+        1.213125,
+        1.204458,
+        1.222167
+      ],
+      "median": 1.204458,
+      "checksum": 140293825
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.876792,
+        0.965708,
+        0.832667,
+        1.277292,
+        0.889416
+      ],
+      "median": 0.889416,
+      "checksum": 140293825
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        11.949208,
+        11.665291,
+        11.518583,
+        10.65975,
+        11.819083
+      ],
+      "median": 11.665291,
+      "checksum": 144995687
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.151667,
+        1.037125,
+        0.991125,
+        1.027917,
+        1.069708
+      ],
+      "median": 1.037125,
+      "checksum": 144995687
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.007958,
+        0.00675,
+        0.008084,
+        0.007167,
+        0.007042
+      ],
+      "median": 0.007167,
+      "checksum": 144995687
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        11.457291,
+        10.867542,
+        10.932042,
+        10.7195,
+        10.935417
+      ],
+      "median": 10.932042,
+      "checksum": 145062695
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        0.706042,
+        0.690833,
+        0.67825,
+        0.669291,
+        0.699667
+      ],
+      "median": 0.690833,
+      "checksum": 145062695
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.036458,
+        0.0075,
+        0.010792,
+        0.008042,
+        0.009833
+      ],
+      "median": 0.009833,
+      "checksum": 145062695
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        9511032
+      ],
+      "median": 9511032,
+      "checksum": 128895
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        4525312
+      ],
+      "median": 4525312,
+      "checksum": 128895
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4552624
+      ],
+      "median": 4552624,
+      "checksum": 128895
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "line array",
+      "samples": [
+        9640440
+      ],
+      "median": 9640440,
+      "checksum": 128895
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        4740296
+      ],
+      "median": 4740296,
+      "checksum": 128895
+    },
+    {
+      "document": "sqlite3.c",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        5325400
+      ],
+      "median": 5325400,
+      "checksum": 128895
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory usage after load",
+      "implementation": "line array",
+      "samples": [
+        42526704
+      ],
+      "median": 42526704,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory usage after load",
+      "implementation": "piece tree",
+      "samples": [
+        19462560
+      ],
+      "median": 19462560,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory usage after load",
+      "implementation": "persistent piece tree",
+      "samples": [
+        19480320
+      ],
+      "median": 19480320,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "File opening",
+      "implementation": "line array",
+      "samples": [
+        36.447417,
+        40.173584,
+        31.551625,
+        31.106416,
+        32.767625
+      ],
+      "median": 32.767625,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "File opening",
+      "implementation": "piece tree",
+      "samples": [
+        17.588833,
+        25.359125,
+        17.03825,
+        22.121875,
+        22.36325
+      ],
+      "median": 22.121875,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "File opening",
+      "implementation": "persistent piece tree",
+      "samples": [
+        16.86925,
+        15.736041,
+        16.176625,
+        16.247709,
+        15.524458
+      ],
+      "median": 16.176625,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        90.275833,
+        77.734833,
+        78.183875,
+        78.984084,
+        76.745708
+      ],
+      "median": 78.183875,
+      "checksum": 701697998
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        2.367417,
+        1.702584,
+        1.7755,
+        1.717375,
+        1.604625
+      ],
+      "median": 1.717375,
+      "checksum": 701697998
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        2.378958,
+        1.822625,
+        1.840166,
+        2.191917,
+        1.725458
+      ],
+      "median": 1.840166,
+      "checksum": 701697998
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        3.487542,
+        2.458584,
+        2.457583,
+        2.43875,
+        2.558666
+      ],
+      "median": 2.458584,
+      "checksum": 809145559
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        48.664792,
+        47.134958,
+        48.30825,
+        48.596458,
+        48.918417
+      ],
+      "median": 48.596458,
+      "checksum": 809145559
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        51.90975,
+        52.758083,
+        53.118167,
+        54.881459,
+        55.220709
+      ],
+      "median": 53.118167,
+      "checksum": 809145559
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.019791,
+        0.020667,
+        0.0225,
+        0.032084,
+        0.018834
+      ],
+      "median": 0.020667,
+      "checksum": 1513971
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.115292,
+        0.103834,
+        0.143625,
+        0.116791,
+        0.115666
+      ],
+      "median": 0.115666,
+      "checksum": 1513971
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.127708,
+        0.112417,
+        0.132208,
+        0.127333,
+        0.110958
+      ],
+      "median": 0.127333,
+      "checksum": 1513971
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        15.38025,
+        14.695375,
+        15.169042,
+        15.615834,
+        15.917625
+      ],
+      "median": 15.38025,
+      "checksum": 321408738
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        1.95275,
+        1.738333,
+        1.678291,
+        1.810084,
+        1.759375
+      ],
+      "median": 1.759375,
+      "checksum": 321408738
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1.935916,
+        1.592041,
+        1.694083,
+        1.742291,
+        1.623958
+      ],
+      "median": 1.694083,
+      "checksum": 321408738
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        82.608292,
+        78.521333,
+        76.429417,
+        94.874791,
+        76.53775
+      ],
+      "median": 78.521333,
+      "checksum": 826318574
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        2.631667,
+        1.827334,
+        2.812709,
+        1.6325,
+        1.458625
+      ],
+      "median": 1.827334,
+      "checksum": 826318574
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.039708,
+        0.017333,
+        0.022334,
+        0.010708,
+        0.010459
+      ],
+      "median": 0.017333,
+      "checksum": 826318574
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        77.414417,
+        76.92675,
+        77.716833,
+        74.939417,
+        79.718125
+      ],
+      "median": 77.414417,
+      "checksum": 826267332
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.720916,
+        2.830084,
+        1.714625,
+        2.157416,
+        1.791
+      ],
+      "median": 1.791,
+      "checksum": 826267332
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.007541,
+        0.008209,
+        0.007625,
+        0.008166,
+        0.00975
+      ],
+      "median": 0.008166,
+      "checksum": 826267332
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        42529928
+      ],
+      "median": 42529928,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        19561312
+      ],
+      "median": 19561312,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        19629080
+      ],
+      "median": 19629080,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "line array",
+      "samples": [
+        42661440
+      ],
+      "median": 42661440,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        19897088
+      ],
+      "median": 19897088,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        20510368
+      ],
+      "median": 20510368,
+      "checksum": 552283
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        51.681542,
+        51.977958,
+        51.633667,
+        52.184709,
+        53.289166
+      ],
+      "median": 51.977958,
+      "checksum": 1783190965
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.161708,
+        0.974875,
+        0.861542,
+        0.953292,
+        1.03725
+      ],
+      "median": 0.974875,
+      "checksum": 1783190965
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.609208,
+        0.581792,
+        0.561,
+        0.554291,
+        0.562666
+      ],
+      "median": 0.562666,
+      "checksum": 1783190965
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        3.395084,
+        2.782417,
+        2.33,
+        2.306792,
+        2.27625
+      ],
+      "median": 2.33,
+      "checksum": 809248991
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        47.878583,
+        51.0115,
+        46.126458,
+        45.945583,
+        46.145458
+      ],
+      "median": 46.145458,
+      "checksum": 809248991
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        51.849208,
+        50.700208,
+        60.327458,
+        50.847834,
+        51.540167
+      ],
+      "median": 51.540167,
+      "checksum": 809248991
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.016042,
+        0.015666,
+        0.016542,
+        0.013458,
+        0.012792
+      ],
+      "median": 0.015666,
+      "checksum": 1371711
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.096041,
+        0.094542,
+        0.100709,
+        0.097125,
+        0.100792
+      ],
+      "median": 0.097125,
+      "checksum": 1371711
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.103,
+        0.098708,
+        0.109459,
+        0.099542,
+        0.101334
+      ],
+      "median": 0.101334,
+      "checksum": 1371711
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        13.789375,
+        13.506875,
+        13.989208,
+        14.66725,
+        13.96225
+      ],
+      "median": 13.96225,
+      "checksum": 321467566
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.316,
+        1.28625,
+        1.37675,
+        1.871708,
+        1.478291
+      ],
+      "median": 1.37675,
+      "checksum": 321467566
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        1.480834,
+        1.461667,
+        1.288083,
+        1.568209,
+        1.564292
+      ],
+      "median": 1.480834,
+      "checksum": 321467566
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        44.769666,
+        44.720917,
+        45.196625,
+        43.477042,
+        43.341459
+      ],
+      "median": 44.720917,
+      "checksum": 826318574
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.34525,
+        1.2125,
+        1.113333,
+        1.101667,
+        1.158917
+      ],
+      "median": 1.158917,
+      "checksum": 826318574
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.03425,
+        0.010125,
+        0.007667,
+        0.012541,
+        0.007041
+      ],
+      "median": 0.010125,
+      "checksum": 826318574
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        46.777458,
+        44.64375,
+        46.791541,
+        43.18,
+        45.940625
+      ],
+      "median": 45.940625,
+      "checksum": 826385582
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        0.784958,
+        0.750833,
+        0.766125,
+        0.756,
+        0.757042
+      ],
+      "median": 0.757042,
+      "checksum": 826385582
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.022542,
+        0.007417,
+        0.007583,
+        0.008583,
+        0.009042
+      ],
+      "median": 0.008583,
+      "checksum": 826385582
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        42479384
+      ],
+      "median": 42479384,
+      "checksum": 552761
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        19391072
+      ],
+      "median": 19391072,
+      "checksum": 552761
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        19429120
+      ],
+      "median": 19429120,
+      "checksum": 552761
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "line array",
+      "samples": [
+        42618264
+      ],
+      "median": 42618264,
+      "checksum": 552761
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        19630328
+      ],
+      "median": 19630328,
+      "checksum": 552761
+    },
+    {
+      "document": "Russian-English Bilingual.dic",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        20251464
+      ],
+      "median": 20251464,
+      "checksum": 552761
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory usage after load",
+      "implementation": "line array",
+      "samples": [
+        330648320
+      ],
+      "median": 330648320,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory usage after load",
+      "implementation": "piece tree",
+      "samples": [
+        197386344
+      ],
+      "median": 197386344,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory usage after load",
+      "implementation": "persistent piece tree",
+      "samples": [
+        197322576
+      ],
+      "median": 197322576,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "File opening",
+      "implementation": "line array",
+      "samples": [
+        330.0785,
+        327.884084,
+        343.543375,
+        333.259667,
+        344.937417
+      ],
+      "median": 333.259667,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "File opening",
+      "implementation": "piece tree",
+      "samples": [
+        267.204625,
+        247.381833,
+        276.500667,
+        247.621625,
+        270.241791
+      ],
+      "median": 267.204625,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "File opening",
+      "implementation": "persistent piece tree",
+      "samples": [
+        237.876417,
+        247.808083,
+        251.650334,
+        249.587583,
+        242.664833
+      ],
+      "median": 247.808083,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        638.980833,
+        512.530417,
+        560.022208,
+        510.894584,
+        585.842584
+      ],
+      "median": 560.022208,
+      "checksum": -1251957962
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        2.604958,
+        2.239833,
+        2.112708,
+        2.073792,
+        2.228459
+      ],
+      "median": 2.228459,
+      "checksum": -1251957962
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Editing: 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        4.146084,
+        2.459625,
+        3.198417,
+        2.441417,
+        3.420792
+      ],
+      "median": 3.198417,
+      "checksum": -1251957962
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        17.809333,
+        15.783916,
+        12.727583,
+        12.640709,
+        12.163875
+      ],
+      "median": 12.727583,
+      "checksum": 1666211079
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        286.285625,
+        283.953583,
+        276.60675,
+        307.347709,
+        279.601458
+      ],
+      "median": 283.953583,
+      "checksum": 1666211079
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: all lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        310.721667,
+        317.197792,
+        307.065708,
+        312.234209,
+        308.77425
+      ],
+      "median": 310.721667,
+      "checksum": 1666211079
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        0.02325,
+        0.028667,
+        0.026917,
+        0.027375,
+        0.024375
+      ],
+      "median": 0.026917,
+      "checksum": 1667192
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        0.100709,
+        0.091209,
+        0.1,
+        0.093792,
+        0.093042
+      ],
+      "median": 0.093792,
+      "checksum": 1667192
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.101417,
+        0.101958,
+        0.099,
+        0.103375,
+        0.120458
+      ],
+      "median": 0.101958,
+      "checksum": 1667192
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        75.517833,
+        74.373667,
+        76.311958,
+        76.613167,
+        72.919458
+      ],
+      "median": 75.517833,
+      "checksum": 1778094381
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        15.341667,
+        14.955041,
+        15.463417,
+        15.469584,
+        15.300166
+      ],
+      "median": 15.341667,
+      "checksum": 1778094381
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Saving: full text after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        16.099709,
+        14.910709,
+        15.022,
+        15.408834,
+        15.688125
+      ],
+      "median": 15.408834,
+      "checksum": 1778094381
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        501.47625,
+        498.4235,
+        543.826208,
+        505.812875,
+        506.687125
+      ],
+      "median": 505.812875,
+      "checksum": 1772127751
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        2.943459,
+        3.186292,
+        2.498375,
+        2.897042,
+        2.508542
+      ],
+      "median": 2.897042,
+      "checksum": 1772127751
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Undo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.048542,
+        0.009875,
+        0.0115,
+        0.017625,
+        0.011708
+      ],
+      "median": 0.011708,
+      "checksum": 1772127751
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "line array",
+      "samples": [
+        493.744625,
+        496.299042,
+        549.0025,
+        502.196916,
+        517.883042
+      ],
+      "median": 502.196916,
+      "checksum": 1771824398
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        2.164834,
+        2.695667,
+        2.8335,
+        2.381709,
+        2.652583
+      ],
+      "median": 2.652583,
+      "checksum": 1771824398
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Redo: 1000 random edits, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.021875,
+        0.010708,
+        0.014416,
+        0.009708,
+        0.008291
+      ],
+      "median": 0.010708,
+      "checksum": 1771824398
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "line array",
+      "samples": [
+        330672360
+      ],
+      "median": 330672360,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "piece tree",
+      "samples": [
+        197470936
+      ],
+      "median": 197470936,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 random edits",
+      "implementation": "persistent piece tree",
+      "samples": [
+        197491032
+      ],
+      "median": 197491032,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "line array",
+      "samples": [
+        330823984
+      ],
+      "median": 330823984,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        197780112
+      ],
+      "median": 197780112,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 random edits with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        198579824
+      ],
+      "median": 198579824,
+      "checksum": 3406849
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        11826.006,
+        10073.749125,
+        10088.368375,
+        9957.353125,
+        10119.962708
+      ],
+      "median": 10088.368375,
+      "checksum": -1628645181
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        1.024208,
+        1.200083,
+        1.183125,
+        0.804167,
+        0.805084
+      ],
+      "median": 1.024208,
+      "checksum": -1628645181
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Editing: 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.812833,
+        1.196625,
+        1.131416,
+        0.684667,
+        0.686667
+      ],
+      "median": 0.812833,
+      "checksum": -1628645181
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        92.430833,
+        118.98825,
+        12.613333,
+        116.10175,
+        12.003917
+      ],
+      "median": 92.430833,
+      "checksum": 1666566622
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        298.242583,
+        286.94025,
+        297.212209,
+        285.704375,
+        285.271542
+      ],
+      "median": 286.94025,
+      "checksum": 1666566622
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: all lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        310.204167,
+        316.633625,
+        320.392583,
+        302.668208,
+        304.603334
+      ],
+      "median": 310.204167,
+      "checksum": 1666566622
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        0.017833,
+        0.022125,
+        0.017208,
+        0.014708,
+        0.016916
+      ],
+      "median": 0.017208,
+      "checksum": 1704491
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        0.119167,
+        0.102208,
+        0.157125,
+        0.109958,
+        0.101208
+      ],
+      "median": 0.109958,
+      "checksum": 1704491
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Reading: 10 windows of 100 lines after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.102792,
+        0.125292,
+        0.125208,
+        0.114417,
+        0.14125
+      ],
+      "median": 0.125208,
+      "checksum": 1704491
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        105.712916,
+        103.129792,
+        93.00175,
+        130.428459,
+        139.361042
+      ],
+      "median": 105.712916,
+      "checksum": 1778455819
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        15.852542,
+        18.164459,
+        15.22275,
+        23.059833,
+        15.343292
+      ],
+      "median": 15.852542,
+      "checksum": 1778455819
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Saving: full text after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        15.615625,
+        14.906584,
+        14.650375,
+        16.485041,
+        15.808667
+      ],
+      "median": 15.615625,
+      "checksum": 1778455819
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        11066.204334,
+        12378.920375,
+        10937.081542,
+        12917.24225,
+        11418.912458
+      ],
+      "median": 11418.912458,
+      "checksum": 1772127751
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.87275,
+        1.743334,
+        1.660208,
+        1.706833,
+        1.652667
+      ],
+      "median": 1.706833,
+      "checksum": 1772127751
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Undo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.029292,
+        0.0085,
+        0.010209,
+        0.008708,
+        0.01425
+      ],
+      "median": 0.010209,
+      "checksum": 1772127751
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "line array",
+      "samples": [
+        9514.65975,
+        12365.312917,
+        12811.378459,
+        12886.795708,
+        12783.2365
+      ],
+      "median": 12783.2365,
+      "checksum": 1772194759
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "piece tree",
+      "samples": [
+        1.297792,
+        1.3115,
+        1.60225,
+        1.266792,
+        1.27675
+      ],
+      "median": 1.297792,
+      "checksum": 1772194759
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Redo: 1000 sequential inserts, one by one",
+      "implementation": "persistent piece tree",
+      "samples": [
+        0.023625,
+        0.00975,
+        0.009084,
+        0.008708,
+        0.008625
+      ],
+      "median": 0.009084,
+      "checksum": 1772194759
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "line array",
+      "samples": [
+        330597560
+      ],
+      "median": 330597560,
+      "checksum": 3407327
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "piece tree",
+      "samples": [
+        197291992
+      ],
+      "median": 197291992,
+      "checksum": 3407327
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 sequential inserts",
+      "implementation": "persistent piece tree",
+      "samples": [
+        197262088
+      ],
+      "median": 197262088,
+      "checksum": 3407327
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "line array",
+      "samples": [
+        330754040
+      ],
+      "median": 330754040,
+      "checksum": 3407327
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "piece tree",
+      "samples": [
+        197471200
+      ],
+      "median": 197471200,
+      "checksum": 3407327
+    },
+    {
+      "document": "checker.ts x 128",
+      "benchmark": "Memory after 1000 sequential inserts with undo history",
+      "implementation": "persistent piece tree",
+      "samples": [
+        198463768
+      ],
+      "median": 198463768,
+      "checksum": 3407327
+    }
+  ]
+}
