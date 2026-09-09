@@ -10,7 +10,7 @@
     "scripts": {
         "prepare": "npm run build",
         "start": "npm run build && npm run watch",
-        "build": "tsc -p tsconfig.build.json",
+        "build": "node -e \"require('fs').rmSync('lib', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
         "watch": "tsc -p tsconfig.build.json -w",
         "typecheck": "tsc -p tsconfig.json --noEmit",
         "lint": "oxlint",
@@ -20,7 +20,7 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "bench": "node --expose-gc --import tsx src/benchmark/bench.ts",
-        "bench:corpus": "node --import tsx src/benchmark/fetchCorpus.ts"
+        "fuzz": "node --import tsx src/fuzz/fuzz.ts"
     },
     "repository": {
         "type": "git",

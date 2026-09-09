@@ -20,8 +20,7 @@ import assert from 'assert';
 import { describe, it } from 'vitest';
 import { Position } from '../common/position';
 import { Range } from '../common/range';
-import { PieceTreeBase } from '../pieceTreeBase';
-import { assertTreeInvariants, createTextBuffer, readSnapshot as getValueInSnapshot } from './testUtils';
+import { IPieceTree, assertTreeInvariants, createTextBuffer, readSnapshot as getValueInSnapshot, treesEqual } from './testUtils';
 
 function splitLines(str: string): string[] {
 	return str.split(/\r\n|\r|\n/);
@@ -86,7 +85,7 @@ function trimLineFeed(text: string): string {
 
 //#region Assertion
 
-function testLinesContent(str: string, pieceTable: PieceTreeBase) {
+function testLinesContent(str: string, pieceTable: IPieceTree) {
 	const lines = splitLines(str);
 	assert.strictEqual(pieceTable.getLineCount(), lines.length);
 	assert.strictEqual(pieceTable.getLinesRawContent(), str);
@@ -108,7 +107,7 @@ function testLinesContent(str: string, pieceTable: PieceTreeBase) {
 	}
 }
 
-function testLineStarts(str: string, pieceTable: PieceTreeBase) {
+function testLineStarts(str: string, pieceTable: IPieceTree) {
 	const lineStarts = [0];
 
 	// Reset regex to search from the beginning
@@ -1546,29 +1545,29 @@ describe('buffer api', () => {
 		const c = createTextBuffer(['abd']);
 		const d = createTextBuffer(['abcd']);
 
-		assert(a.equal(b));
-		assert(!a.equal(c));
-		assert(!a.equal(d));
+		assert(treesEqual(a, b));
+		assert(!treesEqual(a, c));
+		assert(!treesEqual(a, d));
 	});
 
 	it('equal with more chunks', () => {
 		const a = createTextBuffer(['ab', 'cd', 'e']);
 		const b = createTextBuffer(['ab', 'c', 'de']);
-		assert(a.equal(b));
+		assert(treesEqual(a, b));
 	});
 
 	it('equal 2, empty buffer', () => {
 		const a = createTextBuffer(['']);
 		const b = createTextBuffer(['']);
 
-		assert(a.equal(b));
+		assert(treesEqual(a, b));
 	});
 
 	it('equal 3, empty buffer', () => {
 		const a = createTextBuffer(['a']);
 		const b = createTextBuffer(['']);
 
-		assert(!a.equal(b));
+		assert(!treesEqual(a, b));
 	});
 
 	it('getLineCharCode - issue #45735', () => {

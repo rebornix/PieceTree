@@ -3,7 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Piece, PieceTreeBase } from './pieceTreeBase';
+import { Piece } from './pieceBuffers';
+import { PieceTreeBase } from './pieceTreeBase';
 
 export class TreeNode {
 	parent: TreeNode;
@@ -192,6 +193,7 @@ export function rbDelete(tree: PieceTreeBase, z: TreeNode) {
 		z.detach();
 		resetSentinel();
 		tree.root.parent = SENTINEL;
+		tree._nodeCount--;
 
 		return;
 	}
@@ -246,6 +248,8 @@ export function rbDelete(tree: PieceTreeBase, z: TreeNode) {
 	}
 
 	z.detach();
+
+	tree._nodeCount--;
 
 	if (x.parent.left === x) {
 		const newSizeLeft = calculateSize(x);

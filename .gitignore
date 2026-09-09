@@ -80,5 +80,3 @@ TEST-results.xml
 out
 lib
 coverage
-# downloaded by `npm run bench:corpus`
-bench-corpus/

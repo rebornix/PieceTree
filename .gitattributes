@@ -1,0 +1,2 @@
+test/benchmark/corpus/** linguist-vendored -whitespace
+docs/benchmark/*.svg -whitespace
