@@ -13,8 +13,8 @@
         "build": "tsc -p tsconfig.build.json",
         "watch": "tsc -p tsconfig.build.json -w",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix",
+        "lint": "oxlint",
+        "lint:fix": "oxlint --fix",
         "check:consumer": "tsc -p tsconfig.consumer.json && node --import tsx scripts/consumer-check.ts",
         "test": "vitest run",
         "test:watch": "vitest",
@@ -36,10 +36,9 @@
         "@stylistic/eslint-plugin": "^5.10.0",
         "@types/node": "^22.10.0",
         "@vitest/coverage-v8": "^5.0.0",
-        "eslint": "^10.10.0",
+        "oxlint": "^1.82.0",
         "tsx": "^4.23.13",
         "typescript": "^5.7.2",
-        "typescript-eslint": "^8.70.0",
         "vitest": "^5.0.0"
     }
 }

@@ -1,0 +1,110 @@
+{
+  // Deliberately small: the correctness rules microsoft/vscode enables for all of
+  // its TypeScript (eslint.config.js on main), the conventions this code already
+  // follows (tabs, single quotes, semicolons, PascalCase classes), and a layering
+  // check standing in for VS Code's `local/code-layering` / `local/code-import-patterns`.
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  // Opt in only to the plugins we configure rules from. Oxlint otherwise
+  // enables its full `correctness` category from the default plugin set.
+  "plugins": ["typescript", "import", "vitest"],
+  "categories": {
+    "correctness": "off"
+  },
+  "ignorePatterns": ["lib/", "coverage/", "bench-corpus/"],
+  "jsPlugins": [
+    "@stylistic/eslint-plugin",
+    "./scripts/oxlint-plugin.mjs"
+  ],
+  "overrides": [
+    // ---- every TypeScript file ------------------------------------------------
+    {
+      "files": ["**/*.ts"],
+      "rules": {
+        // Correctness: microsoft/vscode eslint.config.js, the block for all files.
+        "constructor-super": "error",
+        "curly": "error",
+        "eqeqeq": "error",
+        "no-async-promise-executor": "error",
+        "no-caller": "error",
+        "no-case-declarations": "error",
+        "no-debugger": "error",
+        "no-duplicate-case": "error",
+        "no-duplicate-imports": "error",
+        "no-eval": "error",
+        "no-misleading-character-class": "error",
+        "no-new-wrappers": "error",
+        "no-restricted-globals": ["error", "name", "length", "event", "closed", "external", "status", "origin", "orientation", "context"],
+        "no-sparse-arrays": "error",
+        "no-throw-literal": "error",
+        "no-unsafe-finally": "error",
+        "no-unused-labels": "error",
+        "no-var": "error",
+        "prefer-const": ["error", { "destructuring": "all" }],
+        // VS Code's `local/code-no-unused-expressions` is a fork of this rule.
+        "no-unused-expressions": ["error", { "allowTernary": true }],
+        "typescript/no-explicit-any": "error",
+        "local/code-no-any-casts": "error",
+        "local/code-no-dangerous-type-assertions": "error",
+
+        // Conventions the code already follows. VS Code enforces the first three
+        // through ESLint and the rest through build/hygiene.ts and its formatter.
+        "local/class-pascal-case": "error",
+        "@stylistic/semi": "error",
+        "@stylistic/member-delimiter-style": "error",
+        "@stylistic/no-extra-semi": "error",
+        "@stylistic/quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": "always" }],
+        "@stylistic/indent": ["error", "tab", { "SwitchCase": 1 }],
+        "@stylistic/no-trailing-spaces": "error",
+        "@stylistic/eol-last": "error"
+      }
+    },
+
+    // ---- the library: src/*.ts and src/common/ --------------------------------
+    // Platform-neutral and self-contained: no Node.js modules, no tests, no benchmarks.
+    {
+      "files": ["src/*.ts", "src/common/**/*.ts"],
+      "rules": {
+        "import/no-nodejs-modules": "error",
+        "no-restricted-imports": ["error", {
+          "patterns": [{
+            "group": ["./test/*", "../test/*", "./benchmark/*", "../benchmark/*", "vitest", "vitest/*"],
+            "message": "The library must not depend on its tests or benchmarks."
+          }]
+        }]
+      }
+    },
+    // src/common/ is the leaf layer (VS Code's vs/base and editor/common/core): it must not import the tree.
+    {
+      "files": ["src/common/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", {
+          "patterns": [{ "group": ["../*"], "message": "src/common/ must not import the piece tree; only other src/common/ modules." }]
+        }]
+      }
+    },
+
+    // ---- tests ------------------------------------------------------------------
+    {
+      "files": ["src/test/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", {
+          "patterns": [{ "group": ["../benchmark/*"], "message": "Tests must not depend on the benchmark." }]
+        }],
+        // Native stand-in for VS Code's `local/code-no-test-only` (`.only`).
+        "vitest/no-focused-tests": "error",
+        "local/code-no-test-async-suite": "error"
+      }
+    },
+
+    // ---- benchmark ----------------------------------------------------------------
+    {
+      "files": ["src/benchmark/**/*.ts"],
+      "rules": {
+        // The benchmark shares the deterministic PRNG with the tests and nothing else.
+        "no-restricted-imports": ["error", {
+          "patterns": [{ "group": ["../test/*", "!../test/prng"], "message": "The benchmark may only use src/test/prng from the tests." }]
+        }]
+      }
+    }
+  ]
+}
