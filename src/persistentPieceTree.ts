@@ -11,7 +11,7 @@ import { AverageBufferSize, BufferCursor, Piece, StringBuffer, createLineStartsF
  * PieceTreeBase, with a root that is never modified. An edit builds a new
  * root that shares everything it did not touch with the previous one, so a
  * version of the document is a root plus a few scalars (getVersion /
- * setVersion, both O(1)), and undo/redo is a stack of versions
+ * restoreVersion, both O(1)), and undo/redo is a stack of versions
  * (PieceTreeHistory) instead of a stack of inverse edits.
  *
  * The algorithms are PieceTreeBase's (VS Code, MIT) restated for a tree
