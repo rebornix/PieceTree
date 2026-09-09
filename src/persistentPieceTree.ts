@@ -265,8 +265,9 @@ export class PersistentPieceTree {
 			if (chunk.buffer.length === 0) {
 				continue;
 			}
-			if (!chunk.lineStarts) {
+			if (!chunk.lineStarts || chunk.lineStartsCount === 0) {
 				chunk.lineStarts = createLineStartsFast(chunk.buffer);
+				chunk.lineStartsCount = chunk.lineStarts.length;
 			}
 			const lastLine = chunk.lineStarts.length - 1;
 			pieces.push(new Piece(
@@ -690,6 +691,7 @@ export class PersistentPieceTree {
 			lineStarts[i] += startOffset;
 		}
 		changeBuffer.lineStarts = (changeBuffer.lineStarts as number[]).concat(lineStarts.slice(1));
+		changeBuffer.lineStartsCount = changeBuffer.lineStarts.length;
 		const endIndex = changeBuffer.lineStarts.length - 1;
 		const newEnd = { line: endIndex, column: changeBuffer.buffer.length - changeBuffer.lineStarts[endIndex] };
 		const extended = new Piece(0, piece.start, newEnd, buffers.getLineFeedCnt(this._buffers, 0, piece.start, newEnd), piece.length + value.length);
@@ -866,6 +868,7 @@ export class PersistentPieceTree {
 			}
 
 			changeBuffer.lineStarts = (changeBuffer.lineStarts as number[]).concat(lineStarts.slice(1));
+			changeBuffer.lineStartsCount = changeBuffer.lineStarts.length;
 			changeBuffer.buffer += '_' + text;
 			startOffset += 1;
 		} else {
@@ -875,6 +878,7 @@ export class PersistentPieceTree {
 				}
 			}
 			changeBuffer.lineStarts = (changeBuffer.lineStarts as number[]).concat(lineStarts.slice(1));
+			changeBuffer.lineStartsCount = changeBuffer.lineStarts.length;
 			changeBuffer.buffer += text;
 		}
 

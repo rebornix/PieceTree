@@ -180,6 +180,13 @@ export class LineArrayBuffer {
 		return this._lines[lineNumber - 1];
 	}
 
+	forEachLine(callback: (line: string) => void): void {
+		const lines = this._lines;
+		for (let i = 0; i < lines.length; i++) {
+			callback(lines[i]);
+		}
+	}
+
 	getLength(): number {
 		return this._lineStarts.getTotalValue();
 	}

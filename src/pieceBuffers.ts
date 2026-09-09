@@ -19,20 +19,15 @@ import { CharCode } from './common/charCode';
  */
 export const AverageBufferSize = 65535;
 
-export function createUintArray(arr: number[]): Uint32Array | Uint16Array {
-	let r;
-	if (arr[arr.length - 1] < 65536) {
-		r = new Uint16Array(arr.length);
-	} else {
-		r = new Uint32Array(arr.length);
-	}
+export function createUintArray(arr: number[]): Uint32Array {
+	const r = new Uint32Array(arr.length);
 	r.set(arr, 0);
 	return r;
 }
 
 export class LineStarts {
 	constructor(
-		public readonly lineStarts: Uint32Array | Uint16Array | number[],
+		public readonly lineStarts: Uint32Array,
 		public readonly cr: number,
 		public readonly lf: number,
 		public readonly crlf: number,
@@ -40,68 +35,74 @@ export class LineStarts {
 	) { }
 }
 
-export function createLineStartsFast(str: string, readonly: boolean = true): Uint32Array | Uint16Array | number[] {
-	const r: number[] = [0];
+function scanLineStarts(str: string, r: number[]): number {
 	let rLength = 1;
+	r[0] = 0;
+	const len = str.length;
 
-	for (let i = 0, len = str.length; i < len; i++) {
-		const chr = str.charCodeAt(i);
+	// V8's indexOf is SIMD-backed. For the common LF-only case (normalized
+	// buffers, Unix files) that is much faster than a charCodeAt loop. A file
+	// that still has CR pays one indexOf('\r') then falls back.
+	if (str.indexOf('\r') === -1) {
+		let i = 0;
+		while ((i = str.indexOf('\n', i)) !== -1) {
+			r[rLength++] = ++i;
+		}
+	} else {
+		for (let i = 0; i < len; i++) {
+			const chr = str.charCodeAt(i);
 
-		if (chr === CharCode.CarriageReturn) {
-			if (i + 1 < len && str.charCodeAt(i + 1) === CharCode.LineFeed) {
-				// \r\n... case
-				r[rLength++] = i + 2;
-				i++; // skip \n
-			} else {
-				// \r... case
+			if (chr === CharCode.CarriageReturn) {
+				if (i + 1 < len && str.charCodeAt(i + 1) === CharCode.LineFeed) {
+					r[rLength++] = i + 2;
+					i++; // skip \n
+				} else {
+					r[rLength++] = i + 1;
+				}
+			} else if (chr === CharCode.LineFeed) {
 				r[rLength++] = i + 1;
 			}
-		} else if (chr === CharCode.LineFeed) {
-			r[rLength++] = i + 1;
 		}
 	}
-	if (readonly) {
-		return createUintArray(r);
-	} else {
+	return rLength;
+}
+
+export function createLineStartsFast(str: string, readonly: boolean = true): Uint32Array | number[] {
+	const r: number[] = [0];
+	const rLength = scanLineStarts(str, r);
+	if (!readonly) {
+		r.length = rLength;
 		return r;
 	}
+	const arr = new Uint32Array(rLength);
+	for (let i = 0; i < rLength; i++) {
+		arr[i] = r[i];
+	}
+	return arr;
 }
 
 export function createLineStarts(r: number[], str: string): LineStarts {
-	r.length = 0;
-	r[0] = 0;
-	let rLength = 1;
+	const rLength = scanLineStarts(str, r);
 	let cr = 0, lf = 0, crlf = 0;
-	let isBasicASCII = true;
 	for (let i = 0, len = str.length; i < len; i++) {
 		const chr = str.charCodeAt(i);
-
 		if (chr === CharCode.CarriageReturn) {
 			if (i + 1 < len && str.charCodeAt(i + 1) === CharCode.LineFeed) {
-				// \r\n... case
 				crlf++;
-				r[rLength++] = i + 2;
-				i++; // skip \n
+				i++;
 			} else {
 				cr++;
-				// \r... case
-				r[rLength++] = i + 1;
 			}
 		} else if (chr === CharCode.LineFeed) {
 			lf++;
-			r[rLength++] = i + 1;
-		} else {
-			if (isBasicASCII) {
-				if (chr !== CharCode.Tab && (chr < 32 || chr > 126)) {
-					isBasicASCII = false;
-				}
-			}
 		}
 	}
-	const result = new LineStarts(createUintArray(r), cr, lf, crlf, isBasicASCII);
+	const lineStarts = new Uint32Array(rLength);
+	for (let i = 0; i < rLength; i++) {
+		lineStarts[i] = r[i];
+	}
 	r.length = 0;
-
-	return result;
+	return new LineStarts(lineStarts, cr, lf, crlf, true);
 }
 
 export interface BufferCursor {
@@ -133,11 +134,14 @@ export class Piece {
 
 export class StringBuffer {
 	buffer: string;
-	lineStarts: Uint32Array | Uint16Array | number[];
+	lineStarts: Uint32Array | number[];
+	/** Used entries in `lineStarts`; may be less than `lineStarts.length` for a growable change buffer. */
+	lineStartsCount: number;
 
-	constructor(buffer: string, lineStarts: Uint32Array | Uint16Array | number[]) {
+	constructor(buffer: string, lineStarts: Uint32Array | number[] | undefined, lineStartsCount?: number) {
 		this.buffer = buffer;
-		this.lineStarts = lineStarts;
+		this.lineStarts = lineStarts ?? [];
+		this.lineStartsCount = lineStartsCount ?? this.lineStarts.length;
 	}
 }
 
@@ -194,8 +198,9 @@ export function getLineFeedCnt(buffers: StringBuffer[], bufferIndex: number, sta
 		return end.line - start.line;
 	}
 
-	const lineStarts = buffers[bufferIndex].lineStarts;
-	if (end.line === lineStarts.length - 1) { // it means, there is no \n after end, otherwise, there will be one more lineStart.
+	const buf = buffers[bufferIndex];
+	const lineStarts = buf.lineStarts;
+	if (end.line === buf.lineStartsCount - 1) { // it means, there is no \n after end, otherwise, there will be one more lineStart.
 		return end.line - start.line;
 	}
 

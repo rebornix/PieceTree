@@ -193,6 +193,7 @@ export class PieceTreeTextBufferBuilder {
 			lastChunk.buffer += String.fromCharCode(this._previousChar);
 			const newLineStarts = createLineStartsFast(lastChunk.buffer);
 			lastChunk.lineStarts = newLineStarts;
+			lastChunk.lineStartsCount = newLineStarts.length;
 			if (this._previousChar === CharCode.CarriageReturn) {
 				this.cr++;
 			}

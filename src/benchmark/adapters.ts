@@ -17,6 +17,8 @@ export interface IBenchBuffer {
 	getEOL(): string;
 	getLineCount(): number;
 	getLineContent(lineNumber: number): string;
+	/** Walk every line; piece tree uses one tree walk, line array indexes the array. */
+	forEachLine(callback: (line: string) => void): void;
 	getPositionAt(offset: number): { lineNumber: number; column: number };
 	/** The full text, as a save would read it. */
 	getValue(): string;
@@ -52,6 +54,17 @@ class PieceTreeBenchBuffer implements IBenchBuffer {
 
 	getLineContent(lineNumber: number): string {
 		return this._tree.getLineContent(lineNumber);
+	}
+
+	forEachLine(callback: (line: string) => void): void {
+		if (this._tree instanceof PieceTreeBase) {
+			this._tree.forEachLine(line => callback(line));
+			return;
+		}
+		const n = this._tree.getLineCount();
+		for (let i = 1; i <= n; i++) {
+			callback(this._tree.getLineContent(i));
+		}
 	}
 
 	getPositionAt(offset: number): { lineNumber: number; column: number } {

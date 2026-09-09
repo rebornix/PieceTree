@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { Range } from '../common/range';
+import { PieceTreeBase } from '../pieceTreeBase';
 import { DefaultEndOfLine, PieceTreeTextBufferBuilder } from '../pieceTreeBuilder';
 import { LinesTextBuffer } from './linesTextBuffer';
 import { Prng } from './prng';
@@ -165,8 +166,10 @@ export interface CheckOptions {
 	 * buffers.
 	 */
 	checkLineLength: boolean;
-	/** Also verify snapshots and `equal()`, both O(n). */
+	/** Also verify snapshots, `equal()`, line iterators, and (optionally) compact(). */
 	thorough: boolean;
+	/** After a thorough check, rebuild into ~64KB chunks and compare again. */
+	compact?: boolean;
 }
 
 /**
@@ -216,6 +219,16 @@ export function assertEquivalent(tree: IPieceTree, model: LinesTextBuffer, optio
 			raw.charCodeAt(offset),
 			`getLineCharCode(${pos.lineNumber}, ${pos.column - 1}) (offset ${offset})`
 		);
+		if (tree instanceof PieceTreeBase) {
+			assert.strictEqual(tree.getCharCode(offset), raw.charCodeAt(offset), `getCharCode(${offset})`);
+			const chunk = tree.getNearestChunk(offset);
+			assert.strictEqual(chunk, raw.substring(offset, offset + chunk.length), `getNearestChunk(${offset})`);
+			assert.ok(chunk.length > 0, `getNearestChunk(${offset}) empty inside the document`);
+		}
+	}
+	if (tree instanceof PieceTreeBase) {
+		assert.strictEqual(tree.getCharCode(raw.length), 0, 'getCharCode(end)');
+		assert.strictEqual(tree.getNearestChunk(raw.length), '', 'getNearestChunk(end)');
 	}
 
 	// ranges, biased towards short ones
@@ -236,6 +249,21 @@ export function assertEquivalent(tree: IPieceTree, model: LinesTextBuffer, optio
 	if (options.thorough) {
 		assert.strictEqual(readSnapshot(tree.createSnapshot('')), raw, 'createSnapshot()');
 		assert.ok(equalsText(tree, raw), 'equal(tree built from the same text)');
+
+		if (tree instanceof PieceTreeBase) {
+			const walked: string[] = [];
+			tree.forEachLine((line, lineNumber) => {
+				assert.strictEqual(lineNumber, walked.length + 1, `forEachLine lineNumber at ${walked.length}`);
+				walked.push(line);
+			});
+			assert.deepStrictEqual(walked, model.getLinesContent(), 'forEachLine()');
+			assert.deepStrictEqual([...tree.iterateLineContents()], model.getLinesContent(), 'iterateLineContents()');
+
+			if (options.compact) {
+				tree.compact();
+				assertEquivalent(tree, model, { ...options, thorough: false, compact: false });
+			}
+		}
 	}
 }
 
@@ -250,6 +278,8 @@ export interface RunOptions {
 	/** Run the full comparison after every `checkEvery`-th op (and always after the last). */
 	checkEvery?: number;
 	thorough?: boolean;
+	/** After each thorough check, compact() the tree and compare again. */
+	compact?: boolean;
 	/** Override how the tree under test is built (used to self-test the harness). */
 	createTree?: (scenario: Scenario) => IPieceTree;
 }
@@ -267,6 +297,7 @@ export function runScenario(scenario: Scenario, options: RunOptions = {}): Diver
 		rng: new Prng(0x5eed),
 		checkLineLength: scenario.mode === 'normalized',
 		thorough: options.thorough ?? true,
+		compact: options.compact ?? false,
 	};
 
 	try {
