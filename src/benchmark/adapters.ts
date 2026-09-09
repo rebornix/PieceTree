@@ -24,8 +24,8 @@ export interface IBenchBuffer {
 	/**
 	 * Buffers that keep versions implement these: `captureVersion` takes the
 	 * current document in O(1), `restoreVersion` brings it back in O(1). The
-	 * undo benchmark uses them where available and replays inverse edits
-	 * otherwise, which is how an undo stack of edits (VS Code's) works.
+	 * undo/redo benchmarks use them where available and replay edits otherwise,
+	 * which is how an undo stack of edits (VS Code's) works.
 	 */
 	captureVersion?(): unknown;
 	restoreVersion?(version: unknown): void;

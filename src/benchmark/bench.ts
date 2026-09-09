@@ -24,8 +24,8 @@ import { IEdit, generateRandomEdits, generateSequentialInserts, generateWindowSt
  *
  * and, for the persistent piece tree, what its versions buy:
  *
- *   6. undo: taking back those edits one by one, as versions where the buffer
- *      keeps them and as inverse edits (VS Code's undo stack) where it does not
+ *   6. undo/redo: taking back and replaying those edits one by one, as versions
+ *      where the buffer keeps them and as edits (VS Code's undo stack) where it does not
  *   7. memory after those edits, without and with the undo history alive
  *
  * Usage: npm run bench -- [options]     (see --help)
@@ -46,7 +46,7 @@ const HELP = `Usage: npm run bench -- [options]
 
   --sizes <list>      synthetic documents to run: ${Object.keys(SYNTHETIC_SPECS).join(', ')} or "none"
                       (default: small,medium,large)
-  --corpus            also run the blog post's real files from bench-corpus/ (npm run bench:corpus downloads them)
+  --corpus            also run the blog post's real files from test/benchmark/corpus/
   --file <path>       also run an arbitrary file (repeatable)
   --huge              add the 54 MB synthetic document (unless --sizes none) and, with --corpus, "checker.ts x 128";
                       takes several minutes
@@ -112,7 +112,7 @@ function loadDocuments(options: IOptions): IDocument[] {
 		for (const file of CORPUS_FILES) {
 			const filePath = corpusPath(file);
 			if (!fs.existsSync(filePath)) {
-				throw new Error(`${filePath} is missing; run "npm run bench:corpus" first`);
+				throw new Error(`vendored benchmark corpus file ${filePath} is missing`);
 			}
 			const doc = fileDocument(filePath);
 			documents.push(doc);
@@ -151,6 +151,7 @@ const BENCHMARKS = {
 	readWindows: (kind: string) => `Reading: 10 windows of 100 lines after ${kind}`,
 	save: (kind: string) => `Saving: full text after ${kind}`,
 	undo: (kind: string) => `Undo: ${kind}, one by one`,
+	redo: (kind: string) => `Redo: ${kind}, one by one`,
 	memoryAfterEdits: (kind: string) => `Memory after ${kind}`,
 	memoryWithHistory: (kind: string) => `Memory after ${kind} with undo history`
 };
@@ -193,40 +194,60 @@ function applyEdits(buffer: IBenchBuffer, edits: IEdit[]): number {
 }
 
 /**
- * What an undo needs per edit: the version to go back to where the buffer has
- * versions, the inverse edit (the range the inserted text occupies, and the
- * text it replaced) where it does not.
+ * What undo or redo needs per edit: a version to restore where the buffer has
+ * versions, or an edit to apply where it does not.
  */
-type UndoRecord = { version: unknown } | { range: IEditRange; text: string };
+type HistoryRecord = { version: unknown } | { range: IEditRange; text: string };
+
+interface IEditHistory {
+	undo: HistoryRecord[];
+	redo: HistoryRecord[];
+}
 
 const EOL_REGEX = /\r\n|\r|\n/;
 
-/** Applies the edits, keeping what undoing each of them needs. */
-function applyEditsRecording(buffer: IBenchBuffer, edits: IEdit[]): UndoRecord[] {
-	const records: UndoRecord[] = [];
+/** Applies the edits, keeping what undoing and redoing each of them needs. */
+function applyEditsRecording(buffer: IBenchBuffer, edits: IEdit[]): IEditHistory {
+	const undo: HistoryRecord[] = [];
+	const redo: HistoryRecord[] = [];
 	const versions = typeof buffer.captureVersion === 'function' && typeof buffer.restoreVersion === 'function';
 	const eol = buffer.getEOL();
 	for (let i = 0; i < edits.length; i++) {
 		if (versions) {
-			records.push({ version: buffer.captureVersion!() });
+			undo.push({ version: buffer.captureVersion!() });
 			buffer.applyEdit(edits[i].range, edits[i].text);
+			redo.push({ version: buffer.captureVersion!() });
 			continue;
 		}
 		const applied = buffer.applyEdit(edits[i].range, edits[i].text);
 		const insertedLength = edits[i].text.length > 0 ? edits[i].text.split(EOL_REGEX).join(eol).length : 0;
 		const start = buffer.getPositionAt(applied.rangeOffset);
 		const end = buffer.getPositionAt(applied.rangeOffset + insertedLength);
-		records.push({
+		undo.push({
 			range: { startLineNumber: start.lineNumber, startColumn: start.column, endLineNumber: end.lineNumber, endColumn: end.column },
 			text: applied.oldText
 		});
+		redo.push(edits[i]);
 	}
-	return records;
+	return { undo, redo };
 }
 
 /** Takes the edits back in reverse order. */
-function undoAll(buffer: IBenchBuffer, records: UndoRecord[]): number {
+function undoAll(buffer: IBenchBuffer, records: HistoryRecord[]): number {
 	for (let i = records.length - 1; i >= 0; i--) {
+		const record = records[i];
+		if ('version' in record) {
+			buffer.restoreVersion!(record.version);
+		} else {
+			buffer.applyEdit(record.range, record.text);
+		}
+	}
+	return records.length;
+}
+
+/** Replays the edits in their original order. */
+function redoAll(buffer: IBenchBuffer, records: HistoryRecord[]): number {
+	for (let i = 0; i < records.length; i++) {
 		const record = records[i];
 		if ('version' in record) {
 			buffer.restoreVersion!(record.version);
@@ -304,19 +325,19 @@ class Runner {
 		const eol = pieceTreeImplementation.build(chunks).getEOL();
 		const rng = new Prng(this.options.seed);
 		const lines = splitIntoLines(chunks);
-		const editKinds: { kind: string; edits: IEdit[]; lineCountAfter: number }[] = [];
+		const editKinds: { kind: string; edits: IEdit[]; lineCountAfter: number; checksumAfter: number }[] = [];
 		{
 			const model = lines.slice();
 			const edits = generateRandomEdits(model, this.options.edits, rng);
-			editKinds.push({ kind: `${this.options.edits} random edits`, edits, lineCountAfter: model.length });
+			editKinds.push({ kind: `${this.options.edits} random edits`, edits, lineCountAfter: model.length, checksumAfter: checksumOfLines(model) });
 		}
 		{
 			const model = lines.slice();
 			const edits = generateSequentialInserts(model, this.options.edits, eol, rng);
-			editKinds.push({ kind: `${this.options.edits} sequential inserts`, edits, lineCountAfter: model.length });
+			editKinds.push({ kind: `${this.options.edits} sequential inserts`, edits, lineCountAfter: model.length, checksumAfter: checksumOfLines(model) });
 		}
 
-		for (const { kind, edits, lineCountAfter } of editKinds) {
+		for (const { kind, edits, lineCountAfter, checksumAfter } of editKinds) {
 			const windows = generateWindowStarts(lineCountAfter, 10, 100, rng);
 
 			this.runTimed(document, chunks, {
@@ -356,19 +377,32 @@ class Runner {
 			// 6. undo, one edit at a time: versions where the buffer has them, inverse edits otherwise.
 			// The undo itself is what is timed; that the whole document is back to the original is
 			// checked afterwards, against the original.
-			const undoRecords = new WeakMap<IBenchBuffer, UndoRecord[]>();
+			const undoRecords = new WeakMap<IBenchBuffer, HistoryRecord[]>();
 			this.runTimed(document, chunks, {
 				name: BENCHMARKS.undo(kind),
-				prepare: buffer => { undoRecords.set(buffer, applyEditsRecording(buffer, edits)); },
+				prepare: buffer => { undoRecords.set(buffer, applyEditsRecording(buffer, edits).undo); },
 				run: buffer => undoAll(buffer, undoRecords.get(buffer)!),
 				verify: buffer => (buffer.getLineCount() * 31 + readLines(buffer, 1, buffer.getLineCount())) | 0,
 				expected: (edits.length + checksumOfLines(lines)) | 0
 			});
 
+			const redoRecords = new WeakMap<IBenchBuffer, HistoryRecord[]>();
+			this.runTimed(document, chunks, {
+				name: BENCHMARKS.redo(kind),
+				prepare: buffer => {
+					const history = applyEditsRecording(buffer, edits);
+					undoAll(buffer, history.undo);
+					redoRecords.set(buffer, history.redo);
+				},
+				run: buffer => redoAll(buffer, redoRecords.get(buffer)!),
+				verify: buffer => (buffer.getLineCount() * 31 + readLines(buffer, 1, buffer.getLineCount())) | 0,
+				expected: (edits.length + checksumAfter) | 0
+			});
+
 			// 7. memory after the edits, without and with everything an undo of each of them needs
 			if (canMeasureMemory()) {
 				this.measureMemory(document, BENCHMARKS.memoryAfterEdits(kind), buffer => { applyEdits(buffer, edits); return buffer; });
-				this.measureMemory(document, BENCHMARKS.memoryWithHistory(kind), buffer => ({ buffer, records: applyEditsRecording(buffer, edits) }));
+				this.measureMemory(document, BENCHMARKS.memoryWithHistory(kind), buffer => ({ buffer, records: applyEditsRecording(buffer, edits).undo }));
 			}
 		}
 	}

@@ -79,30 +79,26 @@ export function repeatDocument(doc: IDocument, times: number): IDocument {
 /* The blog post's files                                                     */
 /* ------------------------------------------------------------------------- */
 
-export const CORPUS_DIR = path.resolve(__dirname, '..', '..', 'bench-corpus');
+export const CORPUS_DIR = path.resolve(__dirname, '..', '..', 'test', 'benchmark', 'corpus');
 
 export interface ICorpusFile {
 	file: string;
-	url: string;
 	/** As quoted in the blog post. */
 	quoted: string;
 }
 
-/** Pinned to the revisions whose sizes match the blog post. Downloaded by fetchCorpus.ts. */
+/** Vendored revisions whose sizes match the blog post. */
 export const CORPUS_FILES: ICorpusFile[] = [
 	{
 		file: 'checker.ts',
-		url: 'https://raw.githubusercontent.com/microsoft/TypeScript/v2.7.1/src/compiler/checker.ts',
 		quoted: '1.46 MB, 26k lines'
 	},
 	{
 		file: 'sqlite3.c',
-		url: 'https://raw.githubusercontent.com/emscripten-core/emscripten/1.37.36/tests/sqlite/sqlite3.c',
 		quoted: '4.31 MB, 128k lines'
 	},
 	{
 		file: 'Russian-English Bilingual.dic',
-		url: 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/344c988aa3b05cf3d9691bdada2fd629795d7468/Russian-English%20Bilingual.dic',
 		quoted: '14 MB, 552k lines'
 	}
 ];
@@ -128,7 +124,7 @@ const MiB = 1024 * 1024;
 
 /**
  * Shaped like the files of the blog post, so the same categories can be run
- * without downloading anything (see fetchCorpus.ts for the real ones).
+ * without loading the much larger vendored corpus files.
  */
 export const SYNTHETIC_SPECS: Record<string, ISyntheticSpec> = {
 	tiny: { name: 'synthetic tiny', bytes: 100 * 1024, lines: 2_000, modelledOn: 'smoke test' },

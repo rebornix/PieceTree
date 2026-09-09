@@ -37,7 +37,7 @@ const noUnsafeCasts = [
 ];
 
 export default defineConfig(
-	globalIgnores(['lib/', 'coverage/', 'bench-corpus/']),
+	globalIgnores(['lib/', 'coverage/', 'test/benchmark/corpus/']),
 
 	// ---- every TypeScript file ------------------------------------------------
 	{
